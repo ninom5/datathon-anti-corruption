@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/datathon}
+    username: ${DB_USER:datathon}
+    password: ${DB_PASSWORD:datathon}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
