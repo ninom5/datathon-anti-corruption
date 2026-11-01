@@ -74,14 +74,13 @@ _Zadnje ažurirano: 2026-10-22. Izvor: Javni poziv + Pravila (PDF-ovi u `context
 ## Nagrade
 - Po izazovu: 1. mjesto 2.000 EUR, 2. mjesto 1.300 EUR, 3. mjesto 700 EUR (ukupno 12.000 EUR, 4.000 EUR po izazovu). Nagrada je neprenosiva.
 - Prva tri po izazovu predstavljaju rješenje na konferenciji 23.11.2026., Zagreb. **Troškove dolaska snose sami.** Predstavljanje ne utječe na ocjenu.
-- 2.000 EUR / 4 člana = 500 EUR po osobi, pa se natjecanje isplati prvenstveno zbog reputacije i portfolija.
+- 2.000 EUR / 3–4 člana = 500–670 EUR po osobi, pa se natjecanje isplati prvenstveno zbog reputacije i portfolija.
 - Sudjelovanje je besplatno.
 
 ## Diskvalifikacija
 Neispunjavanje uvjeta, neistinite činjenice, neizvorno rješenje ili povreda tuđih prava, ometanje provedbe, kršenje propisa RH.
 
 ## Otvorena pitanja (preostala)
-- Prijavni obrazac još nije otvoren/pregledan: što točno traži (OIB? JMBAG? potvrda o statusu studenta? privola za video?). Link je u Javnom pozivu (hyperlink "Ispunite obrazac"), a u PDF-u nije vidljiv kao URL.
 - Je li javni GitHub repo prihvatljiv po sigurnosnoj politici organizacije (vidi `work/decisions.md`)? Kod se smije poslati i kao link za preuzimanje, ali OSS objava se boduje.
 - Pitati organizatora (open.data@mpudt.hr): pod koji se kriterij boduje objava pod open source licencom.
-- Pitati organizatora: je li "razrađeni koncept" bez radnog prototipa realno konkurentan, s obzirom na to da "Izvedivost" nosi 10 bodova.
+- ~~Pitati organizatora o "razrađenom konceptu"~~: nije više relevantno, gradimo radni prototip (JavniRadar, `docs/`).

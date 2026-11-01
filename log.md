@@ -11,3 +11,10 @@
 - Prijedlog (još ne odlučeno): ideja mora biti zaključana oko 27.10. da ostane ~10 dana za izradu. Brainstorm iz dva smjera (od podataka i od problema).
 - Nepushani/necommitani: PDF-ovi u `context/izvori/`, `.claude/skills/` i izmjene md fileova nakon prvog commita.
 - Skillovi `video-script` (3 min) i UI/UX nisu napisani, treba ih tek u fazi izrade.
+
+## 2026-11-01
+- Korisnik je zadao brief za **JavniRadar** (izazov A). Napisana je dokumentacija: `docs/` (9 fileova), `AGENTS.md`; ažurirani `CLAUDE.md` i `work/decisions.md`. Ništa nije commitano (korisnik prvo pregledava).
+- Provedene stvarne HTTP provjere (CKAN, JPT, Sudreg 401 + OpenAPI, SRDI, DZS, OCP OCDS, TED; preuzeto i klasificirano 148 općinskih datoteka). Nalazi su u `docs/DATA_SOURCES.md`.
+- U ovom repou nema `poc/`. Reusable kod je u Javi u `Desktop/datathon`.
+- Pregled starih md fileova: ažurirani README, timeline, team, ideas, tasks (arhiva prijave), competition, jury-simulator skill (3 osobe, rok). Ništa nije obrisano.
+- Kopirani skillovi `react-web` i `spring-boot-api` iz `Desktop/datathon` (izvor netaknut) i prilagođeni JavniRadaru (rječnik domene, /api/v1, domenska pravila, UI pravila za indikatore i AI). `ARCHITECTURE.md` usklađen: camelCase JSON, format greške {statusCode,message,error}.

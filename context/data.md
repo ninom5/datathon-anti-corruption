@@ -16,3 +16,6 @@ _Datasetovi, izvori, shema, veličina, licence i ograničenja. Obvezni dio dokum
 
 ## Kandidat-skupovi
 _Još nema. Popunjava se kroz `data-scout`, jedan blok po skupu (izdavatelj, resurs/format, licenca, svježina, ključ za spajanje, kvaliteta, način dohvata)._
+
+## JavniRadar (2026-11-01)
+Svi izvori, pokrivenost i popis skupova za predaju su u `docs/DATA_SOURCES.md`. Ovaj file se više ne vodi za JavniRadar.

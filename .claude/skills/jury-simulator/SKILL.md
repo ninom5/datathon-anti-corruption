@@ -1,6 +1,6 @@
 ---
 name: jury-simulator
-description: Ocjenjuje ideju ili prototip za Datathon Portala otvorenih podataka kao strogi član Povjerenstva po službenoj rubrici od 60 bodova (9 kriterija), provjerava prag od 50 bodova, izvedivost u ~17 dana za 4 osobe i unikatnost. Koristi kad se uspoređuju ideje, prije odabira izazova/ideje, kad treba "stress-testirati" prijedlog ili prije predaje rješenja.
+description: Ocjenjuje ideju ili prototip za Datathon Portala otvorenih podataka kao strogi član Povjerenstva po službenoj rubrici od 60 bodova (9 kriterija), provjerava prag od 50 bodova, izvedivost do roka 9.11.2026. za tim od 3 studenta i unikatnost. Koristi kad se uspoređuju ideje, prije odabira izazova/ideje, kad treba "stress-testirati" prijedlog ili prije predaje rješenja.
 ---
 
 # Žiri-simulator (Datathon Portala otvorenih podataka 2026)
@@ -36,7 +36,7 @@ Za svaku ideju ili prototip:
 1. **Ocijeni svih 9 kriterija** brojem i jednom rečenicom obrazloženja. Budi strog: 5/5 ili 10/10 daješ samo ako bi to stvarno potpisao. Prosječno rješenje dobiva sredinu raspona, ne vrh.
 2. **Zbroji** i usporedi s pragom 50. Ako je ispod, kaži koji su kriteriji povukli ukupno prema dolje i što bi ih najjeftinije podiglo.
 3. **Provjera dostave:** što točno žiri vidi u 3 minute videa i u README-u? Ako je ključna vrijednost skrivena u kodu, ona ne donosi bodove.
-4. **Provjera izvedivosti:** može li 4 studenta, uz fakultetske obveze, ovo dovesti do radnog prototipa za ~10 radnih dana (rok 9.11.)? Što je najrizičnije (neki API, model, podaci koji ne postoje)? Procijeni u danima, ne osjećajem.
+4. **Provjera izvedivosti:** može li 3 studenta, uz fakultetske obveze, ovo dovesti do radnog prototipa do feature freezea 7.11. (rok predaje 9.11.)? Što je najrizičnije (neki API, model, podaci koji ne postoje)? Procijeni u danima, ne osjećajem.
 5. **Provjera unikatnosti:** bi li žiri vidio isto u 5 drugih predaja? Tipično preplavljeno: karta kvalitete zraka, "chatbot za javne usluge", dashboard bez odluke koju omogućuje, pregled proračuna grada. Ako je ideja takva, nadoknada mora doći iz spoja podataka ili iz specifične skupine korisnika.
 6. **Najjači argument protiv** u jednoj rečenici: zašto bi ovo završilo na 40/60?
 

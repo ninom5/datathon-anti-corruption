@@ -1,0 +1,128 @@
+# JavniRadar – UI/UX
+
+## 1. Smjer
+- **Osjećaj:** urednički podatkovni članak (kao datanovinarski projekti velikih redakcija) + preciznost alata (Linear). **Nije** generički SaaS dashboard s gradijentima i karticama KPI-jeva.
+- **Ton:** smiren i dokumentaran. Bez crvenih alarma. Crvena se ne koristi za "sumnjivo", nego jantarna i neutralna (`--signal: #B45309`), jer boja ne smije sugerirati krivnju.
+- **Tipografija:** serifni naslovi za uredničke dijelove (npr. "Source Serif 4") i grotesk za podatke ("Inter"), uz tabularne brojke (`font-variant-numeric: tabular-nums`). Obje imaju hrvatske dijakritike.
+- **Boje (tokeni):**
+
+| Token | Vrijednost |
+|---|---|
+| `--ink` | `#111827` |
+| `--paper` | `#FAFAF7` |
+| `--muted` | `#6B7280` |
+| `--line` | `#E5E7EB` |
+| `--accent` | `#1D4ED8` (poveznice, odabir) |
+| `--signal` | `#B45309` (indikator) |
+| `--nodata` | uzorak s crtama (sivo) |
+| `--synthetic` | `#7C3AED` (traka za sintetičke podatke) |
+
+  Tamni način: invertirani `paper`/`ink`.
+- **Gustoća:** tablice s 32 px redovima, brojevi poravnati desno, iznosi u formatu `1.234.567 €` (hr-HR).
+
+## 2. Informacijska arhitektura
+```
+/                       Naslovnica (pretraga + karta + istaknuti nalazi)
+/istrazi                Istraživač ugovora (F1)
+/opcina/:oib            Profil JLS (F2) + /usporedba (F4)
+/dobavljac/:oib         Profil dobavljača (F3)
+/ugovor/:id             Detalj ugovora (F8, F9, F6)
+/indikator/:id          Detalj indikatora (F5)
+/izvori                 Izvori i metodologija (F14)
+/ispravak               Obrazac (F12)
+```
+
+## 3. Ekrani
+
+### 3.1 Naslovnica
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│ JavniRadar                          Istraži  Karta  Izvori  [Pretraga]│
+├──────────────────────────────────────────────────────────────────────┤
+│  Kamo odlazi novac vaše općine?                                       │
+│  [ Upišite općinu, tvrtku ili predmet nabave …                  🔍 ]  │
+│  npr. "Općina Mikleuš"  ·  "asfaltiranje 2025"  ·  OIB dobavljača    │
+├───────────────────────────────┬──────────────────────────────────────┤
+│  KARTA (županija/HR)          │  Što se vidi u podacima              │
+│  ░ nema podataka  ▓ 0–2  █ 3+ │  ① 2.425 ugovora iz 30 JLS           │
+│  [interaktivna karta JLS]     │  ② 41 ugovor s rastom vrijednosti    │
+│                               │     >10 %  → pogledaj                │
+│                               │  ③ 61 od 556 JLS objavljuje          │
+│                               │     strojno čitljiv registar         │
+├───────────────────────────────┴──────────────────────────────────────┤
+│ Indikatori nisu optužbe. Pokazuju što vrijedi provjeriti. Metodologija→│
+└──────────────────────────────────────────────────────────────────────┘
+```
+(Brojke na skici su iz provjere 2026-11-01 ili su ilustrativne. U aplikaciji dolaze iz API-ja.)
+
+### 3.2 Istraživač ugovora
+- Lijevo je kolona filtara (sklopiva na mobitelu), desno tablica.
+- Gornja traka prikazuje sažetak filtra: "312 ugovora · 4,1 M € · 18 s indikatorom".
+- Stupac "Oznake" sadrži male značke: `D +75 %`, `F 3 ugovora`, `AI`.
+
+### 3.3 Profil JLS
+```
+Općina Mikleuš · Virovitičko-podravska · 1.234 st.* · skupina P1 (općine < 2.000)
+Podaci: registar ugovora 2024–2025 (data.gov.hr, dohvaćeno 03.11.2026.) ⓘ
+┌ Potrošnja po kategoriji (€ po st.) ─────┐ ┌ Najveći dobavljači ───────┐
+│ 45 Građevinski radovi ████████  210 €   │ │ … d.o.o.   38 %  ⓘ        │
+│ 71 Arhitektonske usl.  ██        41 €   │ │ … d.d.     12 %           │
+│    medijan skupine     ┆                │ └───────────────────────────┘
+└─────────────────────────────────────────┘
+┌ Indikatori (3) ──────────────────────────────────────────────────────┐
+│ D  Rast vrijednosti ugovora  +62 %   kvaliteta: visoka · dokaz: srednji│
+│ F  Uzastopni ugovori ispod praga …                                    │
+└──────────────────────────────────────────────────────────────────────┘
+* broj na skici je ilustrativan
+```
+
+### 3.4 Detalj indikatora (najvažniji ekran za povjerenje)
+```
+D · Povećanje vrijednosti ugovora                          rules-v1 · 05.11.2026.
+─────────────────────────────────────────────────────────────────────────
+Ugovor "Rekonstrukcija …" · Općina … → … d.o.o.
+ 200.000 € ──(+150.000 € izmjena)──► 350.000 €   (+75 %)
+
+┌ Kvaliteta podataka ┐ ┌ Veličina odstupanja ┐ ┌ Pouzdanost dokaza ┐
+│ VISOKA             │ │ +75 %               │ │ SREDNJA           │
+│ strukturirani      │ │ iznad 30 % (čl.316) │ │ razlog izmjene    │
+│ EOJN izvoz         │ │                     │ │ nije objavljen    │
+└────────────────────┘ └─────────────────────┘ └───────────────────┘
+Što je izračunato  ▸ formula, ulazna polja, prag
+Dokazi             ▸ Registar ugovora Općine …, redak 41 ↗ · eojn.hr/contract-eo/… ↗
+Što ovo NE znači   ▸ Povećanje može biti predviđeno ugovorom (čl. 315.) …
+Što nedostaje      ▸ datum i razlog izmjene
+Kako provjeriti    ▸ [Generiraj ZPPI zahtjev za dokumentaciju izmjene]
+Odgovor naručitelja▸ (nema) · [Prijavi grešku / dodaj kontekst]
+─────────────────────────────────────────────────────────────────────────
+AI procjena – zahtijeva ljudsku provjeru                 claude-haiku-5-5
+ ◉ vrijedi provjeriti · pouzdanost: srednja
+ • … (svaki razlog s poveznicama na polja)
+ Moguća legitimna objašnjenja: …          [Korisno] [Pogrešno]
+```
+Tri dimenzije su **tri jednako velika okvira bez ukupnog zbroja**. Nema "ocjene 7/10".
+
+### 3.5 Usporedba općina
+Dot plot: svaka točka je JLS u skupini, os x prikazuje € po stanovniku za odabrani CPV, a odabrana općina je istaknuta. Ispod je tablica sa svim JLS u skupini i n. Prekidač godine.
+
+### 3.6 Dobavljač
+Zaglavlje s OIB-om, pravnim oblikom i Sudreg podacima (ili "nije dostupno"). Mreža "naručitelj ↔ dobavljač" je Future. U MVP-u je tablica naručitelja s udjelima.
+
+### 3.7 Izvori i metodologija
+Tablica izvora (izdavatelj, licenca, metoda dohvata, zadnji dohvat, broj zapisa, status), pokrivenost (x/556 JLS), pravila s formulama, evaluacija AI-ja, politika jezika, kontakt za ispravke.
+
+## 4. Sintetički podaci u UI-ju
+Ljubičasta traka preko cijele širine: **"SINTETIČKI PODACI ZA DEMONSTRACIJU – izmišljene organizacije"**. Takvi zapisi nisu u pretrazi stvarnih podataka. Do njih se dolazi samo preko `/demo`.
+
+## 5. Pristupačnost (WCAG 2.1 AA)
+- Kontrast ≥ 4,5:1 za tekst. Boja nikad nije jedini nositelj informacije (značka ima i slovo pravila).
+- Svaki graf ima tablicu podataka ("Prikaži kao tablicu") i `aria-label` sa sažetkom.
+- Tipkovnica: fokus vidljiv, karta ima alternativni popis JLS.
+- `lang="hr"`, hrvatski formati datuma (`dd. MM. yyyy.`) i brojeva.
+- Mobitel: jedan stupac, filtri u ladici, tablica postaje kartice ispod 640 px.
+
+## 6. Biblioteke [PRIJEDLOG]
+- Grafovi: **Observable Plot** (malen, urednički izgled) ili Recharts.
+- Karta: **MapLibre GL** ili čisti SVG iz GeoJSON-a (`d3-geo`). Za ~556 poligona SVG je dovoljan i lakši.
+- Stil: CSS moduli + tokeni (bez teškog UI kita), uz shadcn-like primitive po potrebi.
+- Prije pisanja koda učitati skill `react-web` (kopirati iz `Desktop/datathon/.claude/skills/`) i `dataviz`.
