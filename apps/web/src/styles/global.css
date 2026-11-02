@@ -1,0 +1,95 @@
+/* Tokens from docs/UI_UX.md §1. The signal colour is amber, never red: colour must not suggest guilt. */
+:root {
+    --ink: #111827;
+    --paper: #FAFAF7;
+    --surface: #FFFFFF;
+    --muted: #6B7280;
+    --line: #E5E7EB;
+    --accent: #1D4ED8;
+    --signal: #B45309;
+    --signal-soft: #FEF3C7;
+    --neutral-soft: #F3F4F6;
+    --synthetic: #7C3AED;
+    --focus: #1D4ED8;
+
+    --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+    --font-sans: Inter, "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+
+    --radius: 6px;
+    --row-height: 32px;
+    --content-width: 1200px;
+
+    color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ink: #F3F4F6;
+        --paper: #111827;
+        --surface: #1F2937;
+        --muted: #9CA3AF;
+        --line: #374151;
+        --accent: #93C5FD;
+        --signal: #FBBF24;
+        --signal-soft: #3B2A0B;
+        --neutral-soft: #273244;
+        --synthetic: #8B5CF6;
+        --focus: #93C5FD;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0;
+}
+
+a {
+    color: var(--accent);
+}
+
+:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+button, input, select {
+    font: inherit;
+    color: inherit;
+}
+
+.tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

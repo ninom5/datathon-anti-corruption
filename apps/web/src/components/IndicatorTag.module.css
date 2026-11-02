@@ -1,0 +1,23 @@
+.tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid;
+}
+
+.signal {
+    color: var(--signal);
+    background: var(--signal-soft);
+    border-color: var(--signal);
+}
+
+.entryError {
+    color: var(--muted);
+    background: var(--neutral-soft);
+    border-color: var(--line);
+    border-style: dashed;
+}

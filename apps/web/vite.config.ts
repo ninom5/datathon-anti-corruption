@@ -10,4 +10,10 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, 'src'),
     },
   },
+  server: {
+    // The API runs on :8080 locally; the axios baseURL is "/api".
+    proxy: {
+      '/api': 'http://localhost:8080',
+    },
+  },
 })

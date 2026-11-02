@@ -1,7 +1,8 @@
-interface RouteTypes {
-    [key: string]: string;
-}
+export const routes = {
+    HOME: "/",
+    CONTRACTS: "/istrazi",
+    CONTRACT: "/ugovor/:id",
+    SOURCES: "/izvori",
+} as const;
 
-export const routes: RouteTypes = {
-    HOME: "/"
-}
+export const contractPath = (id: number) => `/ugovor/${id}`;

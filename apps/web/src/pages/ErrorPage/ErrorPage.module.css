@@ -1,0 +1,13 @@
+.page {
+    max-width: 640px;
+    margin: 64px auto;
+    padding: 0 16px;
+}
+
+.button {
+    padding: 6px 14px;
+    border: 1px solid var(--ink);
+    border-radius: var(--radius);
+    background: transparent;
+    cursor: pointer;
+}

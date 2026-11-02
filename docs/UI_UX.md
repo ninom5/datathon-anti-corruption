@@ -114,6 +114,14 @@ Tablica izvora (izdavatelj, licenca, metoda dohvata, zadnji dohvat, broj zapisa,
 ## 4. Sintetički podaci u UI-ju
 Ljubičasta traka preko cijele širine: **"SINTETIČKI PODACI ZA DEMONSTRACIJU – izmišljene organizacije"**. Takvi zapisi nisu u pretrazi ni u statistikama stvarnih podataka. U istraživaču ugovora prikazuju se samo kad korisnik uključi filter **"Prikaži sintetičke"** (zadano isključen); tada svaki sintetički redak ima oznaku, a detalj ugovora traku. (Promjena 2026-11-02 umjesto zasebne rute `/demo`, vidi `work/decisions.md`.)
 
+## 4a. Stanje implementacije (POC, 2026-11-02)
+- **Rute:** `/` (naslovnica s tri brojke), `/istrazi` (istraživač), `/ugovor/:id` (detalj), `/izvori` (izvori i metodologija). `/opcina`, `/dobavljac`, `/indikator` i karta još nisu napravljeni.
+- **Istraživač:** filtri su u URL-u na hrvatskom (`narucitelj`, `godina`, `dobavljac`, `oznake`, `sinteticki`, `poredak`, `stranica`). Oznake: svi, s bilo kojom oznakom, vrijedi provjeriti, **moguća greška u unosu**, bez oznake.
+- **Sažetak:** "N ugovora · X € · N vrijedi provjeriti · N mogućih grešaka u unosu". Samo stvarni podaci i bez obrta, uz napomenu koliko je ugovora s obrtima izostavljeno.
+- **Detalj indikatora:** blok **"Objašnjenje naručitelja iz izvora"** stoji prije postotka (D2). Moguća greška u unosu nema velik postotak u naslovu, samo sivu iscrtkanu karticu "Informativno – vjerojatna greška u izvoru".
+- **Obrti:** prikazuju se kao "Obrt (naziv skriven) · OIB …", uz napomenu da se AI procjena za njih ne radi.
+- **Fontovi:** sistemski (Georgia/Segoe UI) kao zamjena za Source Serif 4/Inter. Vanjski fontovi se ne učitavaju, da nema poziva prema trećim stranama. Fontove treba dodati lokalno ako tim želi točan izgled.
+
 ## 5. Pristupačnost (WCAG 2.1 AA)
 - Kontrast ≥ 4,5:1 za tekst. Boja nikad nije jedini nositelj informacije (značka ima i slovo pravila).
 - Svaki graf ima tablicu podataka ("Prikaži kao tablicu") i `aria-label` sa sažetkom.

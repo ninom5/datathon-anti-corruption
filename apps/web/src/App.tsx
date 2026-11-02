@@ -2,8 +2,17 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ErrorBoundary} from "react-error-boundary";
 import {Router} from "@/Router.tsx";
 import {ErrorPage} from "@/pages";
+import {isClientError} from "@/api";
 
-const queryClient = new QueryClient();
+/** A 4xx (bad filter, unknown contract) will not change on retry; server and network errors get two more tries. */
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: (failureCount, error) => !isClientError(error) && failureCount < 2,
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 function App() {
 

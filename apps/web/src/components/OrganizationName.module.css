@@ -1,0 +1,10 @@
+.hidden {
+    font-style: italic;
+    color: var(--muted);
+}
+
+.oib,
+.muted {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}

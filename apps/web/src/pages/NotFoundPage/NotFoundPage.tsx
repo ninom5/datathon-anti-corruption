@@ -1,16 +1,9 @@
-import {useLocation} from "wouter";
+import {Link} from "wouter";
 import {routes} from "@/routes";
+import {EmptyState} from "@/components";
 
-
-export const NotFoundPage = () => {
-    const [, navigate] = useLocation();
-
-    return (
-        <div>
-            <p>Stranica koju tražiš ne postoji.</p>
-            <button onClick={() => navigate(routes.HOME)}>
-                Natrag na početnu
-            </button>
-        </div>
-    );
-};
+export const NotFoundPage = () => (
+    <EmptyState title="Stranica koju tražite ne postoji.">
+        <Link href={routes.CONTRACTS}>Istraži ugovore</Link>
+    </EmptyState>
+);

@@ -1,0 +1,306 @@
+/* The synthetic banner spans the whole window, not just the content column. */
+.bleed {
+    margin: -24px calc(50% - 50vw) 20px;
+}
+
+.pageHeader {
+    margin-bottom: 16px;
+}
+
+.lead {
+    color: var(--muted);
+    max-width: 70ch;
+    margin: 6px 0 0;
+}
+
+.summary {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 0;
+    margin-bottom: 20px;
+}
+
+.summaryLine {
+    margin: 0;
+    font-size: 17px;
+}
+
+.summaryNote {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.dot {
+    color: var(--muted);
+    margin: 0 8px;
+}
+
+.signalText {
+    color: var(--signal);
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 16px;
+}
+
+.filtersTitle {
+    font-size: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.field legend {
+    padding: 0;
+    margin-bottom: 4px;
+}
+
+.field select,
+.field input:not([type="radio"]):not([type="checkbox"]) {
+    width: 100%;
+    min-height: 34px;
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.field input[aria-invalid="true"] {
+    border-color: var(--signal);
+}
+
+.fieldError {
+    color: var(--signal);
+    font-size: 13px;
+}
+
+.inline {
+    display: flex;
+    gap: 6px;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.syntheticToggle {
+    padding: 8px;
+    border: 1px dashed var(--synthetic);
+    border-radius: var(--radius);
+}
+
+.smallButton {
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.smallButton:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.linkButton {
+    align-self: flex-start;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.results {
+    min-width: 0;
+}
+
+.results[aria-busy="true"] .table {
+    opacity: 0.6;
+}
+
+.tableWrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+}
+
+.table td {
+    padding: 6px 10px;
+    height: var(--row-height);
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.table tbody tr:hover {
+    background: var(--paper);
+}
+
+.numeric {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.table th.numeric {
+    text-align: right;
+}
+
+.subjectLink {
+    color: var(--ink);
+    text-decoration-color: var(--line);
+    text-underline-offset: 3px;
+}
+
+.date {
+    white-space: nowrap;
+}
+
+.subjectLink:hover {
+    color: var(--accent);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.syntheticRow {
+    box-shadow: inset 3px 0 0 var(--synthetic);
+}
+
+.syntheticTag {
+    margin-left: 6px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--synthetic);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.footnote {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 8px 0 0;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.pageButtons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        position: static;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 12px;
+        background: var(--surface);
+    }
+}
+
+/* Below 640 px the table becomes cards (docs/UI_UX.md §5). */
+@media (max-width: 640px) {
+    .table thead {
+        display: none;
+    }
+
+    .table,
+    .table tbody,
+    .table tr,
+    .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr {
+        padding: 8px 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .table td {
+        border: 0;
+        height: auto;
+        padding: 2px 12px;
+        text-align: left;
+    }
+
+    .table td::before {
+        content: attr(data-label) ": ";
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .numeric {
+        text-align: left;
+    }
+}

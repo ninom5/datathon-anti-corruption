@@ -57,3 +57,11 @@
   - 2.298 prikazivih ugovora; 34 ugovora s fizičkim osobama su skrivena;
   - sažetak bez obrta: 1.954 ugovora, 99,4 M EUR, 21 s indikatorom, 1 moguća greška u unosu (344 ugovora s obrtima izostavljeno).
 - Testovi: 29/29 (novi su `ContractControllerTest`, `SourceControllerTest` i `ContractPrivacyTest`).
+
+## 2026-11-02 (POC, faza 4)
+- Frontend (`apps/web`):
+  - Vite proxy `/api` → `:8080`;
+  - tokeni iz UI_UX §1 i tamni način;
+  - naslovnica, istraživač (filtri u URL-u, sažetak, tablica koja na mobitelu postaje kartice), detalj ugovora (tri dimenzije, objašnjenje naručitelja prije postotka, "Što ovo NE znači", dokazi, izvor s lokatorom) i izvori (pokrivenost i skupovi s datotekama);
+  - ljubičasta traka za sintetiku; 4 stanja ekrana; 4xx se ne ponavlja.
+- Provjera: `yarn lint` i `yarn build` zeleno; `./mvnw test` 29/29. Ekrani su provjereni headless screenshotovima (Edge), jer proširenje za Chrome nije instalirano.
