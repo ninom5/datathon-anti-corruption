@@ -4,6 +4,7 @@ import com.datathon.api.ingest.FileStager.StagedFile;
 import com.datathon.api.integration.ckan.CkanClient;
 import com.datathon.api.integration.ckan.CkanPackage;
 import com.datathon.api.integration.ckan.CkanResource;
+import com.datathon.api.rules.RulesService;
 import com.datathon.api.source.FormatClass;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * One ingest run (docs/ARCHITECTURE.md §4): CKAN discovery, download and classification of every readable
  * "registar ugovora" resource, then import of class A files from oldest to newest so that the newest file wins
- * on duplicate contracts. Started from the admin endpoint, never on application start-up.
+ * on duplicate contracts, then the contract rules. Started from the admin endpoint, never on application start-up.
  */
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class IngestService {
     private final IngestIssueRepository issueRepository;
     private final IngestProperties properties;
     private final JsonMapper jsonMapper;
+    private final RulesService rulesService;
 
     public IngestRun run() {
         IngestRun run = runRepository.save(IngestRun.start());
@@ -66,6 +68,7 @@ public class IngestService {
         stats.put("contractsSuperseded", importStats.getSuperseded());
         stats.put("rejectedByCode", importStats.getRejectedByCode());
         stats.put("warningsByCode", importStats.getWarningsByCode());
+        stats.put("indicatorsByRule", rulesService.runContractRules());
         log.info("Ingest run {}: {}", runId, stats);
         return stats;
     }

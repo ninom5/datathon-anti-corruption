@@ -60,3 +60,32 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **Provjera točnosti parsera prije faze 2:** 0 odbačenih redaka može značiti previše popustljiv parser. Usporedba 10 najvećih i 10 nasumičnih ugovora s izvornim ćelijama i pregled distribucije iznosa po naručitelju (greške decimalnog separatora, HRK/EUR). Greška → popravak + test + ponovni ingest.
 - **Tip naručitelja se razlikuje u izvješćima i API-ju:** općina/grad (`jls`), županija (`zupanija`), ostalo (`javno_tijelo`). Vrtić i županija nisu JLS. **2026. se označava kao nepotpuna godina** (podaci do datuma objave datoteke).
 - **Nakon faze 2 stati** i dati: matricu TP/FP/TN/FN na sintetici, broj stvarnih D indikatora po pojasu i 10 primjera za ručnu provjeru.
+
+## 2026-11-02: Rezultat provjere parsera i zaštite u pravilu D
+- **Parser je točan:** 20/20 uzoraka (10 najvećih i 10 nasumičnih) podudara se s izvornim ćelijama. Nije bilo popravka ni ponovnog ingesta.
+  - "0 odbačenih redaka" znači da 33-stupčani EOJN izvoz uvijek ima poveznicu, naručitelja, datum i iznos.
+  - To ne znači da je parser popustljiv.
+- **Greške su u objavljenim registrima:** isplata bez decimalnog zareza, jedinična cijena kao iznos ugovora, negativan PDV. Ne ispravljamo ih jer ne smijemo izmišljati vrijednosti, a provenancija mora pokazivati izvor kakav jest.
+- **Odluka:** pravilo D takve retke i dalje prikazuje, ali s kvalitetom `niska`, pouzdanošću `slaba` i oznakom `informativno`, uz rečenicu o vjerojatnoj grešci u unosu.
+  - Zašto ih ne skrivamo: skrivanje bi sakrilo i stvarne slučajeve.
+  - Zašto nisu "vrijedi provjeriti": +12.000 % bio bi najveći "indikator" u sustavu i uništio bi vjerodostojnost u demu.
+- **Heuristika `implausible-ratio: 10` nije zakonski prag**, nego pravilo kvalitete podataka. Zato je u `thresholds.yaml` u odjeljku `rule-d`, s oznakom "heuristika JavniRadara".
+- **Pragovi ZJN-a** (10 %/15 %, 30 %, 50 %, jednostavna nabava) su u `thresholds.yaml` s `valid-from`/`valid-to` prema `DATA_SOURCES.md` §10.
+  - Razdoblje "do 15.05.2026." nema početni datum jer ga `docs/` ne navode (prazan `valid-from` znači otvoreno).
+  - HRK pragovi prije 2023. su izostavljeni jer su u `docs/` označeni kao pretpostavka.
+- **Datoteka pragova** je `apps/api/src/main/resources/config/thresholds.yaml` (učitava se preko `spring.config.import`), a ne `config/` u rootu repoa, da bi bila dio JAR-a.
+
+## 2026-11-02: Odluke korisnika prije faze 3 (API i UI)
+1. **D2 s obrazloženjem u registru** ostaje `vrijedi_provjeriti` s pouzdanošću dokaza `srednja`.
+   - API vraća obrazloženje kao zasebno polje `sourceExplanation` (tekst stupca "Obrazloženje iznosa plaćanja", doslovno).
+   - UI ga prikazuje istaknuto, **prije postotka**, pod naslovom **"Objašnjenje naručitelja iz izvora"**.
+   - Zašto: obrazloženje je dio izvora, a ne dokaz da je razlika opravdana. Korisnik ga mora vidjeti prije broja da ne bi zaključivao samo iz postotka.
+2. **Obrti (GDPR):** naziv obrta često sadrži ime i prezime vlasnika.
+   - API i UI ne prikazuju naziv, nego **"Obrt (naziv skriven)"** uz OIB i poveznicu na izvor.
+   - Obrti se isključuju iz svih "top" lista i sažetaka.
+   - Indikatori za obrte ostaju, a AI procjene za njih nema.
+   - Test provjerava da naziv obrta ne izlazi iz API-ja.
+3. **"Informativno – vjerojatna greška u izvoru"** (`severity_note = informativno`) je zasebna kategorija.
+   - Istraživač ima filtar za nju, a sažetak brojku "N mogućih grešaka u unosu".
+   - Zašto: ti zapisi nisu signal o ugovoru, nego o kvaliteti objavljenih podataka. Miješanje s "vrijedi provjeriti" bi napuhalo brojke.
+4. **Git:** lokalni commitovi na grani `poc/vertical-slice` prije faze 3, nakon faze 3 i nakon faze 4. Bez pusha.

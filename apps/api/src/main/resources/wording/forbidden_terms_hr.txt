@@ -1,0 +1,11 @@
+# Terms that must never appear in UI, API or prompt texts (AGENTS.md, docs/ANOMALY_DETECTION.md §0.1).
+# One stem per line, matched case-insensitively as a substring, so every inflection is caught ("korupcij" -> korupcija,
+# korupciju, korupcijski). There is NO exception for negations: "ne znači korupciju" is forbidden too, because a
+# reader remembers the word, not the negation. Lines starting with # are comments.
+korupcij
+kriminal
+nezakonit
+prijevar
+pronevjer
+namješten
+namjesten

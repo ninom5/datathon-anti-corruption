@@ -1,0 +1,29 @@
+ref;category;expected;expected_data_quality;expected_severity;reason
+S001;jasno_pozitivan;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;radovi +75 % (iznad 50 %)
+S002;jasno_pozitivan;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;usluge +20 % (iznad de minimis 10 %)
+S003;jasno_pozitivan;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;robe +35 % (iznad 30 %), bez isplate
+S004;jasno_pozitivan;D_OVERPAYMENT;visoka;vrijedi_provjeriti;isplaćeno 52.000 naspram 37.500 s PDV-om (+38,7 %, +14.500 EUR)
+S005;jasno_pozitivan;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;radovi, dvije izmjene ukupno +40 %
+S006;jasno_pozitivan;D_OVERPAYMENT;visoka;vrijedi_provjeriti;isplaćeno 125.000 naspram 100.000 s PDV-om (+25 %)
+S007;jasno_pozitivan;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;robe +30 %, sklopljen nakon 16.05.2026. (pragovi NN 48/26)
+S011;jasno_negativan;none;;;bez izmjene, isplata jednaka iznosu s PDV-om
+S012;jasno_negativan;none;;;isplata manja od ugovorenog
+S013;jasno_negativan;none;;;bez izmjene, isplata nije objavljena
+S014;jasno_negativan;none;;;+33 %, ali početni iznos 9.000 EUR je ispod 10.000 EUR
+S015;jasno_negativan;none;;;+60 %, ali ugovor na temelju okvirnog sporazuma
+S016;jasno_negativan;none;;;usluge +8,3 % (ispod 10 %)
+S017;jasno_negativan;none;;;radovi +14 % (ispod de minimis 15 % za radove)
+S021;rubni;none;;;robe točno +10 % (granica nije prijeđena)
+S022;rubni;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;robe +10,1 % (tik iznad granice)
+S023;rubni;none;;;radovi točno +15 %, nakon 16.05.2026.
+S024;rubni;none;;;preplata točno +10 % i točno 5.000 EUR
+S025;rubni;none;;;preplata +15 %, ali samo 3.000 EUR
+S026;rubni;none;;;isplaćeni iznos nije objavljen
+S027;rubni;D_VALUE_INCREASE;visoka;vrijedi_provjeriti;HRK ugovor iz 2022., +30 % nakon preračuna u EUR
+S028;rubni;none;;;izmjena 0 EUR, ukupni iznos jednak početnom
+S030;rubni;D_OVERPAYMENT;niska;informativno;ugovor s jediničnim cijenama (napomena), isplata 216x ugovorenog
+S029;kvaliteta;D_OVERPAYMENT;niska;informativno;isplata 122x ugovorenog, vjerojatno izostavljen decimalni zarez
+S031;kvaliteta;D_VALUE_INCREASE;srednja;vrijedi_provjeriti;neispravan OIB dobavljača (9 znamenki); +40 % ostaje, kvaliteta pada
+S032;kvaliteta;D_OVERPAYMENT;srednja;vrijedi_provjeriti;nečitljiv datum izvršenja; preplata +24 % ostaje, kvaliteta pada
+S034;kvaliteta;D_OVERPAYMENT;niska;informativno;iznos s PDV-om (700) manji od iznosa bez PDV-a (7.000), PDV upisan kao negativan
+S033;kvaliteta;rejected;;;nečitljiv datum sklapanja (31.02.2025.), redak se odbacuje

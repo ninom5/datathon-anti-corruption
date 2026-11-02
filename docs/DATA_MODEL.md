@@ -305,4 +305,9 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 | `indicator` | `contract_id` | brzi filtar "ima indikator" za pravila nad jednim ugovorom |
 
 **Kodovi u bazi** ostaju hrvatski kao u §2 (`'doo'`, `'robe'`, `'parser'`); Java enumi su engleski (`LLC`, `GOODS`, `PARSER`) i mapiraju se konverterom (`DatabaseCodeConverter`).
+**Prikaz osjetljivih dobavljača (GDPR, odluka 2026-11-02):**
+- `fizicka_osoba`: ugovor se ne vraća iz API-ja i ne obrađuje se pravilima.
+- `obrt`: zapis se čuva u bazi, ali API umjesto naziva vraća `"Obrt (naziv skriven)"` (`supplier.nameHidden = true`), uz OIB i poveznicu na izvor. Obrti se isključuju iz "top" lista i sažetaka. Indikatori ostaju, AI procjene nema.
+- Izvorni `raw_record.payload` sadrži izvorni naziv. API ga ne izlaže; prikazuje se samo poveznica na izvornu datoteku.
+
 **Lokator:** `sheet=<1-based indeks lista>;row=<Excel redak>`, `raw_record.payload` = `{zaglavlje: tekst ćelije}` bez praznih ćelija.

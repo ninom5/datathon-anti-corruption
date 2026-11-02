@@ -90,6 +90,17 @@ Prvi stvarni run ingesta (`POST /api/admin/ingest/run`, `PoliteHttpClient`, 1 za
   - klasifikator ga sada vodi kao **B**. Odluka je u `work/decisions.md`.
 - Testni uzorak: `apps/api/src/test/resources/fixtures/eojn/grad-osijek-registar-ugovora.xlsx` (HTTP 200, 161.561 B, 588 redaka; datum sklapanja je Excel serijski broj, npr. `46003` = 2025-12-12; zaglavlje `Iznos s PDV-om ` ima razmak na kraju).
 
+
+**Provjera točnosti parsera klase A (2026-11-02) [VERIFICIRANO]:**
+- 10 najvećih i 10 nasumičnih ugovora uspoređeno je s izvornim ćelijama (openpyxl, neovisno o POI-u). Uspoređeni su naručitelj, dobavljač, OIB, datum sklapanja, iznos bez PDV-a, iznos s PDV-om i ukupni iznos. **Svih 20 se podudara**; greške u parseru nema.
+- Omjer iznosa s PDV-om i bez njega: 1,25 u 1.959 ugovora, 1,00 u 199, 1,13 u 39, 1,05 u 23, nestandardan u 112. Zbroj početnog iznosa i izmjene uvijek je jednak ukupnom.
+- Nema ugovora prije 2023. ni HRK iznosa u klasi A.
+- Neobični iznosi **vjerno su preneseni iz izvora** i nisu greška parsera:
+  - Ozalj (32) i Mikleuš (11) objavljuju i narudžbe ispod 100 EUR;
+  - Lepoglava: isplate 516902 i 4452369 bez decimalnog zareza; iznos s PDV-om 700 uz PDV −6.300;
+  - Mikleuš: jedinična cijena 30,09 EUR upisana kao iznos ugovora.
+- Posljedica: pravilo D ima zaštite za takve retke (`ANOMALY_DETECTION.md` §D, "Implementacija").
+
 ### 1.2 Polja standardnog EOJN izvoza (klasa A, stvarno zaglavlje iz `Grad Osijek / registar-ugovora.xlsx`) [VERIFICIRANO]
 
 | Stupac | Primjer | Popunjenost (n = 2.425) | Napomena |

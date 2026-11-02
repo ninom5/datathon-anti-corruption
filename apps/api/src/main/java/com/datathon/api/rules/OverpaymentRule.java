@@ -1,0 +1,113 @@
+package com.datathon.api.rules;
+
+import static com.datathon.api.rules.RuleSupport.eur;
+import static com.datathon.api.rules.RuleSupport.percent;
+
+import com.datathon.api.contract.Contract;
+import com.datathon.api.indicator.DataQuality;
+import com.datathon.api.indicator.EvidenceStrength;
+import com.datathon.api.indicator.SeverityNote;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+/**
+ * D2 (docs/ANOMALY_DETECTION.md §D): the paid amount is more than 10 % and at least 5.000 EUR above the total value
+ * with VAT. Paid amounts include VAT, so they are compared with the gross total. Framework agreements are excluded.
+ */
+@Component
+@RequiredArgsConstructor
+public class OverpaymentRule implements ContractRule {
+
+    public static final String RULE_CODE = "D_OVERPAYMENT";
+
+    static final String NOT_MEANING = "Razlika može nastati zbog ugovora s jediničnim cijenama, indeksacije cijena, "
+            + "isplate koja uključuje druge troškove ili pogreške pri unosu u registar. Bez dokumentacije o isplatama "
+            + "ne može se zaključiti je li isplata bila opravdana.";
+
+    private final RuleThresholds thresholds;
+
+    @Override
+    public String ruleCode() {
+        return RULE_CODE;
+    }
+
+    @Override
+    public Optional<IndicatorDraft> evaluate(Contract contract) {
+        BigDecimal paid = contract.getPaidAmount();
+        if (RuleSupport.isFrameworkContract(contract) || paid == null) {
+            return Optional.empty();
+        }
+        boolean isGrossDerived = contract.getTotalValueGross() == null;
+        BigDecimal gross = isGrossDerived ? grossWithoutAmendments(contract) : contract.getTotalValueGross();
+        if (gross == null || gross.signum() <= 0) {
+            return Optional.empty();
+        }
+        BigDecimal share = RuleSupport.growth(paid, gross);
+        BigDecimal difference = paid.subtract(gross);
+        if (share.compareTo(thresholds.ruleD().overpaymentShare()) <= 0
+                || difference.compareTo(thresholds.ruleD().overpaymentMinEur()) < 0) {
+            return Optional.empty();
+        }
+        return Optional.of(draft(contract, paid, gross, share, isGrossDerived));
+    }
+
+    /** Without a gross total the initial gross value can stand in only when the register shows no amendment. */
+    private static BigDecimal grossWithoutAmendments(Contract contract) {
+        BigDecimal amendments = contract.getAmendmentsValue();
+        return amendments == null || amendments.signum() == 0 ? contract.getInitialValueGross() : null;
+    }
+
+    private IndicatorDraft draft(Contract contract, BigDecimal paid, BigDecimal gross, BigDecimal share, boolean isGrossDerived) {
+        boolean isImplausible = paid.compareTo(gross.multiply(thresholds.ruleD().implausibleRatio())) >= 0;
+        boolean isUnitPrice = RuleSupport.isUnitPriceContract(contract);
+        boolean isVatInconsistent = isGrossBelowNet(contract, gross);
+        DataQuality quality = isImplausible || isUnitPrice || isVatInconsistent
+                ? DataQuality.LOW : RuleSupport.baseQuality(contract, isGrossDerived);
+        List<String> missing = new ArrayList<>(List.of("dokumentacija o isplatama"));
+        if (contract.getPaymentNote() == null) {
+            missing.add("obrazloženje razlike");
+        }
+        return new IndicatorDraft(RULE_CODE, share, "udio", "+" + percent(share) + " % iznad ugovorenog iznosa s PDV-om",
+                quality, quality == DataQuality.LOW ? EvidenceStrength.WEAK : EvidenceStrength.MEDIUM,
+                quality == DataQuality.LOW ? SeverityNote.INFORMATIVE : SeverityNote.WORTH_CHECKING,
+                explanation(contract, paid, gross, share, isImplausible, isUnitPrice, isVatInconsistent), NOT_MEANING, missing,
+                RuleSupport.evidence(contract, List.of("Ukupni iznos (sa izmjenama) s PDV-om", "Isplaćeni iznos",
+                        "Obrazloženje iznosa plaćanja")));
+    }
+
+    /**
+     * A gross amount below the net amount cannot be right (seen in a real register: VAT entered as -6.300 EUR),
+     * so the comparison with the paid amount says nothing about the contract.
+     */
+    private static boolean isGrossBelowNet(Contract contract, BigDecimal gross) {
+        BigDecimal net = contract.getTotalValue() != null ? contract.getTotalValue() : contract.getInitialValue();
+        return net != null && gross.compareTo(net) < 0;
+    }
+
+    private String explanation(Contract contract, BigDecimal paid, BigDecimal gross, BigDecimal share,
+                               boolean isImplausible, boolean isUnitPrice, boolean isVatInconsistent) {
+        StringBuilder text = new StringBuilder()
+                .append("Isplaćeni iznos je ").append(eur(paid)).append(", a ukupni ugovoreni iznos s PDV-om ")
+                .append(eur(gross)).append(". Razlika je ").append(eur(paid.subtract(gross)))
+                .append(" (+").append(percent(share)).append(" %). ");
+        text.append(contract.getPaymentNote() == null
+                ? "Registar ne navodi obrazloženje razlike."
+                : "Obrazloženje iz registra: \"" + contract.getPaymentNote() + "\".");
+        if (isVatInconsistent) {
+            text.append(" U registru je iznos s PDV-om manji od iznosa bez PDV-a, što upućuje na pogrešku pri unosu, "
+                    + "pa se zapis prikazuje samo informativno.");
+        } else if (isImplausible) {
+            text.append(" Isplaćeni iznos je ").append(thresholds.ruleD().implausibleRatio().stripTrailingZeros().toPlainString())
+                    .append(" ili više puta veći od ugovorenog. To najčešće upućuje na pogrešku pri unosu u registar "
+                            + "(npr. izostavljen decimalni zarez) ili na ugovor s jediničnim cijenama, pa se zapis "
+                            + "prikazuje samo informativno.");
+        } else if (isUnitPrice) {
+            text.append(" Napomena u registru navodi jedinične cijene ili količine, pa ugovoreni iznos ne mora biti gornja granica.");
+        }
+        return text.toString();
+    }
+}

@@ -27,3 +27,21 @@
 - **Incident:** compose je imao isti naziv kontejnera kao drugi projekt, pa se pokrenula njihova baza. Ništa nije mijenjano. JavniRadar sada ima vlastiti kontejner `javniradar-postgres` na portu 5434.
 - Stvarni ingest: 139 CKAN skupova, 153 preuzete datoteke (A 21, B 52, C 52, D 2, neuspjelo 20, nečitljivo 6). Klasa A daje **2.332 ugovora iz 17 JLS** + 1 županije + 1 vrtića; 590 duplikata; 0 odbačenih redaka. Nalaz: "stari EOJN izvještaj" je bio uračunat u "53 datoteke klase A".
 - GDPR klasifikator pooštren nakon pregleda stvarnih naziva (osobna imena velikim slovima, OPG, uredi ovlaštenih inženjera, format naziva obrta).
+
+## 2026-11-02 (POC, faza 2)
+- Korisnik je potvrdio fazu 1. Odluke:
+  - parser A2 je prvi zadatak nakon POC-a, prije F i C;
+  - Hvar se preskače;
+  - prije faze 2 provjeriti točnost parsera;
+  - razlikovati tip naručitelja;
+  - 2026. je nepotpuna godina.
+- Provjera parsera: svih 20 uzoraka točno. Neobični iznosi su greške u izvornim registrima (Lepoglava, Mikleuš). Pravilo D zato ima zaštite kvalitete podataka (`ANOMALY_DETECTION.md` §D).
+- Implementirani `thresholds.yaml`, pravila D1/D2, `RulesService` i admin endpointi `rules/run` i `synthetic/load`. Dodani `ForbiddenTerms` i test bez iznimki za negacije.
+- Sintetički skup: 28 redaka u EOJN formatu (2 fiktivne općine) kroz isti XLSX parser. Rezultat: 0 FP, 0 FN.
+  - jasni slučajevi: 7 TP, 7 TN;
+  - kvaliteta: 4 TP, 1 odbačen;
+  - rubni: 3 TP, 6 TN.
+- Stvarni podaci: indikatori za 27 ugovora kod 11 naručitelja.
+  - D1: 16 (11 do 30 %, 5 od 30 do 50 %);
+  - D2: 12 (6 od 10 do 30 %, 1 od 30 do 50 %, 1 iznad 50 %, 4 informativna zbog greške u izvoru).
+- `./mvnw test`: 22/22.

@@ -27,6 +27,7 @@ Vrijede za sve AI agente koji pišu kod ili dokumentaciju u ovom repou (Claude C
   - **zabranjeno:** "korupcija", "kriminal", "nezakonito", "prijevara", "pronevjera", "namješteno", i imenovanje fizičkih osoba kao odgovornih.
 - **Nikad ne izmišljaj nalaze o stvarnoj nabavi.** Sintetički podaci se uvijek označavaju **"SINTETIČKI PODACI ZA DEMONSTRACIJU"**, koriste fiktivne nazive ("Općina Primjerovo", "Primjer d.o.o.") i OIB-e `000000000xx`, imaju `is_synthetic = true` i ne ulaze u statistike stvarnih podataka.
 - Ugovori s fizičkim osobama se ne prikazuju, a za obrte se ne radi AI procjena (GDPR).
+- **Obrti:** naziv obrta često sadrži ime vlasnika. API i UI ga prikazuju kao **"Obrt (naziv skriven)"** uz OIB i poveznicu na izvor. Obrti ne ulaze u "top" liste ni sažetke; njihovi indikatori ostaju vidljivi na razini ugovora.
 
 ## Kvaliteta i rok
 - Pravila rade bez `ANTHROPIC_API_KEY`. LLM pozivi idu kroz cache i budžet (`llm_usage`).

@@ -29,8 +29,8 @@ _Rok je prošao. Prema `Desktop/datathon/CLAUDE.md` prijava je predana (izazovi 
 | Faza | Status | Napomena |
 |---|---|---|
 | 1. Shema + ingest + parser klase A | **GOTOVO 02.11.**, potvrđeno; slijedi provjera točnosti parsera | 2.332 ugovora, 17 JLS (+1 županija, 1 vrtić), 0 odbačenih redaka, 11 testova zeleno |
-| 2. Pravilo D + sintetički skup s očekivanim ishodima + testovi | U RADU 02.11. (stati nakon faze 2) | pragovi samo iz `docs/` (NN 48/26), `ForbiddenWordingTest` bez iznimki za negacije |
-| 3. API (`/contracts`, `/contracts/{id}`, `/sources`) | otvoreno | |
+| 2. Pravilo D + sintetički skup s očekivanim ishodima + testovi | **GOTOVO 02.11.**, čeka potvrdu korisnika | sintetika 28 redaka: 0 FP / 0 FN; stvarno 16 D1 + 12 D2 (4 informativna); 22 testa zeleno |
+| 3. API (`/contracts`, `/contracts/{id}`, `/sources`) | otvoreno | tip naručitelja (`jls`/`zupanija`/`javno_tijelo`) u odgovoru; 2026. označiti kao nepotpunu godinu |
 | 4. UI (istraživač, detalj ugovora, izvori) | otvoreno | |
 
 **Nakon POC-a (redoslijed potvrdio korisnik 02.11.):**

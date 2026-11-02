@@ -1,0 +1,52 @@
+# Thresholds for JavniRadar rules (docs/ANOMALY_DETECTION.md §0.5: configuration with validity dates, never in code).
+# Values are copied ONLY from docs/DATA_SOURCES.md §10 and docs/ANOMALY_DETECTION.md §D, which cite
+# ZJN as amended by NN 48/26 (in force 16.05.2026). Nothing here is from memory.
+# A period is chosen by the contract's date_signed, never by today's date (DATA_SOURCES.md §10, "Pravilo").
+# valid-from empty = the start of the period is not stated in docs/ (the table only says "Do 15.05.2026.").
+javniradar:
+  thresholds:
+    # Contract modification limits as a share of the initial value.
+    # DATA_SOURCES.md §10 lists the same values before and after NN 48/26 ("isto"); two periods are kept so the
+    # amendment date stays visible and a future change only needs a new entry.
+    contract-modification:
+      - valid-from:
+        valid-to: 2026-05-15
+        de-minimis-goods-services: 0.10   # ZJN čl. 320 (DATA_SOURCES.md §10)
+        de-minimis-works: 0.15            # ZJN čl. 320
+        additional-supplies: 0.30         # ZJN čl. 316 st. 2 (dodatni radovi/usluge/robe)
+        unforeseen-circumstances: 0.50    # ZJN čl. 317 (nepredviđene okolnosti)
+        source: "ZJN čl. 316 st. 2, 317, 320; docs/DATA_SOURCES.md §10 (stupac 'Do 15.05.2026.')"
+      - valid-from: 2026-05-16
+        valid-to:
+        de-minimis-goods-services: 0.10
+        de-minimis-works: 0.15
+        additional-supplies: 0.30
+        unforeseen-circumstances: 0.50
+        source: "ZJN čl. 316 st. 2, 317, 320 (NN 48/26); docs/DATA_SOURCES.md §10 (stupac 'Od 16.05.2026.')"
+
+    # Simple procurement (ZJN does not apply below these). Used by rule F; kept here so all ZJN values live in one place.
+    # Pre-2023 HRK values (200.000 / 500.000 HRK) are marked [PRETPOSTAVKA, nije provjereno] in DATA_SOURCES.md §10,
+    # so they are deliberately left out.
+    simple-procurement:
+      - valid-from: 2023-01-01
+        valid-to: 2026-05-15
+        goods-services: 26540
+        works: 66360
+        source: "ZJN čl. 12 st. 1; docs/DATA_SOURCES.md §10, ANOMALY_DETECTION.md §F"
+      - valid-from: 2026-05-16
+        valid-to:
+        goods-services: 50000
+        works: 100000
+        source: "ZJN čl. 12 st. 1 (NN 48/26); docs/DATA_SOURCES.md §10"
+
+    # JavniRadar heuristics for rule D (docs/ANOMALY_DETECTION.md §D). NOT legal thresholds: they only decide when a
+    # difference is large enough to show, and when the numbers look like a data entry error.
+    rule-d:
+      min-initial-value-eur: 10000        # D1 only for contracts with initial value >= 10.000 EUR (ANOMALY_DETECTION.md §D)
+      overpayment-share: 0.10             # D2: paid more than 10 % above total with VAT (ANOMALY_DETECTION.md §D)
+      overpayment-min-eur: 5000           # D2: and at least 5.000 EUR above it (ANOMALY_DETECTION.md §D)
+      # Paid or total more than 10x the contracted value: in the 2026-11-02 parser check every such case was a typo in
+      # the published register (missing decimal comma) or a unit-price contract, so data quality drops to "niska" and
+      # the indicator is informative only (work/decisions.md, 2026-11-02).
+      implausible-ratio: 10
+      source: "docs/ANOMALY_DETECTION.md §D (heuristika JavniRadara, nije zakonski prag)"

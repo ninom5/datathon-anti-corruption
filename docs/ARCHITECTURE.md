@@ -75,6 +75,7 @@ flowchart LR
 | 9. AI | contract + indikatori | `ai_assessment` | samo ako je `ANTHROPIC_API_KEY` postavljen i budžet nije potrošen |
 
 Pokretanje: `POST /api/admin/ingest/run` s headerom `X-Admin-Token` (= env `ADMIN_TOKEN`; bez njega se svaki admin poziv odbija), sinkrono, ~5 min. Ponovni run preskače datoteke s istim URL-om i sha256 koje su već uvezene. Cron kasnije. Za MVP je dovoljan **ručni run + GitHub Actions `workflow_dispatch`** ili Spring `@Scheduled` noću. Svaki run je zapis u `ingest_run`.
+Nakon uvoza ingest pokreće deterministička pravila (`RulesService`). Pravila se mogu ponovno izračunati bez ingesta: `POST /api/admin/rules/run` (npr. nakon promjene `thresholds.yaml`). Sintetički skup se učitava s `POST /api/admin/synthetic/load`: CSV iz `src/main/resources/synthetic/` pretvara se u XLSX i prolazi isti čitač, parser i pravila kao stvarna datoteka. Očekivani ishodi su samo u testnim fixtureima (`fixtures/synthetic/expected.csv`).
 
 ## 5. REST API (`/api/v1`, JSON, samo čitanje osim povratnih informacija)
 

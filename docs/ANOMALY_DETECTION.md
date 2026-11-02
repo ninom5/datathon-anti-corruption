@@ -270,6 +270,25 @@ UI prikazuje pravni kontekst samo kao **okvir**. Nikad ne tvrdi da je granica pr
 
 **Vizualizacija:** "vodopad": početni iznos → izmjena → ukupni → isplaćeno, s poveznicom na redak registra.
 
+**Implementacija (`rules-v1`, 2026-11-02):** `rules/ValueIncreaseRule` (D1) i `rules/OverpaymentRule` (D2), pragovi u `apps/api/src/main/resources/config/thresholds.yaml`.
+- Granice su strogo "veće od": točno +10 % nije indikator, kao ni preplata od točno +10 % i 5.000 EUR.
+- Ugovor na temelju okvirnog sporazuma (stupac ili "okvirn" u predmetu) se preskače. Ugovori s fizičkim osobama se ne obrađuju (GDPR).
+- D2 bez ukupnog iznosa s PDV-om koristi početni iznos s PDV-om samo ako registar ne navodi izmjenu; tada je kvaliteta `srednja`.
+- **Kvaliteta podataka:**
+  - `visoka` za redak klase A bez upozorenja iz ingesta;
+  - `srednja` ako redak ima ikakvo upozorenje (npr. neispravan OIB, nečitljiv datum izvršenja) ili je ulaz izveden;
+  - **`niska`** ako brojevi upućuju na grešku u izvoru:
+    - isplaćeni ili ukupni iznos je ≥ 10 × ugovorenog (`implausible-ratio`, heuristika, nije zakonski prag);
+    - napomena navodi jedinične cijene ili količine ("jedinič…");
+    - iznos s PDV-om je manji od iznosa bez PDV-a (samo D2).
+- **Pouzdanost dokaza:** `srednja` jer su iznosi izravni, ali osnova izmjene ili isplate nije poznata; `slaba` kad je kvaliteta `niska`.
+- **`severity_note`:** `vrijedi_provjeriti`; `informativno` kad je kvaliteta `niska`. Veličina odstupanja se uvijek računa iz objavljenih brojeva i ne "popravlja" se. Loša kvaliteta snižava samo dimenziju kvalitete.
+- Zašto: provjera točnosti parsera (2026-11-02) našla je u stvarnim registrima tri vrste grešaka. Bez ovih zaštita to bi bili najveći "indikatori" u sustavu:
+  - isplata upisana bez decimalnog zareza (516902 umjesto ~5.169,02);
+  - jedinična cijena upisana kao iznos ugovora (30,09 EUR, isplaćeno 6.523,61);
+  - negativan PDV (iznos s PDV-om 700 uz 7.000 bez PDV-a).
+- Obrazloženje iz registra ("Obrazloženje iznosa plaćanja") prikazuje se doslovno u tekstu indikatora; AI procjena ga kasnije koristi kao razlog.
+
 ### Scenarij E – Niska konkurencija
 
 - **Broj ponuda:** nije dostupan u EOJN izvozu, klasi A, OCDS-u (`numberOfTenderers` = 0/56.866) ni u nacionalnom uzorku. Mogući izvori su TED obavijesti o dodjeli (samo iznad EU pragova) [NEVERIFICIRANO] i EOJN obavijesti o dodjeli (robots.txt zabranjuje struganje eojn.hr).

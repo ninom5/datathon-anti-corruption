@@ -1,6 +1,9 @@
 spring:
   application:
     name: api
+  config:
+    # Rule thresholds with validity dates (docs/ANOMALY_DETECTION.md §0.5), kept apart from technical settings.
+    import: "classpath:config/thresholds.yaml"
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5434/javniradar}
     username: ${DB_USER:javniradar}
