@@ -18,3 +18,12 @@
 - U ovom repou nema `poc/`. Reusable kod je u Javi u `Desktop/datathon`.
 - Pregled starih md fileova: ažurirani README, timeline, team, ideas, tasks (arhiva prijave), competition, jury-simulator skill (3 osobe, rok). Ništa nije obrisano.
 - Kopirani skillovi `react-web` i `spring-boot-api` iz `Desktop/datathon` (izvor netaknut) i prilagođeni JavniRadaru (rječnik domene, /api/v1, domenska pravila, UI pravila za indikatore i AI). `ARCHITECTURE.md` usklađen: camelCase JSON, format greške {statusCode,message,error}.
+
+## 2026-11-02 (POC, faza 1)
+- Plan POC-a potvrđen. Tri preporuke prihvaćene (nečitljiv datum sklapanja odbacuje redak; sintetički OIB `000000000xx` je rezerviran; filter "prikaži sintetičke" umjesto `/demo`). Zapisano u `work/decisions.md`, `UI_UX.md` §4 ažuriran.
+- Korisnik traži: stati nakon faze 1; pragovi samo iz `docs/` (NN 48/26) s `valid_from`; test zabranjenih riječi bez iznimki za negacije.
+- Dodani Flyway, Apache POI 5.5.1 i Testcontainers. `V1__init.sql` je podskup `DATA_MODEL.md` (dodaci u §8).
+- Kopirani `PoliteHttpClient` i ostale ingest/http klase, `AmountParser`, `CroatianDates` te dio `common/` iz `Desktop/datathon`, s bilješkom o porijeklu. User-Agent je `JavniRadar/0.1 (studentski projekt; kontakt)`.
+- **Incident:** compose je imao isti naziv kontejnera kao drugi projekt, pa se pokrenula njihova baza. Ništa nije mijenjano. JavniRadar sada ima vlastiti kontejner `javniradar-postgres` na portu 5434.
+- Stvarni ingest: 139 CKAN skupova, 153 preuzete datoteke (A 21, B 52, C 52, D 2, neuspjelo 20, nečitljivo 6). Klasa A daje **2.332 ugovora iz 17 JLS** + 1 županije + 1 vrtića; 590 duplikata; 0 odbačenih redaka. Nalaz: "stari EOJN izvještaj" je bio uračunat u "53 datoteke klase A".
+- GDPR klasifikator pooštren nakon pregleda stvarnih naziva (osobna imena velikim slovima, OPG, uredi ovlaštenih inženjera, format naziva obrta).

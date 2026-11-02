@@ -112,7 +112,7 @@ Zaglavlje s OIB-om, pravnim oblikom i Sudreg podacima (ili "nije dostupno"). Mre
 Tablica izvora (izdavatelj, licenca, metoda dohvata, zadnji dohvat, broj zapisa, status), pokrivenost (x/556 JLS), pravila s formulama, evaluacija AI-ja, politika jezika, kontakt za ispravke.
 
 ## 4. Sintetički podaci u UI-ju
-Ljubičasta traka preko cijele širine: **"SINTETIČKI PODACI ZA DEMONSTRACIJU – izmišljene organizacije"**. Takvi zapisi nisu u pretrazi stvarnih podataka. Do njih se dolazi samo preko `/demo`.
+Ljubičasta traka preko cijele širine: **"SINTETIČKI PODACI ZA DEMONSTRACIJU – izmišljene organizacije"**. Takvi zapisi nisu u pretrazi ni u statistikama stvarnih podataka. U istraživaču ugovora prikazuju se samo kad korisnik uključi filter **"Prikaži sintetičke"** (zadano isključen); tada svaki sintetički redak ima oznaku, a detalj ugovora traku. (Promjena 2026-11-02 umjesto zasebne rute `/demo`, vidi `work/decisions.md`.)
 
 ## 5. Pristupačnost (WCAG 2.1 AA)
 - Kontrast ≥ 4,5:1 za tekst. Boja nikad nije jedini nositelj informacije (značka ima i slovo pravila).

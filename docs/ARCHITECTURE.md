@@ -66,7 +66,7 @@ flowchart LR
 |---|---|---|---|
 | 1. Discovery | CKAN `package_search?q=registar ugovora&rows=1000`, `organization` | `source_dataset`, `source_resource` | spremamo `metadata_modified`, licencu i format |
 | 2. Download | URL resursa | `source_file` (sha256, veličina, `retrieved_at`, HTTP status) | `PoliteHttpClient`; 1 zahtjev/s po hostu; preskok ako se sha256 nije promijenio |
-| 3. Klasifikacija | prvih 20 redaka | `format_class` A/B/C/D | A ako zaglavlje sadrži `OIB ugovaratelja` + `CPV` ili URL `eojn.hr/contract-eo` |
+| 3. Klasifikacija | prvih 15–20 redaka svakog lista | `format_class` A/B/C/D | **A** ako red zaglavlja sadrži ≥ 25 od 33 stupca EOJN izvoza (`EojnColumn`); B = red zaglavlja sa stupcem "OIB"; C = red zaglavlja bez OIB-a; D = ostalo. Stari EOJN izvještaj (18 stupaca) je B, vidi `work/decisions.md` 2026-11-02 |
 | 4. Parsiranje | A: Apache POI, traži red zaglavlja (prvih 15 redaka); CSV: detekcija kodiranja i separatora; B/C/D: LLM ekstrakcija (Should) | `raw_contract_row` (JSONB izvornog retka + `row_number`) | redak se nikad ne gubi; neparsirano ide u `ingest_issue` |
 | 5. Normalizacija | raw | `contract` | iznos: `"1.500,00"` → 1500.00; HRK → EUR /7,53450 za datume < 2023-01-01; datum: Excel serial / `dd.MM.yyyy.`; CPV: prvih 8 znamenki; OIB: 11 znamenki + kontrolna znamenka (ISO 7064 MOD 11,10) |
 | 6. Validacija | contract | `ingest_issue` | vidi §6 |
@@ -74,7 +74,7 @@ flowchart LR
 | 8. Pravila | contract, reference | `indicator` | deterministički, verzionirano |
 | 9. AI | contract + indikatori | `ai_assessment` | samo ako je `ANTHROPIC_API_KEY` postavljen i budžet nije potrošen |
 
-Pokretanje: `POST /api/admin/ingest/run` (zaštićeno tokenom) i cron. Za MVP je dovoljan **ručni run + GitHub Actions `workflow_dispatch`** ili Spring `@Scheduled` noću. Svaki run je zapis u `ingest_run`.
+Pokretanje: `POST /api/admin/ingest/run` s headerom `X-Admin-Token` (= env `ADMIN_TOKEN`; bez njega se svaki admin poziv odbija), sinkrono, ~5 min. Ponovni run preskače datoteke s istim URL-om i sha256 koje su već uvezene. Cron kasnije. Za MVP je dovoljan **ručni run + GitHub Actions `workflow_dispatch`** ili Spring `@Scheduled` noću. Svaki run je zapis u `ingest_run`.
 
 ## 5. REST API (`/api/v1`, JSON, samo čitanje osim povratnih informacija)
 

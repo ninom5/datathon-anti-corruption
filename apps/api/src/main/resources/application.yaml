@@ -2,10 +2,22 @@ spring:
   application:
     name: api
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5433/datathon}
-    username: ${DB_USER:datathon}
-    password: ${DB_PASSWORD:datathon}
+    url: ${DB_URL:jdbc:postgresql://localhost:5434/javniradar}
+    username: ${DB_USER:javniradar}
+    password: ${DB_PASSWORD:javniradar}
   jpa:
     hibernate:
-      ddl-auto: update
+      # Schema comes from Flyway (db/migration); Hibernate only checks that entities match it.
+      ddl-auto: validate
     open-in-view: false
+  flyway:
+    enabled: true
+
+# /api/admin routes need header X-Admin-Token equal to this; empty = every admin call is refused.
+admin:
+  key: ${ADMIN_TOKEN:}
+
+javniradar:
+  ingest:
+    cache-dir: ${INGEST_CACHE_DIR:./data/cache}
+    query: registar ugovora

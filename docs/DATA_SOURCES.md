@@ -66,6 +66,30 @@ Preuzeli smo 166 strojno čitljivih resursa: 148 je vratilo HTTP 200, 5 HTTP 403
 Najviše zapisa imaju Grad Osijek 586, Općina Sveti Filip i Jakov 273, Grad Hvar 264, Grad Ozalj 263, Grad Ivanec 241, Grad Čakovec 223, Općina Mikleuš 130 i Općina Kloštar Ivanić 114.
 Ostalih ~17 izdavatelja klase A ima zaglavlje pomaknuto za nekoliko redaka. Robustan parser ih mora naći tražeći red zaglavlja.
 
+### 1.1a Ponovna provjera ingestom, 2026-11-02 [VERIFICIRANO]
+Prvi stvarni run ingesta (`POST /api/admin/ingest/run`, `PoliteHttpClient`, 1 zahtjev/s po hostu, ~5 min):
+- CKAN `package_search?q=registar ugovora&rows=1000` vraća HTTP 200 sa **139 skupova**. Formati resursa sada su XLSX 103, PDF 65, CSV 34, DOCX 24, bez formata 16, XLS 14, HTML 10, JSON 10, XML 5, ostalo 3. Brojke se razlikuju od 1.11. jer su se tada brojali samo skupovi s naslovom "registar ugovora".
+- `https://data.gov.hr/robots.txt` vraća **HTML SPA s HTTP 200**, ne pravi robots.txt. `RobotsRules` u njemu ne nalazi zabrane.
+- **Preuzeto 153 datoteke** (XLSX/XLS/CSV):
+  - klasa A: 21 datoteka, 18 izdavatelja;
+  - B: 52; C: 52; D: 2;
+  - neuspio download: 20 (Grad Zagreb 403 ×6, Grad Rijeka 404 ×2, Grad Hvar SSL certifikat ×2, NEAKTIVNO ministarstvo ×6, ostalo 404 ×3, neispravan URL ×1);
+  - nečitljivo: 6 (XLSX/XLS koje POI ne otvara, vjerojatno HTML ili stari format pod pogrešnim nastavkom).
+- Ostalih 168 resursa (PDF, DOCX, HTML, JSON, XML, bez formata) u POC-u se ne preuzima.
+- **Klasa A** (točno 33-stupčani EOJN izvoz s poveznicom `eojn.hr/contract-eo`):
+  - 2.922 retka, **2.332 jedinstvena ugovora**; 590 redaka su duplikati iz novijih datoteka;
+  - 19 naručitelja: **17 JLS**, 1 županija, 1 dječji vrtić;
+  - datumi 2024-01-01 – 2026-04-14;
+  - 0 odbačenih redaka; 7 ugovora s neispravnim OIB-om dobavljača (ne 11 znamenki).
+  - To se slaže sa "strogo parsiranim podskupom" iz §1.1 (2.425 / 17 izdavatelja).
+- **Novi nalaz: "stari EOJN izvještaj".** Zbroj od "53 datoteke klase A" iz §1.1 uključivao je i **stariji EOJN izvještaj registra**:
+  - oko 20 XLSX datoteka od 14+ izdavatelja (npr. Korčula 2018–2022, Mikleuš 2021, Čakovec, Makarska, Zlatar, Rovinj);
+  - ima 18 stupaca (`Evidencijski broj nabave`, `Naziv i OIB ugovaratelja` u **jednoj ćeliji**, `Datum sklapanja`, `Iznos bez PDV-a`, `Ukupni isplaćeni iznos s PDV-om`, `Obrazloženja`…);
+  - zaglavlje je u 13.–14. retku, ispod naslova "REGISTAR UGOVORA";
+  - **nema poveznice na eojn.hr ni stupca izmjene**, a godine su uglavnom do 2023.;
+  - klasifikator ga sada vodi kao **B**. Odluka je u `work/decisions.md`.
+- Testni uzorak: `apps/api/src/test/resources/fixtures/eojn/grad-osijek-registar-ugovora.xlsx` (HTTP 200, 161.561 B, 588 redaka; datum sklapanja je Excel serijski broj, npr. `46003` = 2025-12-12; zaglavlje `Iznos s PDV-om ` ima razmak na kraju).
+
 ### 1.2 Polja standardnog EOJN izvoza (klasa A, stvarno zaglavlje iz `Grad Osijek / registar-ugovora.xlsx`) [VERIFICIRANO]
 
 | Stupac | Primjer | Popunjenost (n = 2.425) | Napomena |

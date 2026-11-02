@@ -1,17 +1,21 @@
+# Own project name, container, volume and port: the sibling repo Desktop/datathon uses "datathon-postgres"
+# on 5433 with volume api_pgdata, and sharing them mixed both projects' schemas (2026-11-02).
+name: javniradar
+
 services:
   postgres:
     image: postgres:17
-    container_name: datathon-postgres
+    container_name: javniradar-postgres
     environment:
-      POSTGRES_DB: datathon
-      POSTGRES_USER: datathon
-      POSTGRES_PASSWORD: datathon
+      POSTGRES_DB: javniradar
+      POSTGRES_USER: javniradar
+      POSTGRES_PASSWORD: javniradar
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U datathon -d datathon"]
+      test: ["CMD-SHELL", "pg_isready -U javniradar -d javniradar"]
       interval: 5s
       timeout: 3s
       retries: 10

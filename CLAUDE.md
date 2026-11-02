@@ -29,7 +29,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 ## Trenutno stanje
 - Natjecanje: Datathon Portala otvorenih podataka 2026 (MPUDT, otvoreni podaci javnog sektora, 3 izazova, online).
 - **Projekt: JavniRadar** (izazov A): analiza lokalne javne nabave i neuobičajenih obrazaca, s pravilima i AI procjenom. **Rok: rješenje + video (do 3 min) mailom na open.data@mpudt.hr do 9.11.2026. 24:00. Feature freeze 7.11. 20:00.**
-- Faza: dokumentacija gotova (`docs/`, 2026-11-01), čeka pregled korisnika. Implementacija kreće 2.11. po `docs/MVP_ROADMAP.md`.
+- Faza: **POC u izradi** (`work/prompts/poc-implementation.md`). Faza 1 (shema + ingest + parser klase A) gotova 2.11., čeka potvrdu korisnika prije faze 2. Status u `work/tasks.md`. Lokalna baza: `javniradar-postgres` na portu 5434.
 - Podaci (provjereno 1.11.):
   - glavni izvor su općinski registri ugovora u standardnom EOJN XLSX formatu (~30 JLS na data.gov.hr);
   - nacionalni JSON izvoz je samo uzorak od 20.000 redaka;
@@ -43,7 +43,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - Sudreg ključ i Claude API ključ (korisnik);
   - javni GitHub (sigurnosna politika);
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
-- Zadnje ažurirano: 2026-11-01
+- Zadnje ažurirano: 2026-11-02
 
 ## Index
 | File | Sadržaj |

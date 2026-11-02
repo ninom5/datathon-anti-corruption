@@ -24,3 +24,19 @@ _Rok je prošao. Prema `Desktop/datathon/CLAUDE.md` prijava je predana (izazovi 
 | Pregled dokumentacije `docs/` | korisnik | 02.11. | OTVORENO |
 | Provjeriti smije li kod javno na GitHub (sigurnosna politika); inače predaja zip-om | korisnik | 07.11. | OTVORENO |
 | Potvrditi broj članova tima (3 ili 4) i upisati `team/team.md` | korisnik | 02.11. | OTVORENO |
+
+## POC (vertikalni presjek), prompt `work/prompts/poc-implementation.md`
+| Faza | Status | Napomena |
+|---|---|---|
+| 1. Shema + ingest + parser klase A | **GOTOVO 02.11.**, potvrđeno; slijedi provjera točnosti parsera | 2.332 ugovora, 17 JLS (+1 županija, 1 vrtić), 0 odbačenih redaka, 11 testova zeleno |
+| 2. Pravilo D + sintetički skup s očekivanim ishodima + testovi | U RADU 02.11. (stati nakon faze 2) | pragovi samo iz `docs/` (NN 48/26), `ForbiddenWordingTest` bez iznimki za negacije |
+| 3. API (`/contracts`, `/contracts/{id}`, `/sources`) | otvoreno | |
+| 4. UI (istraživač, detalj ugovora, izvori) | otvoreno | |
+
+**Nakon POC-a (redoslijed potvrdio korisnik 02.11.):**
+1. **Parser "A2" za stari EOJN izvještaj** (~20 datoteka, 14+ izdavatelja, 2018.–2023.). PRVI zadatak nakon POC-a, prije pravila F i C (trebaju više godina i JLS). Vidi `work/decisions.md`.
+2. Pravila F i C.
+
+**Odgođeno:**
+- Grad Hvar (264 ugovora prema 1.11.): Java odbija TLS certifikat (`SSLHandshakeException`). Za POC preskočeno; TLS provjera se ne dira. Opcija: dodati nedostajući posredni certifikat u vlastiti truststore.
+- Kontejner `datathon-postgres` (drugi projekt) je ostao upaljen jer ga je pokrenuo naš stari compose. Korisnik ga može ugasiti (`docker stop datathon-postgres`).

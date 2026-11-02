@@ -289,3 +289,20 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 - `is_synthetic = true` na organizaciji i ugovoru. OIB-i iz raspona `000000000xx` (namjerno nevaljani). Nazivi "Općina Primjerovo", "Primjer d.o.o.".
 - API vraća `"synthetic": true`, a UI prikazuje traku **"SINTETIČKI PODACI ZA DEMONSTRACIJU"**.
 - Sintetički i stvarni zapisi **nikad** ne ulaze u istu usporednu skupinu ni statistiku (`WHERE NOT is_synthetic` u svim agregatima, uz test).
+
+## 8. Stanje implementacije (POC, `V1__init.sql`, 2026-11-02)
+**Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
+**Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `ai_assessment`, `llm_usage`, `feedback` (dolaze s pravilima F/C, AI-jem i Sudregom). Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.
+
+**Dodaci u odnosu na §2** (obrazloženje u `work/decisions.md`):
+| Tablica | Stupac | Zašto |
+|---|---|---|
+| `source_dataset` | `metadata_modified`, `is_synthetic` | CKAN svježina; sintetički izvor se označava na razini skupa |
+| `source_file` | `resource_id`, `name`, `resource_modified`, `error_message`; `UNIQUE (url, sha256)` | `resource_modified` određuje "najnoviju datoteku" kod deduplikacije; ponovni run preskače već uvezenu datoteku |
+| `ingest_issue` | `file_id` | greške na razini datoteke nemaju `raw_record` |
+| `contract` | `eojn_tender_url`, `framework_agreement_url`, `evid_number`, `note`, `quality_flags TEXT[]` | tablica `procedure` još ne postoji; `quality_flags` su upozorenja normalizacije i ulaz za `data_quality` |
+| `contract` | bez `procedure_id`, `lot_id`, `plan_item_id` | povezane tablice još ne postoje |
+| `indicator` | `contract_id` | brzi filtar "ima indikator" za pravila nad jednim ugovorom |
+
+**Kodovi u bazi** ostaju hrvatski kao u §2 (`'doo'`, `'robe'`, `'parser'`); Java enumi su engleski (`LLC`, `GOODS`, `PARSER`) i mapiraju se konverterom (`DatabaseCodeConverter`).
+**Lokator:** `sheet=<1-based indeks lista>;row=<Excel redak>`, `raw_record.payload` = `{zaglavlje: tekst ćelije}` bez praznih ćelija.

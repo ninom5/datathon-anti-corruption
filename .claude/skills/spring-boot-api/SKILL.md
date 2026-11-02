@@ -10,8 +10,8 @@ Read first: `docs/ARCHITECTURE.md`, `docs/DATA_MODEL.md`, `docs/ANOMALY_DETECTIO
 Goal: code that works for the demo by 9 Nov (feature freeze 7 Nov 20:00), that the whole team can read without explanation, and that the jury can inspect (criteria "Feasibility" and "Technical architecture"). Simple and consistent beats clever.
 
 ## Stack (verified in `pom.xml`)
-- Spring Boot 4.1, Java 25, `spring-boot-starter-webmvc` (blocking MVC, NOT WebFlux), Data JPA, Validation, Lombok, PostgreSQL 17 in Docker (`localhost:5433`).
-- `open-in-view: false` is intentional. The schema in `docs/DATA_MODEL.md` relies on CHECK constraints, `pg_trgm` and JSONB, which `ddl-auto: update` cannot create, so `docs/MVP_ROADMAP.md` proposes **Flyway** (`V1__init.sql`). This is a team decision: until it is confirmed in `work/decisions.md`, ask before adding it.
+- Spring Boot 4.1, Java 25, `spring-boot-starter-webmvc` (blocking MVC, NOT WebFlux), Data JPA, Validation, Lombok, PostgreSQL 17 in Docker (`localhost:5434`, container `javniradar-postgres`, own compose project so it never shares a volume with `Desktop/datathon`).
+- `open-in-view: false` is intentional. The schema in `docs/DATA_MODEL.md` relies on CHECK constraints, `pg_trgm` and JSONB, which `ddl-auto: update` cannot create, so `docs/MVP_ROADMAP.md` proposes **Flyway** (`V1__init.sql`); confirmed 2026-11-02 in `work/decisions.md`.
 - Boot 4 uses **Jackson 3** (packages `tools.jackson.*`, not `com.fasterxml.jackson.databind`). Annotations like `@JsonProperty` are still in `com.fasterxml.jackson.annotation`. If unsure about an import, check what is on the classpath; don't guess.
 - Do not add dependencies to `pom.xml` without a short justification to the user (what, why, alternative without the dependency).
 
