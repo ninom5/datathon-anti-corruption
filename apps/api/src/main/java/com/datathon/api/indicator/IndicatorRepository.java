@@ -1,5 +1,6 @@
 package com.datathon.api.indicator;
 
+import java.util.Collection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 public interface IndicatorRepository extends JpaRepository<Indicator, Long> {
 
     List<Indicator> findByContractId(Long contractId);
+
+    List<Indicator> findByContractIdInAndStatusOrderByRuleCode(Collection<Long> contractIds, IndicatorStatus status);
 
     /** Rules are recomputed as a whole; feedback states (osporen, ispravljen) do not exist yet in the POC. */
     @Modifying

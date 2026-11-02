@@ -30,8 +30,8 @@ _Rok je prošao. Prema `Desktop/datathon/CLAUDE.md` prijava je predana (izazovi 
 |---|---|---|
 | 1. Shema + ingest + parser klase A | **GOTOVO 02.11.**, potvrđeno; slijedi provjera točnosti parsera | 2.332 ugovora, 17 JLS (+1 županija, 1 vrtić), 0 odbačenih redaka, 11 testova zeleno |
 | 2. Pravilo D + sintetički skup s očekivanim ishodima + testovi | **GOTOVO 02.11.**, čeka potvrdu korisnika | sintetika 28 redaka: 0 FP / 0 FN; stvarno 16 D1 + 12 D2 (4 informativna); 22 testa zeleno |
-| 3. API (`/contracts`, `/contracts/{id}`, `/sources`) | otvoreno | tip naručitelja (`jls`/`zupanija`/`javno_tijelo`) u odgovoru; 2026. označiti kao nepotpunu godinu |
-| 4. UI (istraživač, detalj ugovora, izvori) | otvoreno | |
+| 3. API (`/contracts`, `/contracts/{id}`, `/sources`) | **GOTOVO 02.11.** | uz `/contracts/summary`, `/buyers`, `/sources/summary`; GDPR test za obrte i fizičke osobe; 29 testova zeleno |
+| 4. UI (istraživač, detalj ugovora, izvori) | U RADU 02.11. | |
 
 **Nakon POC-a (redoslijed potvrdio korisnik 02.11.):**
 1. **Parser "A2" za stari EOJN izvještaj** (~20 datoteka, 14+ izdavatelja, 2018.–2023.). PRVI zadatak nakon POC-a, prije pravila F i C (trebaju više godina i JLS). Vidi `work/decisions.md`.

@@ -2,6 +2,7 @@ package com.datathon.api.rules;
 
 import com.datathon.api.contract.Contract;
 import com.datathon.api.indicator.DataQuality;
+import com.datathon.api.source.Locators;
 import com.datathon.api.source.RawRecord;
 import com.datathon.api.source.SourceFile;
 import java.math.BigDecimal;
@@ -11,13 +12,11 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** Shared pieces of contract rules: data quality, evidence links and Croatian number formatting. */
 final class RuleSupport {
 
-    private static final Pattern LOCATOR = Pattern.compile("sheet=(\\d+);row=(\\d+)");
     /** "Ugovorena cijena je po jediničnim količinama iz troškovnika" (real note, Općina Mikleuš 2025). */
     private static final Pattern UNIT_PRICE_NOTE = Pattern.compile("jedinič|jedinic", Pattern.CASE_INSENSITIVE);
     private static final Pattern FRAMEWORK_SUBJECT = Pattern.compile("okvirn", Pattern.CASE_INSENSITIVE);
@@ -61,8 +60,7 @@ final class RuleSupport {
     }
 
     static String humanLocator(String locator) {
-        Matcher matcher = LOCATOR.matcher(locator);
-        return matcher.matches() ? "list " + matcher.group(1) + ", redak " + matcher.group(2) : locator;
+        return Locators.humanReadable(locator);
     }
 
     /** "200.000,00 €", as in docs/UI_UX.md (hr-HR). */

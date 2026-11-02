@@ -89,3 +89,8 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
    - Istraživač ima filtar za nju, a sažetak brojku "N mogućih grešaka u unosu".
    - Zašto: ti zapisi nisu signal o ugovoru, nego o kvaliteti objavljenih podataka. Miješanje s "vrijedi provjeriti" bi napuhalo brojke.
 4. **Git:** lokalni commitovi na grani `poc/vertical-slice` prije faze 3, nakon faze 3 i nakon faze 4. Bez pusha.
+
+## 2026-11-02: Posljedica pravila "obrti izvan sažetaka" (faza 3)
+- Sažetak isključuje obrte, pa je "N mogućih grešaka u unosu" na stvarnim podacima **1**, a filtar istraživača pokazuje **4** ugovora. Tri od četiri informativna zapisa (Lepoglava) su ugovori s obrtima.
+- Odluka za POC: pravilo korisnika se poštuje. Sažetak uz brojke uvijek navodi koliko je ugovora s obrtima izostavljeno (`excludedCraftContracts`), da se brojke mogu uskladiti s tablicom.
+- **Otvoreno za korisnika:** brojanje (bez naziva) ne otkriva osobu. Možda je dovoljno isključiti obrte samo iz "top" lista s nazivima, a u brojkama ih ostaviti.

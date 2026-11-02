@@ -45,3 +45,15 @@
   - D1: 16 (11 do 30 %, 5 od 30 do 50 %);
   - D2: 12 (6 od 10 do 30 %, 1 od 30 do 50 %, 1 iznad 50 %, 4 informativna zbog greške u izvoru).
 - `./mvnw test`: 22/22.
+
+## 2026-11-02 (POC, faza 3)
+- Odluke korisnika zapisane:
+  - `sourceExplanation` za D2;
+  - "Obrt (naziv skriven)";
+  - kategorija mogućih grešaka u unosu;
+  - lokalni commitovi na `poc/vertical-slice`.
+- API (`/api/v1`): `contracts`, `contracts/summary`, `contracts/{id}`, `buyers`, `sources`, `sources/summary`. Filtri: naručitelj, dobavljač, godina, ima indikator, kategorija, sintetika (zadano isključena).
+- Stvarni podaci preko API-ja:
+  - 2.298 prikazivih ugovora; 34 ugovora s fizičkim osobama su skrivena;
+  - sažetak bez obrta: 1.954 ugovora, 99,4 M EUR, 21 s indikatorom, 1 moguća greška u unosu (344 ugovora s obrtima izostavljeno).
+- Testovi: 29/29 (novi su `ContractControllerTest`, `SourceControllerTest` i `ContractPrivacyTest`).

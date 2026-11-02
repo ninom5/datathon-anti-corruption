@@ -114,6 +114,19 @@ Nakon uvoza ingest pokreće deterministička pravila (`RulesService`). Pravila s
   "synthetic": true
 }
 ```
+**Implementirano u POC-u (2026-11-02):**
+| Metoda | Putanja | Napomena |
+|---|---|---|
+| GET | `/contracts?buyerOib=&supplierOib=&year=&hasIndicator=&severity=&synthetic=&sort=&page=&size=` | `severity` je `vrijedi_provjeriti` ili `informativno` (moguća greška u unosu); `synthetic` je zadano `false`; `sort` je `dateSigned` (zadano) ili `value` |
+| GET | `/contracts/summary` (isti filtri) | brojke za traku istraživača; samo stvarni podaci, bez obrta (`excludedCraftContracts` ih broji odvojeno); `possibleEntryErrors` = "N mogućih grešaka u unosu" |
+| GET | `/contracts/{id}` | vrijednosti, indikatori (tri dimenzije, `sourceExplanation`, `possibleEntryError`, dokazi, "što ovo NE znači"), provenancija (skup, izdavatelj, datoteka, lokator, vrijeme dohvata, metoda, pouzdanost) |
+| GET | `/buyers?synthetic=` | naručitelji s brojem ugovora, za filtar; `type` je `jls`, `zupanija` ili `javno_tijelo` |
+| GET | `/sources?synthetic=&page=&size=` | skupovi s datotekama: status (`uvezeno`, `format_nije_podrzan`, `nestrukturirano`, `necitljivo`, `nedostupno`), vrijeme dohvata, broj redaka i ugovora |
+| GET | `/sources/summary` | pokrivenost: skupovi, datoteke po statusu, naručitelji po tipu, ugovori po godini (`incomplete` za godinu koja nije završila u trenutku dohvata), skriveni ugovori s fizičkim osobama, problemi ingesta po kodu |
+
+- **GDPR:** ugovor s fizičkom osobom vraća 404 i ne pojavljuje se u listama. Obrt se vraća kao `{"name": "Obrt (naziv skriven)", "nameHidden": true, "oib": ...}`.
+- **Nepotpuna godina:** `yearIncomplete = true` za godine od godine zadnjeg dohvata (`DataCoverage`), tj. 2026. u POC-u.
+
 JSON polja su camelCase na engleskom, prema rječniku u skillu `spring-boot-api`. Liste vraćaju `{content, totalElements, page, size}` (zadano `size = 20`, najviše 100).
 
 **Greške:** jedinstveni oblik koji frontend već očekuje (`apps/web/src/types/ErrorResponse.type.ts`): `{statusCode, message, error}`, s porukom na hrvatskom. Odgovori ne sadrže stack traceove, OIB-ove ni URL-ove vanjskih servisa (obrazac iz `RestSudregClient`).
