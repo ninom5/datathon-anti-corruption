@@ -39,7 +39,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 - MVP pravila: D (izmjene/preplate), F (cjepkanje), C (koncentracija). B samo uz Sudreg ključ.
 - Ocjenjivanje: max 60 b. Najviše nose Izvedivost (10), UI/UX (10), video (10). Nagrada se ne dodjeljuje ispod 50 b.
 - Otvoreno:
-  - stack (preporuka Java/Spring Boot umjesto FastAPI-ja, čeka potvrdu);
+  - stack: Java/Spring Boot POTVRĐEN 2.11.;
   - Sudreg ključ i Claude API ključ (korisnik);
   - javni GitHub (sigurnosna politika);
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
@@ -57,6 +57,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 | `work/ideas.md` | ideje i pristupi (s kritičkom ocjenom) |
 | `work/decisions.md` | odluke + obrazloženja |
 | `work/tasks.md` | tko radi što, status |
+| `work/prompts/` | gotovi promptovi za agente (npr. `poc-implementation.md`) |
 | `log.md` | kronološki dnevnik |
 | `AGENTS.md` | tehnička pravila za AI agente (provenancija, neutralni jezik, AI procjena, sintetički podaci) |
 | `docs/PROJECT_OVERVIEW.md` | problem, korisnici, MVP i budućnost, diferencijacija, mapiranje na 9 kriterija |

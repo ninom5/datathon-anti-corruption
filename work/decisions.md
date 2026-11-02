@@ -34,3 +34,10 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **ZJN je izmijenjen (NN 48/26, 16.05.2026.):** pragovi jednostavne nabave su sada 50.000/100.000 EUR (prije 26.540/66.360); registar ugovora se objavljuje u EOJN-u; upis od 5.000 EUR. Novi Pravilnik NN 86/2026 propisuje 31 obvezno polje. Pragovi idu u konfiguraciju s datumom važenja.
 - Ne strugamo eojn.hr (robots.txt `Disallow: /`).
 - Otvoreno: odnos prema projektu natječaja (izazov C, `Desktop/datathon`). Oba projekta punim kapacitetom u 8 dana nisu realna.
+
+## 2026-11-02: Stack potvrđen: Java/Spring Boot + React
+- Korisnik je potvrdio Javu. Obrazloženje je u `docs/ARCHITECTURE.md` §1: kod za ponovnu upotrebu postoji samo u Javi, a skelet je već postavljen. Python ostaje samo za istraživanje i evaluaciju.
+
+## 2026-11-02: POC uključuje sintetički skup s poznatim ishodom
+- Korisnik želi testne podatke koji moraju biti označeni, da se provjeri radi li pravilo D. Sintetika ide kroz isti parser (EOJN format) i dobiva očekivane oznake. Integracijski test ispisuje TP/FP/TN/FN i pada na promašaju jasnog slučaja.
+- Zašto: stvarni podaci nemaju ground truth, pa bez ovoga ne znamo je li pravilo točno ili samo tiho. Isti skup kasnije služi kao 40 sintetičkih slučajeva u evaluaciji (`MVP_ROADMAP.md`, 06.11.) i za demo.

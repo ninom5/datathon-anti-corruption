@@ -19,7 +19,7 @@ _Rok je prošao. Prema `Desktop/datathon/CLAUDE.md` prijava je predana (izazovi 
 |---|---|---|---|
 | Zatražiti Sudreg OAuth ključ | korisnik | 01.11. | OTVORENO, HITNO |
 | Claude API ključ s limitom potrošnje | korisnik | 02.11. | OTVORENO |
-| Potvrditi stack (Java) i uloge DATA/BACK/FRONT | tim | 02.11. | OTVORENO |
+| Potvrditi stack (Java) i uloge DATA/BACK/FRONT | tim | 02.11. | Java GOTOVO; uloge OTVORENO |
 | Odluka: JavniRadar naspram agregatora natječaja (C) | tim | 02.11. | OTVORENO |
 | Pregled dokumentacije `docs/` | korisnik | 02.11. | OTVORENO |
 | Provjeriti smije li kod javno na GitHub (sigurnosna politika); inače predaja zip-om | korisnik | 07.11. | OTVORENO |
