@@ -65,3 +65,8 @@
   - naslovnica, istraživač (filtri u URL-u, sažetak, tablica koja na mobitelu postaje kartice), detalj ugovora (tri dimenzije, objašnjenje naručitelja prije postotka, "Što ovo NE znači", dokazi, izvor s lokatorom) i izvori (pokrivenost i skupovi s datotekama);
   - ljubičasta traka za sintetiku; 4 stanja ekrana; 4xx se ne ponavlja.
 - Provjera: `yarn lint` i `yarn build` zeleno; `./mvnw test` 29/29. Ekrani su provjereni headless screenshotovima (Edge), jer proširenje za Chrome nije instalirano.
+
+## 2026-11-02 (večer): POC spojen u main, raspisani zadaci
+- `poc/vertical-slice` spojen u `main` fast-forwardom (0ca7dfb). Uključuje i `nmilas-poc`. Ništa nije pushano.
+- `work/tasks.md` prepisan u backlog T01–T29 + P1–P4 po ulogama DATA/BACK/FRONT, s rokovima, ovisnostima i promptovima. Arhiva prijave je skraćena.
+- Remote repo `ninom5/datathon-anti-corruption` je PRIVATE (provjereno `gh`).
