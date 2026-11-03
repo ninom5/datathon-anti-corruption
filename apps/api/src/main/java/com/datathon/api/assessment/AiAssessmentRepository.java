@@ -30,14 +30,15 @@ public interface AiAssessmentRepository extends JpaRepository<AiAssessment, Long
 
     /**
      * {@code [contractId, subject, value, hasActiveIndicator]} of contracts that may be sent to the model: the supplier
-     * has an OIB and is neither a craft nor a natural person (GDPR, AGENTS.md). The value is total or initial EUR.
+     * has an OIB and is not a craft, a natural person, "ostalo" or "nepoznato" (the last two hold crafts with personal
+     * names that the classifier did not recognise; GDPR, AGENTS.md). The value is total or initial EUR.
      */
     @Query(nativeQuery = true, value = """
             select c.id, c.subject, coalesce(c.total_value_eur, c.initial_value_eur),
                    exists (select 1 from indicator_contract ic join indicator i on i.id = ic.indicator_id
                            where ic.contract_id = c.id and i.status = 'aktivan')
             from contract c join organization s on s.id = c.supplier_id
-            where s.oib is not null and s.org_type not in ('obrt', 'fizicka_osoba') and c.is_synthetic = :synthetic""")
+            where s.oib is not null and s.org_type not in ('obrt', 'fizicka_osoba', 'ostalo', 'nepoznato') and c.is_synthetic = :synthetic""")
     List<Object[]> findCandidateRows(@Param("synthetic") boolean synthetic);
 
     /**
@@ -55,7 +56,7 @@ public interface AiAssessmentRepository extends JpaRepository<AiAssessment, Long
             join raw_record r on r.id = p.raw_record_id
             join source_file f on f.id = r.file_id
             where not c.is_synthetic and f.format_class = 'A'
-              and s.oib is not null and s.org_type not in ('obrt', 'fizicka_osoba')
+              and s.oib is not null and s.org_type not in ('obrt', 'fizicka_osoba', 'ostalo', 'nepoznato')
             order by md5(c.id::text || :seed)
             limit :size""")
     List<Object[]> findRealSample(@Param("seed") String seed, @Param("size") int size);

@@ -59,7 +59,7 @@ class AiContextBuilderTest {
     private static AiContext build() {
         Contract contract = contract();
         return AiContextBuilder.build(contract, List.of(indicator(contract)), new AiContextBuilder.ContextFacts(null,
-                new MunicipalityFacts(3120, "P2"), null, new AiContextBuilder.Threshold(new BigDecimal("26540"), "ZJN")));
+                new MunicipalityFacts(3120, "P2"), null, new AiContextBuilder.Threshold(new BigDecimal("26540"), "ZJN"), null));
     }
 
     @Test
@@ -87,6 +87,30 @@ class AiContextBuilderTest {
     }
 
     @Test
+    void companyRegisterDataComesFromTheSnapshotWithItsSource() {
+        Contract contract = contract();
+        AiContextBuilder.CompanyFacts company = new AiContextBuilder.CompanyFacts(true, LocalDate.of(2026, 11, 4),
+                LocalDate.of(2020, 12, 9), "41.00.0", "Građenje stambenih i nestambenih zgrada", "NKD 2025", false, false);
+        AiContextBuilder.CompanyFacts missing = new AiContextBuilder.CompanyFacts(false, LocalDate.of(2026, 11, 4),
+                null, null, null, null, null, null);
+
+        AiContext found = AiContextBuilder.build(contract, List.of(),
+                new AiContextBuilder.ContextFacts(null, null, null, null, company));
+        AiContext notFound = AiContextBuilder.build(contract, List.of(),
+                new AiContextBuilder.ContextFacts(null, null, null, null, missing));
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> supplier = (Map<String, Object>) found.data().get("dobavljac");
+        assertThat(supplier).containsEntry("nkd", "41.00.0").containsEntry("datum_osnivanja", "2020-12-09")
+                .containsEntry("djelatnost", "Građenje stambenih i nestambenih zgrada");
+        assertThat((String) supplier.get("izvor")).startsWith("Sudski registar").contains("NKD 2025");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> unknown = (Map<String, Object>) notFound.data().get("dobavljac");
+        assertThat(unknown).containsEntry("nkd", null).containsEntry("datum_osnivanja", null);
+        assertThat((String) unknown.get("izvor")).startsWith("nije u Sudskom registru");
+    }
+
+    @Test
     void concentrationIndicatorOfAnotherSupplierIsLeftOut() {
         Contract contract = contract();
         Indicator otherSupplier = new Indicator("C_CONCENTRATION", "rules-v1", "buyer_cpv", contract.getBuyer(),
@@ -97,7 +121,7 @@ class AiContextBuilderTest {
         thisSupplier.setSubjectRef("{\"topSupplierOib\":\"00000000012\"}");
 
         AiContext context = AiContextBuilder.build(contract, List.of(otherSupplier, thisSupplier, indicator(contract)),
-                new AiContextBuilder.ContextFacts(null, null, null, null));
+                new AiContextBuilder.ContextFacts(null, null, null, null, null));
 
         assertThat((List<?>) context.data().get("pravila")).hasSize(2);
         assertThat(context.canonicalJson()).doesNotContain("00000000011");

@@ -40,7 +40,17 @@ final class AiContextBuilder {
      *                           (thresholds.yaml), null when date or subject type is unknown
      */
     record ContextFacts(Boolean ownedByBuyer, MunicipalityFacts municipality, Map<String, Object> peerStatistics,
-                        Threshold simpleProcurement) {
+                        Threshold simpleProcurement, CompanyFacts company) {
+    }
+
+    /**
+     * The newest Sudreg snapshot of the supplier; null when it was never looked up (or cannot be: crafts, persons).
+     *
+     * @param foundInRegister false when the register has no subject with this OIB
+     */
+    record CompanyFacts(boolean foundInRegister, java.time.LocalDate retrievedOn, java.time.LocalDate foundedOn,
+                        String nkdCode, String nkdName, String nkdVersion, Boolean inBankruptcy,
+                        Boolean inLiquidation) {
     }
 
     /** A value from thresholds.yaml with the legal source it was copied from. */
@@ -51,7 +61,7 @@ final class AiContextBuilder {
         Map<String, Object> peerStatistics = facts.peerStatistics();
         Map<String, Object> data = new TreeMap<>();
         data.put("ugovor", contractPart(contract, facts.simpleProcurement()));
-        data.put("dobavljac", supplierPart(contract.getSupplier(), facts.ownedByBuyer()));
+        data.put("dobavljac", supplierPart(contract.getSupplier(), facts.ownedByBuyer(), facts.company()));
         data.put("narucitelj", buyerPart(contract.getBuyer(), facts.municipality()));
         data.put("pravila", indicators.stream()
                 .filter(indicator -> isAboutThisSupplier(indicator, contract.getSupplier()))
@@ -87,17 +97,32 @@ final class AiContextBuilder {
         return part;
     }
 
-    private static Map<String, Object> supplierPart(Organization supplier, Boolean ownedByBuyer) {
+    private static Map<String, Object> supplierPart(Organization supplier, Boolean ownedByBuyer, CompanyFacts company) {
         Map<String, Object> part = new TreeMap<>();
         part.put("oib", supplier.getOib());
         part.put("naziv", supplier.getName());
         part.put("pravni_oblik", code(supplier.getOrgType()));
-        part.put("nkd", null);
-        part.put("datum_osnivanja", null);
-        part.put("izvor", COMPANY_REGISTER_UNAVAILABLE);
         part.put("jpt_oznaka", supplier.getJptCode());
         part.put("u_vlasnistvu_narucitelja", ownedByBuyer);
+        boolean isKnown = company != null && company.foundInRegister();
+        part.put("nkd", isKnown ? company.nkdCode() : null);
+        part.put("djelatnost", isKnown ? company.nkdName() : null);
+        part.put("datum_osnivanja", isKnown && company.foundedOn() != null ? company.foundedOn().toString() : null);
+        part.put("u_stecaju", isKnown ? company.inBankruptcy() : null);
+        part.put("u_likvidaciji", isKnown ? company.inLiquidation() : null);
+        part.put("izvor", registerSource(company));
         return part;
+    }
+
+    /** Where NKD and founding date come from; never guessed (docs/ANOMALY_DETECTION.md §4.2). */
+    private static String registerSource(CompanyFacts company) {
+        if (company == null) {
+            return COMPANY_REGISTER_UNAVAILABLE;
+        }
+        if (!company.foundInRegister()) {
+            return "nije u Sudskom registru (provjereno " + company.retrievedOn() + ")";
+        }
+        return "Sudski registar, sudreg-data.gov.hr (" + company.nkdVersion() + ", dohvaćeno " + company.retrievedOn() + ")";
     }
 
     /** A JLS with its population (DZS, Popis 2021) and peer group P1-P7. */

@@ -40,6 +40,13 @@ javniradar:
     prices:
       claude-haiku-5-5: { input: 0.10, output: 0.50 }
       claude-sonnet-5-5: { input: 2.00, output: 10.00 }
+  # Sudski registar (docs/DATA_SOURCES.md §7). Without credentials NKD and founding date stay "nedostupno".
+  sudreg:
+    base-url: https://sudreg-data.gov.hr
+    client-id: ${SUDREG_CLIENT_ID:}
+    client-secret: ${SUDREG_CLIENT_SECRET:}
+    # At most one request per second, as for every other source (PoliteHttpClient).
+    min-interval-millis: 1000
   anthropic:
     api-key: ${ANTHROPIC_API_KEY:}
     base-url: ${ANTHROPIC_BASE_URL:https://api.anthropic.com}

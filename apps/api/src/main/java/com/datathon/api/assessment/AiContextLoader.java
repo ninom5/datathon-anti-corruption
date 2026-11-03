@@ -1,6 +1,9 @@
 package com.datathon.api.assessment;
 
+import com.datathon.api.assessment.AiContextBuilder.CompanyFacts;
 import com.datathon.api.assessment.AiContextBuilder.ContextFacts;
+import com.datathon.api.organization.CompanySnapshotRepository;
+import java.time.ZoneOffset;
 import com.datathon.api.assessment.AiContextBuilder.MunicipalityFacts;
 import com.datathon.api.assessment.AiContextBuilder.Threshold;
 import com.datathon.api.contract.SubjectType;
@@ -35,6 +38,7 @@ public class AiContextLoader {
     private final MunicipalityRepository municipalityRepository;
     private final MunicipalityService municipalityService;
     private final RuleThresholds thresholds;
+    private final CompanySnapshotRepository snapshotRepository;
 
     /** Data shared by all contracts of one run, loaded once; the peer cache is used by parallel workers. */
     public record Lookups(Set<String> supplierFounderPairs, Map<String, Optional<Map<String, Object>>> peerStatistics) {
@@ -56,7 +60,16 @@ public class AiContextLoader {
                 : new MunicipalityFacts(municipality.getPopulation2021(), municipality.getPeerGroup());
         return AiContextBuilder.build(contract, indicatorRepository.findActiveByContractId(contractId),
                 new ContextFacts(ownedByBuyer(contract, lookups), municipalityFacts, peerStatistics(municipality, contract, lookups),
-                        simpleProcurementThreshold(contract)));
+                        simpleProcurementThreshold(contract), companyFacts(contract)));
+    }
+
+    private CompanyFacts companyFacts(Contract contract) {
+        return snapshotRepository.findLatest(contract.getSupplier().getId())
+                .map(snapshot -> new CompanyFacts(!snapshot.isNotFound(),
+                        snapshot.getRetrievedAt().atZone(ZoneOffset.UTC).toLocalDate(), snapshot.getFoundedOn(),
+                        snapshot.getMainNkd(), snapshot.getMainNkdName(), snapshot.getNkdVersion(),
+                        snapshot.getInBankruptcy(), snapshot.getInLiquidation()))
+                .orElse(null);
     }
 
     /** Same thresholds as rule F; without a subject type goods/services and works cannot be told apart. */
