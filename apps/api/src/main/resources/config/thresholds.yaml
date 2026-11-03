@@ -96,3 +96,11 @@ javniradar:
       overpayment: {medium-from: 0.30, high-from: 1.00, strict: true}
       splitting: {medium-from: 1.5, high-from: 2.0, strict: false}         # sum / threshold
       concentration: {medium-from: 7500, high-from: 9000, strict: false}   # HHI
+
+  # Which contracts get an AI assessment (docs/ANOMALY_DETECTION.md §4.1, cost control). JavniRadar heuristics.
+  ai:
+    selection:
+      min-value-eur: 20000                # or at least one rule indicator, or a vague subject
+      min-subject-words: 4                # a subject shorter than this counts as vague
+      max-contracts-per-run: 300          # ai.max_contracts_per_run
+      source: "docs/ANOMALY_DETECTION.md §4.1 (heuristika JavniRadara)"

@@ -127,3 +127,29 @@
 
 ## 2026-11-03 – refactor-ui
 - Nova grana `refactor-ui` (od `43-karta-usporedba`). Frontend prebačen na dizajn sustav OtvoreniRadara: tokeni, fontovi, shell s mobilnim izbornikom, komponente (Button, Badge, PageHeader, stanja, Select, TextInput…), sve stranice na `PageHeader`/`BackLink`. Dodan `DESIGN_SYSTEM.md`, ažuriran `docs/UI_UX.md` §1. Tamni način uklonjen. Build i lint prolaze, provjereno u pregledniku (1280 px i mobitel). Na zahtjev korisnika commitano i otvoren PR #53 (baza `43-karta-usporedba`).
+
+## 2026-11-03 – prompt za #44
+- Napisan `work/prompts/next-44-ai-procjena.md`: faze 1–3 (shema, kontekst, validator, fixture klijent, cache, budžet, admin run s `dryRun`, API i blok u UI-ju) rade bez `ANTHROPIC_API_KEY`; faza 4 (evaluacija 40+60) traži ključ i potvrdu korisnika; faza 5 Sonnet je Should.
+- Ploča: #42 je spojen (PR #52), ali issue je otvoren i u "In progress"; treba ga ručno zatvoriti.
+
+## 2026-11-03 – #44 AI procjena, faze 1–3 (grana `44-ai-procjena`, necommitano)
+- Backend: `V4__ai.sql` (`ai_assessment`, `llm_usage`), paket `assessment` (odabir kandidata, kontekst §4.2 s kanonskim JSON-om i hashom, validator §4.4 + strože dopune, run s cacheom, budžetom po runu i paralelnim pozivima, `POST /api/admin/ai/run`), `integration/anthropic` (`AnthropicLlmClient` sa strukturiranim izlazom, `NoopLlmClient` bez ključa). Prompt `ai-flag-v1` i shema su resursi u `resources/ai/`. Nova ovisnost `anthropic-java` 3.3.0.
+- `GET /contracts/{id}` vraća `aiAssessment` ili razlog zašto ga nema; UI ima blok "AI procjena – zahtijeva ljudsku provjeru" na dnu detalja ugovora (oznaka riječima, jantarna, razlozi s poljima i poveznicama, legitimna objašnjenja uvijek vidljiva, što nedostaje).
+- Testovi: 72 prolaze bez ključa (validator 15 slučajeva, kontekst, run s `FixtureLlmClient`: prihvaćen, odbačen, cache, budžet, API nedostupan, prikaz u API-ju; start bez ključa). `yarn lint` i `yarn build` prolaze.
+- `dryRun` nad lokalnom bazom: 300 kandidata (gornja granica), gruba procjena 0,32 USD s Haikuom. Primjer konteksta pregledan; `statistika_skupine` je za većinu ugovora `null` (n < 8, isti nalaz kao #43).
+- UI provjeren headless Chromeom (proširenje za Chrome nije bilo spojeno) na 1280 i 500 px s privremenim ručnim zapisom na sintetičkom ugovoru, koji je zatim obrisan. Stanja "obrt" i "nije dostupna" provjerena.
+- Sljedeće: faza 4 (evaluacija) nakon potvrde ključa s limitom potrošnje.
+
+## 2026-11-03 – #44 faza 4, prvi pravi pozivi (korisnik potvrdio ključ s limitom)
+- 10 sintetičkih + 21 stvarni ugovor s `claude-haiku-5-5`, `ai-flag-v1`: 30 prihvaćeno, 0 odbačeno, 1 prolazna greška (restart devtoolsa usred runa; ponovljeno uspješno). Trošak ~0,0014–0,0016 USD po pozivu (≈ 5.400 ulaznih, 2.200 izlaznih tokena). Svih 2.212 prihvatljivih stvarnih ugovora ≈ 3 USD.
+- Validator je u 9 od 30 odgovora odbacio pojedine razloge (citirano `null` polje, tvrdnja > 300 znakova); nijedan cijeli odgovor.
+- **Ispravljeno:** pravilo C veže indikator na sve ugovore ćelije (naručitelj + CPV2), i one drugih dobavljača. Model je to primijetio kao nesklad. AI kontekst sada uzima C samo za ugovore najvećeg dobavljača (`topSupplierOib`). Isti prikaz postoji i u UI-ju (#41/#42), nije mijenjan.
+- **Nalazi pregleda (čeka odluku korisnika):** (1) 17 od 20 stvarnih ugovora s indikatorima dobilo je "vrijedi provjeriti", a razlozi uglavnom ponavljaju pravila; (2) jedan razlog kaže "odstupa od usporednih općina" bez `statistika_skupine` u kontekstu; (3) korisni novi signali: CPV koji ne odgovara predmetu (sintetika), 1,78 M € "jednostavnom nabavom" (Bistra, ugovor 5007).
+
+## 2026-11-04 – #44 faza 4: prompt v2/v3 i evaluacija
+- Prompt `ai-flag-v2` (ne ponavljati pravila, usporedba samo s podacima) i `ai-flag-v3` (izuzeta nabava ispod praga je uobičajena, nedostajući podaci nisu razlog). Kontekst dobio prag jednostavne nabave i vrijednost s PDV-om.
+- Popravljeno: `ConcurrentModificationException` u cacheu usporednih skupina (prolazna greška "null"); validator više ne odbija citiranje null polja (§4.4 doslovno); novo pravilo: usporedba s općinama bez `statistika_skupine` se odbacuje.
+- Evaluacija (`docs/EVALUATION.md`): sintetika 40 slučajeva, v3 dva runa: preciznost 1,00, odziv 0,905/0,952, 0 lažno pozitivnih. Stvarni uzorak 60 (seed 44): 12/60 oznaka, kappa prema pravilima 0,444; ručne oznake još nema → metrike prema ljudima nisu izmjerene. CSV i upute u `work/eval/`.
+- Novi endpointi `/api/admin/ai/eval/*` i `contractIds` na `/api/admin/ai/run`. Ukupni trošak do sada 0,66 USD.
+- Lokalno: port 8080 drži tuđi stari `ApiApplication` (PID 19120, kao u `status-42.md`), 8091–8094 također zauzeti; moj API radi na **8095** s `SPRING_DEVTOOLS_RESTART_ENABLED=false` (devtools restart usred runa je rušio pozive).
+

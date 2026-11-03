@@ -1,3 +1,4 @@
+import type {AiAssessment} from "./AiAssessment.type.ts";
 import type {Indicator, IndicatorBadge, MagnitudeBand, RuleCode} from "./Indicator.type.ts";
 import type {OrganizationRef} from "./Organization.type.ts";
 import type {Provenance} from "./Source.type.ts";
@@ -56,6 +57,9 @@ export interface ContractDetail {
     eojnTenderUrl: string | null;
     frameworkAgreementUrl: string | null;
     indicators: Indicator[];
+    /** Null when there is no accepted AI assessment; then aiAssessmentUnavailableReason says why. */
+    aiAssessment: AiAssessment | null;
+    aiAssessmentUnavailableReason: string | null;
     provenance: Provenance;
     synthetic: boolean;
 }

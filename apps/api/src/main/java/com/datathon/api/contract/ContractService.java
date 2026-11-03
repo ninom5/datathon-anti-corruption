@@ -8,6 +8,7 @@ import static com.datathon.api.contract.ContractSpecifications.withIndicator;
 import static com.datathon.api.contract.ContractSpecifications.withIndicatorOfRule;
 import static com.datathon.api.contract.ContractSpecifications.withPossibleEntryError;
 
+import com.datathon.api.assessment.AiAssessmentQueryService;
 import com.datathon.api.common.NotFoundException;
 import com.datathon.api.common.PageRequests;
 import com.datathon.api.common.PageResponse;
@@ -44,6 +45,7 @@ public class ContractService {
     private final IndicatorService indicatorService;
     private final ContractTotals contractTotals;
     private final DataCoverage dataCoverage;
+    private final AiAssessmentQueryService aiAssessmentQueryService;
 
     @Transactional(readOnly = true)
     public PageResponse<ContractListItem> find(ContractFilter filter) {
@@ -61,7 +63,9 @@ public class ContractService {
                 .filter(ContractService::isShowable)
                 .orElseThrow(() -> new NotFoundException("Ugovor " + id + " ne postoji."));
         List<IndicatorResponse> indicators = indicatorService.toResponses(indicatorRepository.findActiveByContractId(id));
-        return ContractDetail.from(contract, indicators, dataCoverage.incompleteFromYear());
+        AiAssessmentQueryService.ContractAssessment ai = aiAssessmentQueryService.forContract(contract);
+        return ContractDetail.from(contract, indicators, ai.assessment(), ai.unavailableReason(),
+                dataCoverage.incompleteFromYear());
     }
 
     /**

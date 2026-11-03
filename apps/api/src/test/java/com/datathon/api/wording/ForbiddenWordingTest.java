@@ -13,7 +13,9 @@ import org.junit.jupiter.api.Test;
 
 /**
  * AGENTS.md: no forbidden term may appear in code, templates or resources that can reach a user. Scans the backend
- * sources and resources and, when present, the frontend sources. The list itself is the only excluded file.
+ * sources and resources and, when present, the frontend sources. Excluded: the list itself, and the AI prompts in
+ * {@code resources/ai/}, which must name the forbidden words to forbid them to the model; they never reach a user, and
+ * every model answer is checked against the same list (AiAssessmentValidator).
  */
 class ForbiddenWordingTest {
 
@@ -57,6 +59,7 @@ class ForbiddenWordingTest {
     private static boolean isScanned(Path file) {
         String name = file.getFileName().toString();
         return Files.isRegularFile(file) && !file.endsWith(Path.of(ForbiddenTerms.RESOURCE))
+                && !file.toString().replace('\\', '/').contains("main/resources/ai/")
                 && TEXT_EXTENSIONS.stream().anyMatch(name::endsWith);
     }
 }

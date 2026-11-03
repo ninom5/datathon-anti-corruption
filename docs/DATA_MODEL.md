@@ -305,9 +305,15 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 - Indeks iz V1 `indicator_contract` preimenovan je u `indicator_contract_id`, jer je naziv potreban tablici.
 - Sintetički osnivači: `SyntheticRegisterLoader` upisuje `founders` za dva fiktivna komunalna društva (OIB `00000000033`, `00000000043`). Stvarne organizacije dobivaju osnivače samo iz JPT-a.
 
+## 8c. AI procjena (#44, `V4__ai.sql`, 2026-11-03)
+- `ai_assessment` i `llm_usage` točno prema §2, uz indeks `ai_assessment_contract (contract_id, status)`. `feedback` dolazi s #45.
+- `reasons` sprema samo prihvaćene razloge (kod potpuno odbačenog odgovora sve, radi evaluacije); `rejection_reason` opisuje i djelomično odbačene razloge.
+- Prikazuje se samo **najnovija** procjena ugovora koja nije `zamijenjeno`, i to samo ako je `prihvaceno`. Ako je najnoviji odgovor za iste podatke odbačen, starija prihvaćena procjena se ne prikazuje.
+- `llm_usage.purpose = 'ai-flag'`; pogodak u cacheu se bilježi s `cache_hit = true` i troškom 0.
+
 ## 8. Stanje implementacije (POC, `V1__init.sql`, 2026-11-02)
 **Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
-**Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `ai_assessment`, `llm_usage`, `feedback` (dolaze s pravilima F/C, AI-jem i Sudregom). Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.
+**Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `feedback` (dolaze s pravilima F/C, AI-jem i Sudregom). Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.
 
 **Dodaci u odnosu na §2** (obrazloženje u `work/decisions.md`):
 | Tablica | Stupac | Zašto |

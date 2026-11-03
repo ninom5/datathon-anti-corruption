@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["oznaka", "razlozi", "nedostajuci_podaci", "moguca_legitimna_objasnjenja", "pouzdanost"],
+  "properties": {
+    "oznaka": {"type": "string", "enum": ["nema_oznake", "vrijedi_provjeriti", "visoka_pozornost"]},
+    "razlozi": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tvrdnja", "polja", "izvori"],
+        "properties": {
+          "tvrdnja": {"type": "string"},
+          "polja": {"type": "array", "items": {"type": "string"}},
+          "izvori": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "nedostajuci_podaci": {"type": "array", "items": {"type": "string"}},
+    "moguca_legitimna_objasnjenja": {"type": "array", "items": {"type": "string"}},
+    "pouzdanost": {"type": "string", "enum": ["niska", "srednja", "visoka"]}
+  }
+}

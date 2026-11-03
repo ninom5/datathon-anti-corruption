@@ -152,3 +152,24 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **Zadržano iz JavniRadara (pravila domene):** jantarni signal (`--color-signal`) umjesto crvene, ljubičasta traka za sintetičke podatke (svoj ton, ne AI ton), tri odvojene dimenzije indikatora, "Što ovo NE znači".
 - **Uklonjeno:** tamni način i velika slova iznad naslova (eyebrow), zaobljene "pill" oznake.
 - Komponente su sada u mapi po komponenti (`components/<Name>/`), kao u OtvoreniRadaru.
+
+## 2026-11-03: #44 – AI procjena (potvrdio korisnik)
+- **Strukturirani izlaz (`output_config.format`, JSON shema iz `ANOMALY_DETECTION.md` §4.3) umjesto prisilnog poziva alata `zabiljezi_procjenu`.** Zašto: `claude-sonnet-5-5` (ponovna provjera, faza 5) vraća 400 na forsirani `tool_choice` (`tool`/`any`), a strukturirani izlaz jednako ograničava odgovor (enumi, obavezna polja). Isti obrazac već radi s Haiku 5.5 u `Desktop/datathon`. §4.3 dopušta "tool use / structured output". `minItems` i `maxLength` iz §4.3 provjerava validator, ne shema.
+- **Few-shot primjeri:** §4.5 ih samo opisuje, pa su napisani kao potpuni sintetički JSON primjeri točno prema tim opisima (u `resources/ai/ai-flag-v1.txt`). Svaka promjena teksta prompta = nova verzija.
+- **Nova ovisnost `com.anthropic:anthropic-java` 3.3.0** (ista kao u `Desktop/datathon`): službeni SDK s retryjem i timeoutima; alternativa (ručni `RestClient`) je više koda bez koristi.
+- **Bez ključa:** `LlmClient` ima `AnthropicLlmClient` (ključ iz env-a) i `FixtureLlmClient` (testovi). Bez ključa AI run vraća "AI nije konfiguriran", a pravila i UI rade dalje.
+- **Gumbi "Korisno / Pogrešno"** se ne rade u #44: `/feedback` (#45) još ne postoji.
+- **Validator je stroži od §4.4** (zapisano u `ANOMALY_DETECTION.md` §4.7): tvrdnja > 300 znakova se odbacuje; zabranjena riječ u objašnjenju ili popisu podataka koji nedostaju odbacuje cijeli odgovor, jer se i to prikazuje; `visoka_pozornost` s manje od dva prihvaćena razloga spušta se na `vrijedi_provjeriti` (pravilo 7 prompta). *Prvotno pravilo "null polje nije citabilno" je ukinuto 03.11.*: odbacivalo je legitimne tvrdnje "izmjene nisu objavljene", a §4.4 traži samo da polje postoji.
+- **`synthetic=true` u AI runu znači samo sintetički ugovori** (evaluacija bez troška na stvarnim), `false` samo stvarni. **`dryRun` je zadano `true`**, da pravi run uvijek traži izričit `dryRun=false`.
+- **Ključ konteksta je `narucitelj`** (bez dijakritike), jer model citira putanje doslovno.
+- **Paralelni pozivi (4):** 300 poziva jedan po jedan traje ~20 min. Cijena: budžet se može premašiti za najviše 4 poziva (desetinke centa s Haikuom).
+- **AI procjena na `IndicatorPage` ("procjena postoji za N od M ugovora skupine") nije rađena** (Should iz prompta, izvan opsega dok nema stvarnih procjena).
+
+## 2026-11-04: #44 – evaluacija i verzije prompta (korisnik: "radi što je najbolje")
+- **Prompt `ai-flag-v3` je u upotrebi.** v1 je ponavljao pravila (17 od 20 stvarnih ugovora s indikatorom "vrijedi provjeriti"); v2 traži novi signal; v3 ispravlja sustavne oznake bez osnove nađene ručnim pregledom stvarnog uzorka (izuzeta nabava ispod praga, nedostajući podaci kao razlog). Brojke su u `docs/EVALUATION.md`.
+- **Kontekst je dobio prag jednostavne nabave i vrijednost s PDV-om.** Bez praga model je "napamet" procjenjivao je li jednostavna nabava prevelika; bez bruto vrijednosti svaka isplata +25 % (PDV) izgledala je kao preplata. Oboje dolazi iz baze i `thresholds.yaml`, ne od modela.
+- **Indikator C ulazi u AI kontekst samo za ugovore dobavljača kojeg imenuje.** #41 veže C na sve ugovore ćelije (naručitelj + CPV2), pa bi model na ugovoru dobavljača Y čitao tvrdnju o dobavljaču X. **Isti prikaz postoji na stranici ugovora (#41/#42) i nije mijenjan; preporuka za #47: na ugovoru drugog dobavljača prikazati C kao kontekst skupine, ne kao oznaku tog ugovora.**
+- **Sintetički skup je ispravljan tri puta (v1→v4), samo zbog grešaka u podacima** (roba označena kao usluge, CPV, iznos iznad praga u skupini F). Nakon v4 se ne mijenja, da se ne prilagođava modelu; svi runovi su zapisani.
+- **Pun run svih 2.212 stvarnih ugovora (~2,5–3,5 USD) je odgođen** dok se ne upišu ručne oznake i ne spoji Sudreg, da se ne plati dvaput. Za demo postoji ~90 stvarnih procjena (lokalna baza).
+- **UI:** `nema_oznake` se prikazuje kao "Bez dodatnih signala", uz rečenicu da AI nije našao ništa osim onoga što pokazuju pravila (semantika v2/v3).
+
