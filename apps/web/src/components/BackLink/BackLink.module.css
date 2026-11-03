@@ -1,0 +1,22 @@
+.link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .link {
+        min-height: 42px;
+        margin-bottom: var(--space-2);
+    }
+}

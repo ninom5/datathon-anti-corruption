@@ -2,7 +2,7 @@ import {ChartFrame, HorizontalBars, OrganizationName} from "@/components";
 import type {IndicatorDetail} from "@/types";
 import {cpvDivisionLabel, formatEur, formatNumber} from "@/utils";
 import {buildSupplierShares, supplierChartLabel} from "@/pages/IndicatorPage";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface ConcentrationChartProps { indicator: IndicatorDetail }
 const percent = (value: number) => new Intl.NumberFormat("hr-HR", {style: "percent", maximumFractionDigits: 1}).format(value);

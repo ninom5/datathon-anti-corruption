@@ -1,5 +1,5 @@
 import {Link, useSearchParams} from "wouter";
-import {EmptyState, ErrorState, LoadingState} from "@/components";
+import {ButtonLink, EmptyState, ErrorState, LoadingState, PageHeader} from "@/components";
 import {useMunicipalities, usePeerComparison} from "@/hooks";
 import {mapPath, routes} from "@/routes";
 import type {PeerComparison} from "@/types";
@@ -35,14 +35,12 @@ interface ComparisonResultProps {
 
 const ComparisonResult = ({comparison}: ComparisonResultProps) => {
     if (comparison.peerGroup === "P7") {
-        return <EmptyState title="Grad Zagreb nema usporedive skupine.">
-            <p>Usporedba po stanovniku ima smisla samo među sličnim JLS, a Zagreb je jedini u svojoj skupini.</p>
-        </EmptyState>;
+        return <EmptyState title="Grad Zagreb nema usporedive skupine"
+                           hint="Usporedba po stanovniku ima smisla samo među sličnim JLS, a Zagreb je jedini u svojoj skupini."/>;
     }
     if (comparison.withData === 0) {
-        return <EmptyState title={`Nijedna JLS iz skupine nema ugovora za ${comparison.year}.`}>
-            <p>Odaberite drugu godinu.</p>
-        </EmptyState>;
+        return <EmptyState icon="calendar" title={`Nijedna JLS iz skupine nema ugovora za ${comparison.year}.`}
+                           hint="Odaberite drugu godinu."/>;
     }
     return (
         <>
@@ -92,29 +90,25 @@ export const ComparisonPage = () => {
 
     const renderResult = () => {
         if (!state.oib) {
-            return <EmptyState title="Odaberite JLS za usporedbu.">
-                <p>Usporedba je moguća za {formatNumber(withData.length)} JLS koje objavljuju strojno čitljiv registar ugovora.</p>
-            </EmptyState>;
+            return <EmptyState icon="mapPin" title="Odaberite JLS za usporedbu"
+                               hint={`Usporedba je moguća za ${formatNumber(withData.length)} JLS koje objavljuju strojno čitljiv registar ugovora.`}/>;
         }
         if (comparison.error) {
             return <ErrorState message={comparison.error.message} onRetry={() => comparison.refetch()}/>;
         }
         if (comparison.isPending) {
-            return <LoadingState label="Učitavanje usporedbe…"/>;
+            return <LoadingState message="Učitavanje usporedbe…"/>;
         }
         return <ComparisonResult comparison={comparison.data}/>;
     };
 
     return (
         <>
-            <header className={styles.pageHeader}>
-                <h1>Usporedba sa sličnim JLS</h1>
-                <p className={styles.lead}>
-                    Potrošnja po stanovniku u odnosu na JLS slične veličine (usporedne skupine po Popisu 2021.). Uspoređuju
-                    se samo JLS koje imaju podatke za odabranu godinu.
-                    {state.oib && <> <Link href={mapPath(state.oib)}>Prikaži na karti</Link></>}
-                </p>
-            </header>
+            <PageHeader
+                title="Usporedba sa sličnim JLS"
+                description="Potrošnja po stanovniku u odnosu na JLS slične veličine (usporedne skupine po Popisu 2021.). Uspoređuju se samo JLS koje imaju podatke za odabranu godinu."
+                actions={state.oib && <ButtonLink href={mapPath(state.oib)} variant="secondary">Prikaži na karti</ButtonLink>}
+            />
             {municipalities.error && <ErrorState message={municipalities.error.message} onRetry={() => municipalities.refetch()}/>}
             <ComparisonFilters
                 municipalities={withData}

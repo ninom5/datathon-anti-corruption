@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {IndicatorCard} from "@/components";
+import {Button, IndicatorCard} from "@/components";
 import type {BuyerProfile, Indicator} from "@/types";
 import {formatNumber, ruleOptions} from "@/utils";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface IndicatorGroupProps { indicators: Indicator[]; label: string; short: string }
 
@@ -14,7 +14,7 @@ const IndicatorGroup = ({indicators, label, short}: IndicatorGroupProps) => {
         <section id={`rule-${short}`} className={styles.ruleGroup}>
             <h3>{short} · {label} ({formatNumber(indicators.length)})</h3>
             {visible.map((indicator) => <IndicatorCard key={indicator.id} indicator={indicator} compact/>)}
-            {indicators.length > 10 && <button className={styles.button} type="button" aria-expanded={isExpanded} onClick={() => setExpanded(!isExpanded)}>{isExpanded ? "Prikaži prvih 10" : `Prikaži sve (${formatNumber(indicators.length)})`}</button>}
+            {indicators.length > 10 && <Button variant="secondary" aria-expanded={isExpanded} onClick={() => setExpanded(!isExpanded)}>{isExpanded ? "Prikaži prvih 10" : `Prikaži sve (${formatNumber(indicators.length)})`}</Button>}
         </section>
     );
 };
@@ -22,7 +22,7 @@ const IndicatorGroup = ({indicators, label, short}: IndicatorGroupProps) => {
 interface BuyerIndicatorsProps { profile: BuyerProfile }
 
 export const BuyerIndicators = ({profile}: BuyerIndicatorsProps) => (
-    <section className={styles.section}>
+    <section className={styles.plainSection}>
         <h2>Indikatori u objavljenim ugovorima</h2>
         <p className={styles.note}>Tri odvojene dimenzije opisuju svaki indikator. Broj indikatora nije ocjena naručitelja; jedan ugovor može pripadati više indikatora. Detalj vodi do dokaza i redaka izvora.</p>
         <ul className={styles.ruleCounts}>{ruleOptions.map((rule) => {

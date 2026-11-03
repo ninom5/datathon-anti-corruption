@@ -1,0 +1,129 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.skipLink {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 20;
+    padding: var(--space-2) var(--space-4);
+    color: var(--color-text-inverse);
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
+    transform: translateY(-200%);
+}
+
+.skipLink:focus {
+    color: var(--color-text-inverse);
+    transform: translateY(0);
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.headerInner,
+.main,
+.footerInner {
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding-right: var(--gutter);
+    padding-left: var(--gutter);
+}
+
+.headerInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    height: var(--header-height);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.brand:hover {
+    color: var(--color-text);
+}
+
+.brandMark {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-inverse);
+    background: var(--color-primary);
+}
+
+.main {
+    flex: 1;
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-8);
+}
+
+.main:focus {
+    outline: none;
+}
+
+.footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+}
+
+.footerInner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-5);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.footerBrand {
+    max-width: 48ch;
+}
+
+.footerName {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+}
+
+.footerLinks {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-2) var(--space-5);
+    padding: 0;
+    list-style: none;
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding-top: var(--space-5);
+        padding-bottom: var(--space-7);
+    }
+
+    .footerLinks {
+        flex-direction: column;
+    }
+}

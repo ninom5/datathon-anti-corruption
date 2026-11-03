@@ -3,7 +3,7 @@ import {OrganizationName} from "@/components";
 import {contractPath} from "@/routes";
 import type {IndicatorContract} from "@/types";
 import {formatDate, formatEur} from "@/utils";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface IndicatorContractsProps { contracts: IndicatorContract[] }
 

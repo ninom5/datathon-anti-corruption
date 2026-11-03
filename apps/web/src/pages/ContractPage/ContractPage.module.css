@@ -1,43 +1,21 @@
-/* The synthetic banner spans the whole window, not just the content column. */
-.bleed {
-    margin: -24px calc(50% - 50vw) 20px;
-}
-
-.back {
-    display: inline-block;
-    margin-bottom: 12px;
-    font-size: 14px;
-}
-
-.header {
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 14px;
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    font-size: 28px;
-    max-width: 40ch;
-}
-
 .parties {
-    margin: 10px 0 4px;
-    font-size: 16px;
+    margin: var(--space-3) 0 var(--space-1);
+    font-size: var(--font-size-md);
 }
 
 .arrow {
-    margin: 0 10px;
-    color: var(--muted);
+    margin: 0 var(--space-3);
+    color: var(--color-text-muted);
 }
 
 .muted {
-    color: var(--muted);
+    color: var(--color-text-muted);
 }
 
 .grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 28px;
+    grid-template-columns: minmax(0, 1fr) var(--aside-width);
+    gap: var(--space-6);
     align-items: start;
 }
 
@@ -45,25 +23,25 @@
 .sideColumn {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: var(--space-5);
     min-width: 0;
 }
 
 .block h2 {
-    font-size: 19px;
-    margin-bottom: 10px;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-3);
 }
 
 .facts {
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: 6px 14px;
+    gap: var(--space-2) var(--space-3);
     margin: 0;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 .facts dt {
-    color: var(--muted);
+    color: var(--color-text-muted);
 }
 
 .facts dd {
@@ -76,28 +54,28 @@
 }
 
 .flags {
-    margin-top: 14px;
+    margin-top: var(--space-3);
 }
 
 .flags h3 {
-    font-size: 15px;
+    font-size: var(--font-size-sm);
 }
 
 .flags ul {
-    margin: 6px 0 0;
-    padding-left: 18px;
+    margin: var(--space-2) 0 0;
+    padding-left: var(--space-4);
 }
 
 .valuesTable {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 .valuesTable th,
 .valuesTable td {
-    padding: 6px 4px;
-    border-bottom: 1px solid var(--line);
+    padding: var(--space-2) var(--space-1);
+    border-bottom: 1px solid var(--color-border);
     text-align: right;
     white-space: nowrap;
 }
@@ -109,23 +87,32 @@
 }
 
 .valuesTable thead th {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
     .grid {
         grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .facts {
         grid-template-columns: 1fr;
     }
 
     .facts dd {
-        margin-bottom: 6px;
+        margin-bottom: var(--space-2);
     }
 }
+
+/* Aside panels (amounts, source): bordered surfaces like the OtvoreniRadar detail aside. */
+.sideColumn .block {
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+

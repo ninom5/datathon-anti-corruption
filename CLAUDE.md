@@ -44,6 +44,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - javni GitHub (sigurnosna politika);
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
 - #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
+- **Grana `refactor-ui` (03.11., PR #53 prema `43-karta-usporedba`):** frontend preuzima dizajn sustav OtvoreniRadara (`FESB/datathon`); vidi `DESIGN_SYSTEM.md` i `work/decisions.md`.
 - Zadnje ažurirano: 2026-11-03
 
 ## Index
@@ -61,6 +62,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 | `work/status-42.md` | stanje #42: gotovo / preostalo, lokalno okruženje (API na 8093) |
 | `work/prompts/` | gotovi promptovi za agente (npr. `poc-implementation.md`) |
 | `log.md` | kronološki dnevnik |
+| `DESIGN_SYSTEM.md` | dizajn sustav frontenda (isti kao OtvoreniRadar): tokeni, komponente, rasporedi stranica |
 | `AGENTS.md` | tehnička pravila za AI agente (provenancija, neutralni jezik, AI procjena, sintetički podaci) |
 | `docs/PROJECT_OVERVIEW.md` | problem, korisnici, MVP i budućnost, diferencijacija, mapiranje na 9 kriterija |
 | `docs/DATA_SOURCES.md` | provjereni izvori (HTTP testovi 1.11.), pokrivenost, polja, pragovi ZJN, postojeći alati, popis skupova za predaju |

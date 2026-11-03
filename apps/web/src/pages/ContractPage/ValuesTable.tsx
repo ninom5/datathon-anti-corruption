@@ -27,14 +27,14 @@ export const ValuesTable = ({values}: ValuesTableProps) => {
                 {rows.map((row) => (
                     <tr key={row.label}>
                         <th scope="row">{row.label}</th>
-                        <td className="tabular">{formatEur(row.net)}</td>
-                        <td className="tabular">{row.label === "Izmjene" ? "–" : formatEur(row.gross)}</td>
+                        <td className="tabular-nums">{formatEur(row.net)}</td>
+                        <td className="tabular-nums">{row.label === "Izmjene" ? "–" : formatEur(row.gross)}</td>
                     </tr>
                 ))}
                 <tr>
                     <th scope="row">Isplaćeno</th>
                     <td className={styles.muted}>–</td>
-                    <td className="tabular">{formatEur(values.paidAmount)}</td>
+                    <td className="tabular-nums">{formatEur(values.paidAmount)}</td>
                 </tr>
                 </tbody>
             </table>

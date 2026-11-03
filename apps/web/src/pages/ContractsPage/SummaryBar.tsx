@@ -11,14 +11,14 @@ interface SummaryBarProps {
 export const SummaryBar = ({summary, isSyntheticShown}: SummaryBarProps) => (
     <section className={styles.summary} aria-label="Sažetak odabira">
         <p className={styles.summaryLine}>
-            <strong className="tabular">{formatNumber(summary.contracts)}</strong>{" "}
+            <strong className="tabular-nums">{formatNumber(summary.contracts)}</strong>{" "}
             {plural(summary.contracts, "ugovor", "ugovora", "ugovora")}
             <span className={styles.dot}>·</span>
-            <strong className="tabular">{formatEurMillions(summary.totalValue)}</strong> bez PDV-a
+            <strong className="tabular-nums">{formatEurMillions(summary.totalValue)}</strong> bez PDV-a
             <span className={styles.dot}>·</span>
-            <strong className={`tabular ${styles.signalText}`}>{formatNumber(summary.worthChecking)}</strong> vrijedi provjeriti
+            <strong className={`tabular-nums ${styles.signalText}`}>{formatNumber(summary.worthChecking)}</strong> vrijedi provjeriti
             <span className={styles.dot}>·</span>
-            <strong className="tabular">{formatNumber(summary.possibleEntryErrors)}</strong>{" "}
+            <strong className="tabular-nums">{formatNumber(summary.possibleEntryErrors)}</strong>{" "}
             {plural(summary.possibleEntryErrors, "moguća greška", "moguće greške", "mogućih grešaka")} u unosu
         </p>
         <p className={styles.summaryNote}>

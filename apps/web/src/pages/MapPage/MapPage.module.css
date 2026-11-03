@@ -1,43 +1,36 @@
-.pageHeader {
-    margin-bottom: 16px;
-}
-
 .lead {
-    color: var(--muted);
+    color: var(--color-text-muted);
     max-width: 75ch;
-    margin: 6px 0 0;
+    margin: 0;
+    font-size: var(--font-size-md);
 }
 
 .lead strong {
-    color: var(--ink);
+    color: var(--color-text);
 }
 
 .quickPick {
     display: inline-flex;
     flex-direction: column;
-    gap: 4px;
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 12px;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
 }
 
 .quickPick select {
     min-width: 260px;
-    padding: 6px 8px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
-    font-size: 15px;
+    max-width: 100%;
 }
 
 .layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
-    gap: 24px;
+    gap: var(--space-5);
     align-items: start;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
     .layout {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -45,10 +38,10 @@
 
 .mapFrame {
     position: relative;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 8px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2);
 }
 
 .map {
@@ -64,12 +57,12 @@
 }
 
 .shape:hover {
-    stroke: var(--ink);
+    stroke: var(--color-text);
     stroke-width: 1.2;
 }
 
 .unassigned {
-    fill: var(--surface);
+    fill: var(--color-surface);
     stroke: var(--map-no-data-line);
     stroke-width: 0.6;
     stroke-dasharray: 2 2;
@@ -77,7 +70,7 @@
 
 .selectedOutline {
     fill: none;
-    stroke: var(--accent);
+    stroke: var(--color-primary);
     stroke-width: 2.5;
     pointer-events: none;
 }
@@ -107,12 +100,12 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 6px 10px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
-    font-size: 13px;
+    font-size: var(--font-size-xs);
     pointer-events: none;
     white-space: nowrap;
     z-index: 2;
@@ -123,154 +116,151 @@
 }
 
 .legend {
-    margin: 12px 0 0;
+    margin: var(--space-3) 0 0;
 }
 
 .legendTitle {
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-2);
 }
 
 .legendList {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 18px;
+    gap: var(--space-2) var(--space-4);
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: 13px;
+    font-size: var(--font-size-xs);
 }
 
 .legendItem {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-2);
 }
 
 .legendSwatch {
-    stroke: var(--line);
+    stroke: var(--color-border);
 }
 
 .legendCount {
-    color: var(--muted);
+    color: var(--color-text-muted);
 }
 
 .attribution {
-    margin: 8px 0 0;
-    font-size: 12px;
-    color: var(--muted);
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
 .panel {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 16px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
     position: sticky;
     top: 16px;
 }
 
 .panelHint {
     margin: 0;
-    color: var(--muted);
+    color: var(--color-text-muted);
 }
 
 .panelKind {
     margin: 0;
-    font-size: 13px;
-    color: var(--muted);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
 .panelTitle {
-    font-size: 22px;
-    margin: 2px 0 4px;
+    font-size: var(--font-size-xl);
+    margin: 2px 0 var(--space-1);
 }
 
 .panelMeta {
-    margin: 0 0 12px;
-    font-size: 14px;
+    margin: 0 0 var(--space-3);
+    font-size: var(--font-size-sm);
 }
 
 .panelStats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 0 0 12px;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-3);
 }
 
 .panelStats dt {
-    font-size: 12px;
-    color: var(--muted);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
 .panelStats dd {
     margin: 0;
-    font-size: 20px;
+    font-size: var(--font-size-lg);
     font-variant-numeric: tabular-nums;
 }
 
 .panelNote {
-    margin: 0 0 10px;
-    font-size: 13px;
-    color: var(--muted);
+    margin: 0 0 var(--space-3);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
 .panelLinks {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 12px;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
 }
 
 .muted {
-    color: var(--muted);
-    font-size: 13px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
 }
 
 .tableDetails {
-    margin-top: 24px;
+    margin-top: var(--space-5);
 }
 
 .tableDetails > summary {
     cursor: pointer;
-    font-weight: 600;
-    padding: 8px 0;
+    font-weight: var(--font-weight-semibold);
+    padding: var(--space-2) 0;
 }
 
 .tableBlock {
-    margin-top: 8px;
+    margin-top: var(--space-2);
 }
 
 .tableControls {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: var(--space-4);
     align-items: end;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
 }
 
 .searchLabel {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    font-size: 13px;
-    color: var(--muted);
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
 }
 
 .searchInput {
     min-width: 260px;
-    padding: 6px 8px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
+    max-width: 100%;
 }
 
 .toggle {
     display: inline-flex;
-    gap: 6px;
+    gap: var(--space-2);
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 .tableScroll {
@@ -280,20 +270,20 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 .table th,
 .table td {
     text-align: left;
-    padding: 6px 8px;
-    border-bottom: 1px solid var(--line);
+    padding: var(--space-2) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .table thead th {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 600;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
 }
 
 .table tbody th {
@@ -309,7 +299,7 @@
     background: none;
     border: none;
     padding: 0;
-    color: var(--accent);
+    color: var(--color-primary);
     text-decoration: underline;
     cursor: pointer;
     text-align: left;

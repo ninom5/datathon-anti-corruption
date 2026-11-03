@@ -51,9 +51,9 @@ export const DatasetTable = ({datasets}: DatasetTableProps) => (
                                 {fileStatusLabels[file.status]}
                             </span>
                         </td>
-                        <td data-label="Redaka" className={`${styles.numeric} tabular`}>{formatNumber(file.rows)}</td>
-                        <td data-label="Ugovora" className={`${styles.numeric} tabular`}>{formatNumber(file.contracts)}</td>
-                        <td data-label="Dohvaćeno" className="tabular">{formatDateTime(file.retrievedAt)}</td>
+                        <td data-label="Redaka" className={`${styles.numeric} tabular-nums`}>{formatNumber(file.rows)}</td>
+                        <td data-label="Ugovora" className={`${styles.numeric} tabular-nums`}>{formatNumber(file.contracts)}</td>
+                        <td data-label="Dohvaćeno" className="tabular-nums">{formatDateTime(file.retrievedAt)}</td>
                     </tr>
                 ))}
                 </tbody>

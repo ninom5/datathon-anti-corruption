@@ -29,7 +29,7 @@ export const ContractTable = ({contracts}: ContractTableProps) => (
             <tbody>
             {contracts.map((contract) => (
                 <tr key={contract.id} className={contract.synthetic ? styles.syntheticRow : undefined}>
-                    <td data-label="Datum" className={`${styles.date} tabular`}>
+                    <td data-label="Datum" className={`${styles.date} tabular-nums`}>
                         {formatDate(contract.dateSigned)}
                         {contract.yearIncomplete && <span className={styles.muted}> *</span>}
                     </td>
@@ -39,7 +39,7 @@ export const ContractTable = ({contracts}: ContractTableProps) => (
                         <Link href={contractPath(contract.id)} className={styles.subjectLink}>{contract.subject}</Link>
                         {contract.synthetic && <span className={styles.syntheticTag}>sintetički</span>}
                     </td>
-                    <td data-label="Iznos" className={`${styles.numeric} tabular`}>{formatEurRounded(displayedValue(contract))}</td>
+                    <td data-label="Iznos" className={`${styles.numeric} tabular-nums`}>{formatEurRounded(displayedValue(contract))}</td>
                     <td data-label="Oznake">
                         <span className={styles.tags}>
                             {contract.indicators.map((indicator) => <IndicatorTag key={indicator.id} indicator={indicator}/>)}

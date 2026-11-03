@@ -4,7 +4,7 @@ import {contractPath} from "@/routes";
 import type {IndicatorDetail} from "@/types";
 import {formatDate, formatEur, formatEurRounded} from "@/utils";
 import {buildTimeline} from "@/pages/IndicatorPage";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface SplittingChartProps { indicator: IndicatorDetail }
 

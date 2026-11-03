@@ -1,4 +1,5 @@
 import {type FormEvent, useState} from "react";
+import {Button, Select, TextInput} from "@/components";
 import type {BuyerOption, ContractSummary} from "@/types";
 import {buyerTypeLabels, formatNumber, magnitudeBandOptions, readMagnitudeBand, ruleOptions} from "@/utils";
 import {type ExplorerState, type IndicatorChoice, isOib, type SortChoice} from "./explorerState.ts";
@@ -49,40 +50,43 @@ export const FilterPanel = ({state, buyers, years, ruleCounts, onChange, onReset
 
             <label className={styles.field}>
                 <span>Naručitelj</span>
-                <select value={state.buyerOib ?? ""} onChange={(event) => onChange({buyerOib: event.target.value || undefined})}>
+                <Select value={state.buyerOib ?? ""} onChange={(event) => onChange({buyerOib: event.target.value || undefined})}>
                     <option value="">Svi naručitelji</option>
                     {buyers.map((buyer) => (
                         <option key={buyer.id} value={buyer.oib ?? ""} disabled={!buyer.oib}>
                             {buyerLabel(buyer)}
                         </option>
                     ))}
-                </select>
+                </Select>
             </label>
 
             <label className={styles.field}>
                 <span>Godina sklapanja</span>
-                <select value={state.year ?? ""} onChange={(event) => onChange({year: event.target.value ? Number(event.target.value) : undefined})}>
+                <Select value={state.year ?? ""} onChange={(event) => onChange({year: event.target.value ? Number(event.target.value) : undefined})}>
                     <option value="">Sve godine</option>
                     {years.map(({year, incomplete}) => (
                         <option key={year} value={year}>{incomplete ? `${year}. (nepotpuna)` : `${year}.`}</option>
                     ))}
-                </select>
+                </Select>
             </label>
 
             <form className={styles.field} onSubmit={handleSupplierSubmit}>
                 <label htmlFor="supplier-oib">OIB dobavljača</label>
                 <div className={styles.inline}>
-                    <input
+                    <TextInput
                         id="supplier-oib"
+                        name="supplierOib"
+                        autoComplete="off"
+                        spellCheck={false}
                         inputMode="numeric"
                         maxLength={11}
-                        placeholder="11 znamenki"
+                        placeholder="npr. 12345678901"
                         value={supplierInput}
                         aria-invalid={isSupplierInvalid}
                         aria-describedby={isSupplierInvalid ? "supplier-oib-error" : undefined}
                         onChange={(event) => setSupplierInput(event.target.value.trim())}
                     />
-                    <button type="submit" className={styles.smallButton}>Primijeni</button>
+                    <Button type="submit" variant="secondary">Primijeni</Button>
                 </div>
                 {isSupplierInvalid && <span id="supplier-oib-error" className={styles.fieldError}>OIB ima 11 znamenki.</span>}
             </form>
@@ -120,20 +124,20 @@ export const FilterPanel = ({state, buyers, years, ruleCounts, onChange, onReset
 
             <label className={styles.field}>
                 <span>Pojas</span>
-                <select value={state.band ?? ""} aria-describedby="band-hint"
+                <Select value={state.band ?? ""} aria-describedby="band-hint"
                         onChange={(event) => onChange({band: readMagnitudeBand(event.target.value)})}>
                     <option value="">Svi pojasevi</option>
                     {magnitudeBandOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                </select>
+                </Select>
                 <span id="band-hint" className={styles.footnote}>Pojas veličine odstupanja je heuristika unutar pravila, a ne ukupna ocjena.</span>
             </label>
 
             <label className={styles.field}>
                 <span>Poredak</span>
-                <select value={state.sort} onChange={(event) => onChange({sort: event.target.value as SortChoice})}>
+                <Select value={state.sort} onChange={(event) => onChange({sort: event.target.value as SortChoice})}>
                     <option value="dateSigned">Najnoviji prvo</option>
                     <option value="value">Najveći iznos prvo</option>
-                </select>
+                </Select>
             </label>
 
             <label className={`${styles.radio} ${styles.syntheticToggle}`}>
@@ -141,7 +145,7 @@ export const FilterPanel = ({state, buyers, years, ruleCounts, onChange, onReset
                 Prikaži sintetičke
             </label>
 
-            <button type="button" className={styles.linkButton} onClick={handleReset}>Poništi filtre</button>
+            <Button variant="ghost" size="sm" className={styles.resetButton} onClick={handleReset}>Poništi filtre</Button>
         </aside>
     );
 };

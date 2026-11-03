@@ -1,7 +1,7 @@
 import {ChartFrame, HorizontalBars} from "@/components";
 import type {BuyerCpvTotal} from "@/types";
 import {cpvDivisionLabel, formatEur, formatEurRounded, formatNumber} from "@/utils";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface CpvChartProps { rows: BuyerCpvTotal[]; population: number | null | undefined }
 

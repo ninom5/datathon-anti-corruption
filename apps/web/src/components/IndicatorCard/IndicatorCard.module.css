@@ -1,0 +1,170 @@
+/* Signal = amber left rule; informative = neutral. Borders, no shadow, radius-md like every card. */
+.indicator {
+    margin-bottom: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-signal);
+    border-radius: var(--radius-md);
+}
+
+.indicatorInfo {
+    border-left-color: var(--color-border-strong);
+}
+
+.indicatorHeader {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+}
+
+.indicatorHeader h3 {
+    font-size: var(--font-size-lg);
+}
+
+.ruleLetter {
+    display: inline-block;
+    min-width: 24px;
+    margin-right: var(--space-2);
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    color: var(--color-text-inverse);
+    background: var(--color-signal);
+}
+
+.indicatorInfo .ruleLetter {
+    background: var(--color-text-muted);
+}
+
+.ruleMeta {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.severitySignal,
+.severityInfo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    margin: var(--space-2) 0 var(--space-3);
+    padding: 1px var(--space-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.severitySignal {
+    color: var(--color-signal);
+    background: var(--color-signal-soft);
+    border-color: var(--color-signal-border);
+}
+
+.severityInfo {
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+}
+
+.sourceExplanation {
+    margin: var(--space-3) 0 var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-info-soft);
+    border-radius: var(--radius-sm);
+}
+
+.sourceExplanation h4 {
+    margin-bottom: var(--space-1);
+    font-size: var(--font-size-sm);
+}
+
+.sourceExplanation blockquote {
+    margin-bottom: var(--space-1);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-md);
+}
+
+.magnitude {
+    margin: var(--space-3) 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Three equal, separate dimensions. Never a combined score (docs/UI_UX.md §3.4). */
+.dimensions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+}
+
+.dimension {
+    padding: var(--space-3);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.dimension h4 {
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+}
+
+.dimensionValue {
+    margin: var(--space-1) 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.dimensionHint {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-snug);
+    color: var(--color-text-muted);
+}
+
+.indicatorDetails {
+    margin-top: var(--space-4);
+}
+
+.indicatorDetails dt {
+    margin-top: var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.indicatorDetails dd {
+    margin-top: 2px;
+}
+
+.evidence {
+    padding-left: var(--space-5);
+}
+
+.muted {
+    color: var(--color-text-muted);
+}
+
+.link {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+@media (max-width: 768px) {
+    .indicator {
+        padding: var(--space-4);
+    }
+
+    .dimensions {
+        grid-template-columns: 1fr;
+    }
+}

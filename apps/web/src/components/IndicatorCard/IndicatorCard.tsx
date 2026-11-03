@@ -2,6 +2,7 @@ import {Link} from "wouter";
 import {indicatorPath} from "@/routes";
 import type {Indicator} from "@/types";
 import {
+    classNames,
     dataQualityHints,
     dataQualityLabels,
     evidenceStrengthHints,
@@ -10,6 +11,7 @@ import {
     formatMagnitude,
     ruleLetter,
 } from "@/utils";
+import {ExternalLink} from "@/components/ExternalLink";
 import styles from "./IndicatorCard.module.css";
 
 interface DimensionProps {
@@ -41,7 +43,7 @@ export const IndicatorCard = ({indicator, showLink = true, inContract = false, c
     const magnitude = compact && indicator.magnitude.value !== null ? formatMagnitude(indicator.ruleCode, indicator.magnitude.value) : indicator.magnitude.label ?? "nije izračunato";
     const severityLabel = isEntryError ? "Informativno – vjerojatna greška u izvoru" : isInformative ? "Informativno – poznato moguće objašnjenje" : "Vrijedi provjeriti";
     return (
-        <article className={`${styles.indicator} ${isInformative ? styles.indicatorInfo : ""}`}>
+        <article className={classNames(styles.indicator, isInformative && styles.indicatorInfo)}>
             <header className={styles.indicatorHeader}>
                 <h3>
                     <span className={styles.ruleLetter} aria-hidden="true">{ruleLetter(indicator.ruleCode)}</span>
@@ -89,7 +91,7 @@ export const IndicatorCard = ({indicator, showLink = true, inContract = false, c
                     <ul className={styles.evidence}>
                         {indicator.evidence.map((link) => (
                             <li key={`${link.url}-${link.field ?? ""}-${link.label}`}>
-                                <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+                                <ExternalLink href={link.url}>{link.label}</ExternalLink>
                                 {link.field && <span className={styles.muted}> – stupac „{link.field}”</span>}
                             </li>
                         ))}
@@ -98,7 +100,7 @@ export const IndicatorCard = ({indicator, showLink = true, inContract = false, c
                 </>}
             </dl>
             {inContract && indicator.subjectType !== "contract" && <p>Ovaj ugovor je dio skupine od {indicator.contractIds.length} ugovora.</p>}
-            {showLink && <p><Link href={indicatorPath(indicator.id)}>Otvori indikator →</Link></p>}
+            {showLink && <Link href={indicatorPath(indicator.id)} className={styles.link}>Otvori indikator →</Link>}
         </article>
     );
 };

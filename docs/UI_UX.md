@@ -3,21 +3,22 @@
 ## 1. Smjer
 - **Osjećaj:** urednički podatkovni članak (kao datanovinarski projekti velikih redakcija) + preciznost alata (Linear). **Nije** generički SaaS dashboard s gradijentima i karticama KPI-jeva.
 - **Ton:** smiren i dokumentaran. Bez crvenih alarma. Crvena se ne koristi za "sumnjivo", nego jantarna i neutralna (`--signal: #B45309`), jer boja ne smije sugerirati krivnju.
-- **Tipografija:** serifni naslovi za uredničke dijelove (npr. "Source Serif 4") i grotesk za podatke ("Inter"), uz tabularne brojke (`font-variant-numeric: tabular-nums`). Obje imaju hrvatske dijakritike.
-- **Boje (tokeni):**
+- **Dizajn sustav:** isti kao frontend OtvoreniRadara (`FESB/datathon`, grana `refactor-ui`, 03.11.). Tokeni, komponente i pravila su u `DESIGN_SYSTEM.md` (korijen repoa), vrijednosti u `apps/web/src/styles/global.css`.
+- **Tipografija:** Source Serif 4 (600) za `h1`/`h2`, IBM Plex Sans za sve ostalo, tabularne brojke (`.tabular-nums`). Obje imaju hrvatske dijakritike.
+- **Boje (tokeni, izbor):**
 
 | Token | Vrijednost |
 |---|---|
-| `--ink` | `#111827` |
-| `--paper` | `#FAFAF7` |
-| `--muted` | `#6B7280` |
-| `--line` | `#E5E7EB` |
-| `--accent` | `#1D4ED8` (poveznice, odabir) |
-| `--signal` | `#B45309` (indikator) |
-| `--nodata` | uzorak s crtama (sivo) |
-| `--synthetic` | `#7C3AED` (traka za sintetičke podatke) |
+| `--color-text` | `#1d2420` |
+| `--color-background` | `#f7f7f3` |
+| `--color-text-muted` | `#59625d` |
+| `--color-border` | `#dfe4dc` |
+| `--color-primary` | `#244a3d` (poveznice, gumbi, odabir) |
+| `--color-signal` / `-soft` | `#85570a` / `#f8efda` (indikator, jantarna) |
+| `--map-no-data` | uzorak s crtama (sivo) |
+| `--color-synthetic` | `#5b3f8f` (traka za sintetičke podatke) |
 
-  Tamni način: invertirani `paper`/`ink`.
+  Tamni način je uklonjen (OtvoreniRadar ga nema; video se snima u svijetlom).
 - **Gustoća:** tablice s 32 px redovima, brojevi poravnati desno, iznosi u formatu `1.234.567 €` (hr-HR).
 
 ## 2. Informacijska arhitektura

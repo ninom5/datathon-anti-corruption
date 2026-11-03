@@ -1,46 +1,36 @@
-.pageHeader {
-    margin-bottom: 20px;
-}
-
-.lead {
-    color: var(--muted);
-    max-width: 75ch;
-    margin: 6px 0 0;
-}
-
 .coverage {
-    border-top: 2px solid var(--ink);
-    padding-top: 14px;
-    margin-bottom: 32px;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-3);
+    margin-bottom: var(--space-6);
 }
 
 .coverage h2,
 .datasets h2,
 .method h2 {
-    font-size: 20px;
+    font-size: var(--font-size-lg);
 }
 
 .coverage h3 {
-    font-size: 15px;
-    margin: 14px 0 6px;
+    font-size: var(--font-size-sm);
+    margin: var(--space-3) 0 var(--space-2);
 }
 
 .coverageGrid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
+    gap: var(--space-5);
 }
 
 .compactTable {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 .compactTable th,
 .compactTable td {
-    padding: 6px 0;
-    border-bottom: 1px solid var(--line);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
     vertical-align: top;
 }
 
@@ -51,68 +41,66 @@
 
 .compactTable td {
     text-align: right;
-    padding-left: 12px;
+    padding-left: var(--space-3);
 }
 
 .hint {
     display: block;
-    color: var(--muted);
-    font-size: 12px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
 }
 
 .datasets {
-    margin-bottom: 32px;
+    margin-bottom: var(--space-6);
 }
 
 .datasetsHeader {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-3);
 }
 
 .toggle {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
 }
 
 .tableWrap {
     overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: var(--font-size-xs);
 }
 
 .table thead th {
     text-align: left;
-    color: var(--muted);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--line);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .table td,
 .table tbody th {
-    padding: 6px 10px;
+    padding: var(--space-2) var(--space-3);
     vertical-align: top;
     text-align: left;
     font-weight: 400;
 }
 
 .datasetGroup {
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--color-border);
 }
 
 .datasetCell {
@@ -121,7 +109,7 @@
 
 .publisher {
     display: block;
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
 }
 
 .fileCell {
@@ -137,38 +125,38 @@
 .status,
 .statusOk {
     display: inline-block;
-    padding: 0 8px;
-    border-radius: 999px;
-    font-size: 12px;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-xs);
     white-space: nowrap;
-    background: var(--neutral-soft);
-    color: var(--muted);
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
 }
 
 .statusOk {
-    color: var(--ink);
-    font-weight: 600;
-    border: 1px solid var(--ink);
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    border: 1px solid var(--color-text);
 }
 
 .pager {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 10px;
-    margin-top: 10px;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
 }
 
 .method ul {
-    padding-left: 18px;
+    padding-left: var(--space-4);
     max-width: 80ch;
 }
 
 .method li {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
     .coverageGrid {
         grid-template-columns: 1fr;
     }
