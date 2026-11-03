@@ -54,9 +54,9 @@ export const evidenceStrengthLabels: Record<EvidenceStrength, string> = {
 };
 
 export const evidenceStrengthHints: Record<EvidenceStrength, string> = {
-    jaka: "Više neovisnih izvora potvrđuje isti obrazac.",
+    jaka: "Objavljeni podaci izravno i dosljedno podupiru obrazac.",
     srednja: "Iznosi su izravno iz izvora, ali razlog nije objavljen.",
-    slaba: "Podaci vjerojatno sadrže grešku pri unosu.",
+    slaba: "Podaci obrazac podupiru samo posredno (npr. moguća greška pri unosu ili slabije podudaranje predmeta).",
 };
 
 export const ruleLetter = (ruleCode: string) => ruleCode.charAt(0);

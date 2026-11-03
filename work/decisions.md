@@ -108,3 +108,26 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **JPT i DZS:** `jpt_body` i `municipality` po OIB-u (odstupanje od `DATA_MODEL.md` §2 opisano je u §8a). JPT i DZS osvježavaju se na početku svakog ingest runa; pad jednog izvora bilježi se kao `reference_source_failed` i ne zaustavlja run. DZS uvoz je idempotentan (ponovno spajanje nad istom datotekom).
 - **Grad Hvar (Could) nije rađen:** TLS posredni certifikat u vlastitom truststoreu ostaje otvoren zadatak. Provjera se ne isključuje.
 - **Korisnik 2026-11-03: asistent nikad ne commita** (ni push ni PR). Promjene ostaju necommitane na grani `40-a2-jpt-dzs`.
+
+## 2026-11-03: #41 – pravila F i C, pojas veličine odstupanja (potvrdio korisnik)
+- **Pragovi jednostavne nabave 2017.–2022. su provjereni** (ZJN 2016 čl. 12 st. 1, NN 120/16; na snazi od 01.01.2017., čl. 452): 200.000 kn za robe i usluge, 500.000 kn za radove. U `thresholds.yaml` su preračunati po fiksnom tečaju 7,53450 (26.544,56 € / 66.361,40 €), uz izvorni iznos u kunama. Zbog toga F pokriva i A2 podatke od 2017. do 2022.
+- **Skupna pravila:** dodano je sučelje `GroupRule`, nad svim ugovorima jednog naručitelja. `ContractRule` ostaje za pravila nad jednim ugovorom. Migracija `V3` dodaje `indicator.buyer_id`, `indicator.magnitude_band` i tablicu `indicator_contract`, da filtar `/contracts?ruleCode=F` i detalj ugovora vide skupne indikatore.
+- **F, detalji kojih nema u `docs/`:**
+  - vrsta predmeta za A2 (`subject_type` je NULL) izvodi se iz CPV-a: `45` = radovi, ostalo = robe/usluge;
+  - kriterij prozora je razmak prvog i zadnjeg ugovora ≤ 90 dana (točno 90 ulazi);
+  - prozor koji prelazi promjenu praga koristi **najniži** prag u prozoru;
+  - prozori se ne preklapaju (nakon prijavljenog prozora traženje nastavlja iza njegovog zadnjeg ugovora), pa isti ugovori ne daju više indikatora;
+  - **CPV2 varijanta:** ako ugovori istog dobavljača imaju različite CPV3, ali isti CPV2, i samo zajedno prelaze prag, indikator nastaje s dokazom `slaba`.
+- **C:** razdoblje su **3 zadnje kalendarske godine u kojima naručitelj ima ugovore** (za naručitelje samo s A2 to je npr. 2021.–2023.). Vrijednost je `coalesce(ukupni, početni)`. Obrti ulaze u izračun, ali se u tekstu ne imenuju.
+- **Pojas veličine odstupanja (`band`: `nizak`/`srednji`/`visok`)** je heuristika JavniRadara, a ne zakonski prag. Granice su u `thresholds.yaml` (`bands`):
+  - D1: ≤ 30 % / 30–50 % / > 50 % (čl. 316, 317);
+  - D2: ≤ 30 % / 30–100 % / > 100 %;
+  - F (zbroj / prag): < 1,5× / 1,5–2× / ≥ 2×;
+  - C (HHI): < 7.500 / 7.500–9.000 / ≥ 9.000.
+  - Zašto: filtar "pojas" u UI-ju i izvješće po pojasu trebaju jednu ljestvicu preko svih pravila, a veličina odstupanja ostaje zaseban broj s jedinicom.
+
+## 2026-11-03: #41 – lažno pozitivni nakon ručnog pregleda (korisnik: "radi što misliš da je najbolje")
+- **F ne uzima ugovore iz otvorenog postupka.** Pregled 164 stvarna F indikatora našao je 16 skupina koje su grupe (lotovi) jednog otvorenog postupka (npr. Osijek: 4 projekta istog dana; Stankovci: 5 prostornih planova). Takvi ugovori su prošli javni postupak, pa ne mogu biti izbjegavanje postupka. Vrsta postupka je ulaz pravila F u `ANOMALY_DETECTION.md` §F; sada se i koristi. Izuzima se svaki postupak javne nabave po ZJN-u, tj. vrsta postupka koja sadrži riječ "postupak" (otvoreni, ograničeni, pregovarački…). Ostaju "Jednostavna nabava" i "Nabava izuzeta od primjene ZJN" (`thresholds.yaml`, `rule-f.public-procedure-markers`). Na stvarnim podacima vrste su: jednostavna nabava 3.166, izuzeta 2.010, otvoreni postupak 754, pregovarački 28.
+- **C traži da najveći dobavljač ima ≥ 2 ugovora u ćeliji** (`rule-c.min-top-contracts`). Scenarij C je "ponovljene dodjele"; u oko 7 od 22 stvarnih slučajeva udio je nosio jedan veliki ugovor (npr. Osijek 1 od 29, Štrigova 1 od 8).
+- **D2: `implausible-ratio-without-note: 5`.** Isplata ≥ 5× ugovorenog s PDV-om **bez obrazloženja u registru** daje kvalitetu `niska` i `informativno`. S obrazloženjem ostaje granica 10×. Razlog: Ivanec 2021.–2022. ima niz isplata 9–10× bez obrazloženja (npr. 11.010,44 → 110.101,44 €), što izgleda kao greška u unosu. Slučajevi s obrazloženjem ("dodatni radovi", "povećanje cijena") ostaju "vrijedi provjeriti".
+- **Nije uvedeno:** oznaka mogućeg duplikata (dva identična retka istog dana). Rijetko je (1 slučaj), a moglo bi sakriti stvarne ugovore.

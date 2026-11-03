@@ -21,3 +21,9 @@
     border-color: var(--line);
     border-style: dashed;
 }
+
+.informative {
+    color: var(--muted);
+    background: var(--neutral-soft);
+    border-color: var(--line);
+}

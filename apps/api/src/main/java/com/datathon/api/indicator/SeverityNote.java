@@ -20,6 +20,11 @@ public enum SeverityNote implements DatabaseCode {
         return code;
     }
 
+    /** Unknown codes are rejected earlier by request validation. */
+    public static SeverityNote fromCode(String code) {
+        return INFORMATIVE.code.equals(code) ? INFORMATIVE : WORTH_CHECKING;
+    }
+
     @Converter(autoApply = true)
     public static class JpaConverter extends DatabaseCodeConverter<SeverityNote> {
         public JpaConverter() {

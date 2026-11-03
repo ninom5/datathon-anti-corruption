@@ -1,7 +1,12 @@
 package com.datathon.api.rules;
 
 import com.datathon.api.contract.Contract;
+import com.datathon.api.contract.SubjectType;
 import com.datathon.api.indicator.DataQuality;
+import com.datathon.api.organization.Organization;
+import com.datathon.api.organization.OrganizationType;
+import com.datathon.api.organization.dto.OrganizationRef;
+import com.datathon.api.source.FormatClass;
 import com.datathon.api.source.Locators;
 import com.datathon.api.source.RawRecord;
 import com.datathon.api.source.SourceFile;
@@ -9,6 +14,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -79,6 +86,82 @@ final class RuleSupport {
     /** {@code part / whole - 1} with enough precision to compare against thresholds such as 0.10 exactly. */
     static BigDecimal growth(BigDecimal part, BigDecimal whole) {
         return part.divide(whole, 6, RoundingMode.HALF_UP).subtract(BigDecimal.ONE);
+    }
+
+    private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+
+    /**
+     * Group rules (F, C): "visoka" only when every contract is a parser-read class A row without ingest warnings
+     * (docs/ANOMALY_DETECTION.md §2). Old EOJN report rows (A2) or derived inputs make it "srednja".
+     */
+    static DataQuality groupQuality(List<Contract> contracts, boolean hasDerivedInput) {
+        boolean isAllClean = contracts.stream().allMatch(contract -> contract.getQualityFlags().isEmpty() && isClassA(contract));
+        return isAllClean && !hasDerivedInput ? DataQuality.HIGH : DataQuality.MEDIUM;
+    }
+
+    private static boolean isClassA(Contract contract) {
+        RawRecord raw = contract.getProvenance() == null ? null : contract.getProvenance().getRawRecord();
+        return raw != null && raw.getFile().getFormatClass() == FormatClass.A;
+    }
+
+    /** One link per contract of a group, so every amount and date can be checked in its source row. */
+    static List<EvidenceLink> groupEvidence(List<Contract> contracts, String field) {
+        List<EvidenceLink> links = new ArrayList<>();
+        for (Contract contract : contracts) {
+            RawRecord raw = contract.getProvenance() == null ? null : contract.getProvenance().getRawRecord();
+            String what = date(contract.getDateSigned()) + ", " + eur(valueOf(contract));
+            if (raw != null) {
+                SourceFile file = raw.getFile();
+                links.add(new EvidenceLink("Registar ugovora: " + file.getDataset().getTitle() + ", "
+                        + humanLocator(raw.getLocator()) + " (" + what + ")", file.getUrl(), field));
+            } else if (contract.getEojnContractUrl() != null) {
+                links.add(new EvidenceLink("Ugovor u EOJN-u (" + what + ")", contract.getEojnContractUrl(), field));
+            }
+        }
+        return links;
+    }
+
+    /** Value used by group rules: total with amendments, or the initial value when no total is published (A2). */
+    static BigDecimal valueOf(Contract contract) {
+        return contract.getTotalValue() != null ? contract.getTotalValue() : contract.getInitialValue();
+    }
+
+    /** Crafts are named after their owner, so texts never carry a craft's name (GDPR decision 2026-11-02). */
+    static String supplierName(Organization supplier) {
+        String name = supplier.getOrgType() == OrganizationType.CRAFT ? OrganizationRef.HIDDEN_CRAFT_NAME : supplier.getName();
+        return supplier.getOib() == null ? name : name + " (OIB " + supplier.getOib() + ")";
+    }
+
+    /**
+     * Threshold category of a contract. Old EOJN reports (A2) have no subject type, so it is derived from the CPV
+     * division: 45 = works, anything else goods or services, which share one threshold (work/decisions.md, #41).
+     */
+    static SubjectType thresholdType(Contract contract) {
+        SubjectType type = contract.getSubjectType();
+        if (type == SubjectType.WORKS || type == SubjectType.GOODS || type == SubjectType.SERVICES) {
+            return type;
+        }
+        return contract.getCpv() != null && contract.getCpv().startsWith("45") ? SubjectType.WORKS : SubjectType.SERVICES;
+    }
+
+    static boolean isSubjectTypeDerived(Contract contract) {
+        return contract.getSubjectType() == null || contract.getSubjectType() == SubjectType.OTHER;
+    }
+
+    static String cpvPrefix(Contract contract, int digits) {
+        String cpv = contract.getCpv();
+        return cpv == null || cpv.length() < digits ? null : cpv.substring(0, digits);
+    }
+
+    static String date(LocalDate date) {
+        return date == null ? "datum nije objavljen" : DATE.format(date);
+    }
+
+    /** 2.4876 -> "2,49". */
+    static String decimal(BigDecimal value) {
+        DecimalFormat format = new DecimalFormat("#,##0.##", DecimalFormatSymbols.getInstance(Locale.of("hr", "HR")));
+        format.setRoundingMode(RoundingMode.HALF_UP);
+        return format.format(value);
     }
 
     private static boolean matches(Pattern pattern, String text) {

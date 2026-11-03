@@ -60,12 +60,12 @@ class ContractPrivacyTest {
     private RulesService rulesService;
 
     @Test
-    void craftNameIsHiddenNaturalPersonContractIsNotExposedAndCraftsStayOutOfSummaries() throws Exception {
+    void craftNameIsHiddenNaturalPersonContractIsNotExposedAndCraftsStayOutOfNamedLists() throws Exception {
         SourceFile file = sourceFile();
         Organization buyer = organization(BUYER_OIB, "Općina Testno", OrganizationType.LOCAL_GOVERNMENT);
         Contract craftContract = contract("craft", buyer, organization(CRAFT_OIB, CRAFT_NAME, OrganizationType.CRAFT), file, 2);
         Contract personContract = contract("person", buyer, organization(PERSON_OIB, "Pero Primjerić", OrganizationType.NATURAL_PERSON), file, 3);
-        rulesService.runContractRules();
+        rulesService.runRules();
 
         MvcTestResult detail = mvc.get().uri("/api/v1/contracts/" + craftContract.getId()).exchange();
         assertThat(detail).hasStatusOk();
@@ -87,10 +87,24 @@ class ContractPrivacyTest {
                 .bodyJson().extractingPath("$.totalElements").isEqualTo(0);
         assertThat(mvc.get().uri("/api/v1/contracts/" + personContract.getId())).hasStatus(404);
 
+        // Crafts count in numbers (decision 2026-11-03, #41); the natural person never does.
         assertThat(mvc.get().uri("/api/v1/contracts/summary?buyerOib=" + BUYER_OIB)).bodyJson().satisfies(json -> {
-            assertThat(json).extractingPath("$.contracts").isEqualTo(0);
-            assertThat(json).extractingPath("$.withIndicator").isEqualTo(0);
-            assertThat(json).extractingPath("$.excludedCraftContracts").isEqualTo(1);
+            assertThat(json).extractingPath("$.contracts").isEqualTo(1);
+            assertThat(json).extractingPath("$.withIndicator").isEqualTo(1);
+            assertThat(json).extractingPath("$.craftContracts").isEqualTo(1);
+            assertThat(json).extractingPath("$.contractsByRule.D_VALUE_INCREASE").isEqualTo(1);
+        });
+
+        // Buyer profile: the craft is counted, but stays out of the supplier list with names.
+        MvcTestResult profile = mvc.get().uri("/api/v1/buyers/" + BUYER_OIB).exchange();
+        assertThat(profile).hasStatusOk();
+        assertThat(profile.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
+                .doesNotContain(CRAFT_NAME).doesNotContain("Pero");
+        assertThat(profile).bodyJson().satisfies(json -> {
+            assertThat(json).extractingPath("$.contracts").isEqualTo(1);
+            assertThat(json).extractingPath("$.craftContracts").isEqualTo(1);
+            assertThat(json).extractingPath("$.topSuppliers").asArray().isEmpty();
+            assertThat(json).extractingPath("$.indicatorCounts[0].ruleCode").isEqualTo("D_VALUE_INCREASE");
         });
     }
 

@@ -298,6 +298,13 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 - **`municipality`** je ključan po `oib` (iz JPT-a), a ne po `organization_id` kao u §2. Većina od 556 JLS nema ugovora, pa nema ni redak u `organization`. Stupci: `name`, `kind`, `county`, `population_2021`, `peer_group`, `provenance_id`. `has_contract_data` i pokrivenost računaju se upitom nad `contract`.
 - A2 ugovori: `eojn_contract_url` je NULL, `amendments_value_eur` i `total_value_eur` su NULL (u izvoru ih nema). Zbrojevi koriste `coalesce(total, initial)`.
 
+## 8b. Dodaci za #41 (`V3__group_rules.sql`, 2026-11-03)
+- `indicator.buyer_id` (FK na `organization`): naručitelj svakog indikatora, za filtre `/indicators` i profil naručitelja.
+- `indicator.magnitude_band` (`nizak`/`srednji`/`visok`): pojas veličine odstupanja (`ANOMALY_DETECTION.md` §4a).
+- **`indicator_contract (indicator_id, contract_id)`**: svi ugovori na koje se indikator odnosi. Pravila nad jednim ugovorom imaju jedan redak, a F i C imaju cijelu skupinu. Filtri ugovora ("ima indikator", `ruleCode`) i detalj ugovora čitaju ovu tablicu, pa vide i skupne indikatore. `indicator.contract_id` ostaje za pravila nad jednim ugovorom.
+- Indeks iz V1 `indicator_contract` preimenovan je u `indicator_contract_id`, jer je naziv potreban tablici.
+- Sintetički osnivači: `SyntheticRegisterLoader` upisuje `founders` za dva fiktivna komunalna društva (OIB `00000000033`, `00000000043`). Stvarne organizacije dobivaju osnivače samo iz JPT-a.
+
 ## 8. Stanje implementacije (POC, `V1__init.sql`, 2026-11-02)
 **Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
 **Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `ai_assessment`, `llm_usage`, `feedback` (dolaze s pravilima F/C, AI-jem i Sudregom). Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.

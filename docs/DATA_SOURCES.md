@@ -341,7 +341,8 @@ Ovo je **pravi API**, što podiže bodove za kriterij "Upotreba otvorenih podata
 | Izmjena de minimis | 10 % (robe/usluge) / 15 % (radovi) prvotne vrijednosti | isto | ZJN čl. 320 |
 | Dodatni radovi/usluge/robe | ≤ 30 % prvotne vrijednosti | isto | ZJN čl. 316 st. 2 (prije izmjene vrijednost nije provjerena) |
 | Nepredviđene okolnosti | ≤ 50 % prvotne vrijednosti | isto | ZJN čl. 317 |
-| Pragovi prije 2023. (HRK) | 200.000 / 500.000 HRK [PRETPOSTAVKA, nije provjereno] | | |
+| Jednostavna nabava 01.01.2017.–31.12.2022. (HRK) | robe/usluge < 200.000,00 kn (= 26.544,56 EUR po 7,53450), radovi < 500.000,00 kn (= 66.361,40 EUR) | | ZJN 2016 čl. 12 st. 1, NN 120/16; stupa na snagu 01.01.2017. (čl. 452) [VERIFICIRANO 2026-11-03, narodne-novine.nn.hr/clanci/sluzbeni/2016_12_120_2607.html] |
+| Registar ugovora 2017.–2022. (HRK) | ≥ 20.000,00 kn | | ZJN 2016 čl. 28 st. 5, NN 120/16 [VERIFICIRANO 2026-11-03] |
 
 **Pravilo:** prag se uvijek bira prema **datumu sklapanja ugovora**, nikad prema današnjem datumu.
 

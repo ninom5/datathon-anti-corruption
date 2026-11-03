@@ -63,7 +63,8 @@ public class OverpaymentRule implements ContractRule {
     }
 
     private IndicatorDraft draft(Contract contract, BigDecimal paid, BigDecimal gross, BigDecimal share, boolean isGrossDerived) {
-        boolean isImplausible = paid.compareTo(gross.multiply(thresholds.ruleD().implausibleRatio())) >= 0;
+        BigDecimal implausibleRatio = implausibleRatio(contract);
+        boolean isImplausible = paid.compareTo(gross.multiply(implausibleRatio)) >= 0;
         boolean isUnitPrice = RuleSupport.isUnitPriceContract(contract);
         boolean isVatInconsistent = isGrossBelowNet(contract, gross);
         boolean isCurrencyMix = isKunaEuroRatio(paid, gross);
@@ -76,7 +77,8 @@ public class OverpaymentRule implements ContractRule {
         return new IndicatorDraft(RULE_CODE, share, "udio", "+" + percent(share) + " % iznad ugovorenog iznosa s PDV-om",
                 quality, quality == DataQuality.LOW ? EvidenceStrength.WEAK : EvidenceStrength.MEDIUM,
                 quality == DataQuality.LOW ? SeverityNote.INFORMATIVE : SeverityNote.WORTH_CHECKING,
-                explanation(contract, paid, gross, share, new Doubts(isImplausible, isUnitPrice, isVatInconsistent, isCurrencyMix)),
+                explanation(contract, paid, gross, share,
+                        new Doubts(isImplausible, isUnitPrice, isVatInconsistent, isCurrencyMix), implausibleRatio),
                 NOT_MEANING, missing,
                 RuleSupport.evidence(contract, List.of("Ukupni iznos (sa izmjenama) s PDV-om", "Isplaćeni iznos",
                         "Obrazloženje iznosa plaćanja")));
@@ -106,7 +108,17 @@ public class OverpaymentRule implements ContractRule {
         return distance.compareTo(thresholds.ruleD().currencyMixTolerance()) <= 0;
     }
 
-    private String explanation(Contract contract, BigDecimal paid, BigDecimal gross, BigDecimal share, Doubts doubts) {
+    /**
+     * 10x in general; 5x when the register gives no explanation, because then a typo is the likeliest reading
+     * (work/decisions.md, 2026-11-03 #41).
+     */
+    private BigDecimal implausibleRatio(Contract contract) {
+        boolean hasNote = contract.getPaymentNote() != null && !contract.getPaymentNote().isBlank();
+        return hasNote ? thresholds.ruleD().implausibleRatio() : thresholds.ruleD().implausibleRatioWithoutNote();
+    }
+
+    private String explanation(Contract contract, BigDecimal paid, BigDecimal gross, BigDecimal share, Doubts doubts,
+                               BigDecimal implausibleRatio) {
         StringBuilder text = new StringBuilder()
                 .append("Isplaćeni iznos je ").append(eur(paid)).append(", a ukupni ugovoreni iznos s PDV-om ")
                 .append(eur(gross)).append(". Razlika je ").append(eur(paid.subtract(gross)))
@@ -122,8 +134,9 @@ public class OverpaymentRule implements ContractRule {
             text.append(" U registru je iznos s PDV-om manji od iznosa bez PDV-a, što upućuje na pogrešku pri unosu, "
                     + "pa se zapis prikazuje samo informativno.");
         } else if (doubts.isImplausible()) {
-            text.append(" Isplaćeni iznos je ").append(thresholds.ruleD().implausibleRatio().stripTrailingZeros().toPlainString())
-                    .append(" ili više puta veći od ugovorenog. To najčešće upućuje na pogrešku pri unosu u registar "
+            text.append(" Isplaćeni iznos je ").append(implausibleRatio.stripTrailingZeros().toPlainString())
+                    .append(" ili više puta veći od ugovorenog").append(contract.getPaymentNote() == null ? ", a registar ne navodi obrazloženje" : "")
+                    .append(". To najčešće upućuje na pogrešku pri unosu u registar "
                             + "(npr. izostavljen decimalni zarez) ili na ugovor s jediničnim cijenama, pa se zapis "
                             + "prikazuje samo informativno.");
         } else if (doubts.isUnitPrice()) {

@@ -77,3 +77,28 @@
 - JPT: 4.678 tijela, 3.897 s osnivačima; 15 parova u kojima je naručitelj osnivač dobavljača. DZS: 556/556 JLS spojeno, usporedne skupine P1–P7.
 - Nalaz: EOJN izvještaj označava kune kao "EUR" kod isplata za 2022.; D2 to sada prikazuje informativno (6 slučajeva).
 - `./mvnw test` 41/41; `yarn lint` i `yarn build` zeleno. Korisnik: asistent nikad ne commita.
+
+## 2026-11-03 (večer): #41 faza 1, pravila F i C (grana `41-pravila-f-c`, necommitano)
+- Pragovi jednostavne nabave za 2017.–2022. provjereni u NN 120/16 (čl. 12 st. 1, čl. 452) i dodani u `thresholds.yaml`, pa F pokriva i A2.
+- Novo: `GroupRule`, `SplittingRule` (F), `ConcentrationRule` (C), `MagnitudeBands` i migracija `V3` (`indicator.buyer_id`, `magnitude_band`, `indicator_contract`).
+- Sintetika: 89 novih redaka (Općina Uzorkovo za F, Općina Probnik za C). Ground truth: F i C imaju 0 FP i 0 FN na jasnim i rubnim slučajevima.
+- Stvarni podaci: F 164 (nizak 91, srednji 55, visok 18), C 22 (nizak 15, srednji 3, visok 4), D1 16, D2 88.
+- Ručni pregled je našao dvije sustavne vrste lažno pozitivnih:
+  - F: grupe (lotovi) otvorenog postupka (16 skupina);
+  - C: udio koji nosi jedan veliki ugovor (oko 7 od 22).
+  - Prijedlozi čekaju potvrdu korisnika.
+- `./mvnw test` 41/41.
+
+## 2026-11-03 (kasna večer): #41 popravci lažno pozitivnih i faza 2 (API)
+- Korisnik je prepustio odluku asistentu ("radi što misliš da je najbolje"). Uvedeno, uz zapis u `work/decisions.md`:
+  - F bez ugovora iz postupaka po ZJN-u (lotovi otvorenog postupka);
+  - C traži ≥ 2 ugovora najvećeg dobavljača;
+  - D2 bez obrazloženja ima granicu 5×.
+- Stvarni podaci nakon popravaka: F 150 (nizak 88, srednji 49, visok 13), C 17 (11/2/4), D2 informativnih 28 (prije 23).
+- API:
+  - `GET /api/v1/indicators`, `GET /api/v1/buyers/{oib}`;
+  - `/contracts` prima `ruleCode` i `band`;
+  - sažetak ima `contractsByRule` i `craftContracts` (obrti sada ulaze u brojke).
+  - "Moguća greška u unosu" vrijedi samo za pravilo D.
+- Frontend: tipovi usklađeni sa stvarnim JSON-om (`BuyerProfile`, `Indicator`, `ContractSummary`), API funkcije `getIndicators` i `getBuyerProfile`. Oznaka u tablici prikazuje F kao "2,49×", a C kao "HHI 8.580". Informativni F i C nisu "greška u unosu".
+- Provjera: `./mvnw test` 46/46; `yarn lint` i `yarn build` zeleno; endpointi provjereni `curl`-om na lokalnoj bazi (port 8092, jer su 8080 i 8091 zauzeti).

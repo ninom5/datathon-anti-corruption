@@ -26,10 +26,10 @@ export const SummaryBar = ({summary, isSyntheticShown}: SummaryBarProps) => (
         </p>
         <p className={styles.summaryNote}>
             Sažetak obuhvaća samo stvarne podatke
-            {summary.excludedCraftContracts > 0 && (
-                <> i ne uključuje {formatNumber(summary.excludedCraftContracts)}{" "}
-                    {plural(summary.excludedCraftContracts, "ugovor", "ugovora", "ugovora")} s obrtima (zaštita osobnih
-                    podataka; u tablici su prikazani bez naziva)</>
+            {summary.craftContracts > 0 && (
+                <>, uključujući {formatNumber(summary.craftContracts)}{" "}
+                    {plural(summary.craftContracts, "ugovor", "ugovora", "ugovora")} s obrtima (nazivi obrta su skriveni
+                    radi zaštite osobnih podataka)</>
             )}
             .
             {summary.incompleteYears.length > 0 && <> {summary.incompleteYears.join(", ")}. je nepotpuna godina.</>}
