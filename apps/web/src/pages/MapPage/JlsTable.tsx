@@ -1,3 +1,4 @@
+import {TextInput} from "@/components";
 import {useState} from "react";
 import type {MunicipalityOverview} from "@/types";
 import {formatNumber} from "@/utils";
@@ -27,8 +28,8 @@ export const JlsTable = ({municipalities, onSelect}: JlsTableProps) => {
             <div className={styles.tableControls}>
                 <label className={styles.searchLabel}>
                     Pretraži JLS ili županiju
-                    <input type="search" value={query} onChange={(event) => setQuery(event.target.value)}
-                           className={styles.searchInput}/>
+                    <TextInput type="search" name="jlsQuery" autoComplete="off" placeholder="npr. Split" value={query}
+                               onChange={(event) => setQuery(event.target.value)} className={styles.searchInput}/>
                 </label>
                 <label className={styles.toggle}>
                     <input type="checkbox" checked={isWithDataOnly} onChange={(event) => setIsWithDataOnly(event.target.checked)}/>

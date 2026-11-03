@@ -1,0 +1,16 @@
+/* Spans the whole window, not just the content column, and sits flush under the header. */
+.banner {
+    margin: calc(-1 * var(--space-6)) calc(50% - 50vw) var(--space-5);
+    padding: var(--space-2) var(--gutter);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+    color: var(--color-text-inverse);
+    background: var(--color-synthetic);
+}
+
+@media (max-width: 768px) {
+    .banner {
+        margin-top: calc(-1 * var(--space-5));
+    }
+}

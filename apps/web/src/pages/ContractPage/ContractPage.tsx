@@ -1,5 +1,5 @@
 import {Link, useParams} from "wouter";
-import {EmptyState, ErrorState, IndicatorCard, LoadingState, OrganizationName, SyntheticBanner} from "@/components";
+import {BackLink, ButtonLink, EmptyState, ErrorState, IndicatorCard, LoadingState, OrganizationName, PageHeader, SyntheticBanner} from "@/components";
 import {isClientError} from "@/api";
 import {useContract} from "@/hooks";
 import {buyerPath, routes} from "@/routes";
@@ -24,7 +24,7 @@ const ContractFacts = ({contract}: {contract: ContractDetail}) => (
             <dt>Trajanje</dt>
             <dd>{contract.durationText ?? "nije objavljeno"}</dd>
             <dt>Datum izvršenja</dt>
-            <dd className="tabular">{formatDate(contract.completedOn)}</dd>
+            <dd className="tabular-nums">{formatDate(contract.completedOn)}</dd>
             <dt>Okvirni sporazum</dt>
             <dd>{contract.frameworkBased ? "ugovor na temelju okvirnog sporazuma" : "ne"}</dd>
             {contract.note && (
@@ -65,21 +65,25 @@ const ContractView = ({contract}: {contract: ContractDetail}) => {
     const buyerType = contract.buyer.type ? buyerTypeLabels[contract.buyer.type] : undefined;
     return (
         <>
-            {contract.synthetic && <div className={styles.bleed}><SyntheticBanner/></div>}
-            <Link href={routes.CONTRACTS} className={styles.back}>← Istraživač ugovora</Link>
-            <header className={styles.header}>
-                <h1>{contract.subject}</h1>
-                <p className={styles.parties}>
-                    {contract.buyer.oib ? <Link href={buyerPath(contract.buyer.oib)}>{contract.buyer.name}</Link> : <span>{contract.buyer.name}</span>}
-                    {buyerType && <span className={styles.muted}> ({buyerType})</span>}
-                    <span className={styles.arrow} aria-label="ugovor s">→</span>
-                    <OrganizationName organization={contract.supplier} showOib/>
-                </p>
-                <p className={styles.muted}>
-                    Sklopljen <span className="tabular">{formatDate(contract.dateSigned)}</span>
-                    {contract.yearIncomplete && <> · {contract.year}. je nepotpuna godina u podacima</>}
-                </p>
-            </header>
+            {contract.synthetic && <SyntheticBanner/>}
+            <BackLink href={routes.CONTRACTS}>Istraživač ugovora</BackLink>
+            <PageHeader
+                title={contract.subject}
+                meta={
+                    <>
+                        <p className={styles.parties}>
+                            {contract.buyer.oib ? <Link href={buyerPath(contract.buyer.oib)}>{contract.buyer.name}</Link> : <span>{contract.buyer.name}</span>}
+                            {buyerType && <span className={styles.muted}> ({buyerType})</span>}
+                            <span className={styles.arrow} aria-label="ugovor s">→</span>
+                            <OrganizationName organization={contract.supplier} showOib/>
+                        </p>
+                        <p>
+                            Sklopljen <span className="tabular-nums">{formatDate(contract.dateSigned)}</span>
+                            {contract.yearIncomplete && <> · {contract.year}. je nepotpuna godina u podacima</>}
+                        </p>
+                    </>
+                }
+            />
             <div className={styles.grid}>
                 <div className={styles.mainColumn}>
                     <Indicators contract={contract}/>
@@ -100,21 +104,23 @@ export const ContractPage = () => {
     const contract = useContract(id);
 
     if (!Number.isInteger(id) || id <= 0) {
-        return <EmptyState title="Neispravna adresa ugovora."><Link href={routes.CONTRACTS}>Istraži ugovore</Link></EmptyState>;
+        return <EmptyState title="Neispravna adresa ugovora" actions={<ButtonLink href={routes.CONTRACTS} variant="secondary">Istraži ugovore</ButtonLink>}/>;
     }
     if (isClientError(contract.error)) {
         return (
-            <EmptyState title="Ugovor ne postoji ili nije javno prikazan.">
-                <p>Ugovori s fizičkim osobama se ne prikazuju radi zaštite osobnih podataka.</p>
-                <Link href={routes.CONTRACTS}>Istraži ugovore</Link>
-            </EmptyState>
+            <EmptyState
+                icon="document"
+                title="Ugovor ne postoji ili nije javno prikazan"
+                hint="Ugovori s fizičkim osobama se ne prikazuju radi zaštite osobnih podataka."
+                actions={<ButtonLink href={routes.CONTRACTS} variant="secondary">Istraži ugovore</ButtonLink>}
+            />
         );
     }
     if (contract.error) {
         return <ErrorState message={contract.error.message} onRetry={() => contract.refetch()}/>;
     }
     if (contract.isPending) {
-        return <LoadingState label="Učitavanje ugovora…"/>;
+        return <LoadingState message="Učitavanje ugovora…"/>;
     }
     return <ContractView contract={contract.data}/>;
 };

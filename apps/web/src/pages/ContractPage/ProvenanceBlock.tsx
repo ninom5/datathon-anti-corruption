@@ -29,7 +29,7 @@ export const ProvenanceBlock = ({contract}: ProvenanceBlockProps) => {
                     {provenance.locatorLabel && <strong className={styles.locator}> · {provenance.locatorLabel}</strong>}
                 </dd>
                 <dt>Dohvaćeno</dt>
-                <dd className="tabular">{formatDateTime(provenance.retrievedAt)}</dd>
+                <dd className="tabular-nums">{formatDateTime(provenance.retrievedAt)}</dd>
                 <dt>Metoda</dt>
                 <dd>
                     {provenance.method === "parser" ? "parser EOJN izvoza" : provenance.method} ({provenance.extractorVersion}),

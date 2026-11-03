@@ -1,5 +1,5 @@
 import {useSearchParams} from "wouter";
-import {EmptyState, ErrorState, LoadingState, SyntheticBanner} from "@/components";
+import {Button, EmptyState, ErrorState, LoadingState, PageHeader, SyntheticBanner} from "@/components";
 import {useBuyers, useContracts, useContractSummary, useSourcesSummary} from "@/hooks";
 import type {ContractListItem, YearCount} from "@/types";
 import {ContractTable} from "./ContractTable.tsx";
@@ -31,14 +31,15 @@ const Results = ({contracts, isPending, error, onRetry, onReset}: ResultsProps) 
         return <ErrorState message={error.message} onRetry={onRetry}/>;
     }
     if (isPending || !contracts) {
-        return <LoadingState label="Učitavanje ugovora…"/>;
+        return <LoadingState message="Učitavanje ugovora…"/>;
     }
     if (contracts.length === 0) {
         return (
-            <EmptyState title="Nema ugovora za odabrane filtre.">
-                <p>Proširite odabir, npr. uklonite godinu ili oznaku pravila.</p>
-                <button type="button" className={styles.linkButton} onClick={onReset}>Poništi filtre</button>
-            </EmptyState>
+            <EmptyState
+                title="Nema ugovora za odabrane filtre"
+                hint="Proširite odabir, npr. uklonite godinu ili oznaku pravila."
+                actions={<Button variant="secondary" onClick={onReset}>Poništi filtre</Button>}
+            />
         );
     }
     return <ContractTable contracts={contracts}/>;
@@ -59,14 +60,11 @@ export const ContractsPage = () => {
 
     return (
         <>
-            {state.synthetic && <div className={styles.bleed}><SyntheticBanner/></div>}
-            <header className={styles.pageHeader}>
-                <h1>Istraživač ugovora</h1>
-                <p className={styles.lead}>
-                    Ugovori iz registara koje naručitelji objavljuju na data.gov.hr. Oznaka pravila znači da nešto
-                    vrijedi provjeriti, a ne da je nešto pogrešno.
-                </p>
-            </header>
+            {state.synthetic && <SyntheticBanner/>}
+            <PageHeader
+                title="Istraživač ugovora"
+                description="Ugovori iz registara koje naručitelji objavljuju na data.gov.hr. Oznaka pravila znači da nešto vrijedi provjeriti, a ne da je nešto pogrešno."
+            />
             {summary.error && <ErrorState message={summary.error.message} onRetry={() => summary.refetch()}/>}
             {!summary.error && summary.data && <SummaryBar summary={summary.data} isSyntheticShown={state.synthetic}/>}
             <div className={styles.layout}>

@@ -27,7 +27,7 @@ export const CoverageSummary = ({summary}: CoverageSummaryProps) => (
                                 {fileStatusLabels[status]}
                                 <span className={styles.hint}>{fileStatusHints[status]}</span>
                             </th>
-                            <td className="tabular">{formatNumber(summary.filesByStatus[status] ?? 0)}</td>
+                            <td className="tabular-nums">{formatNumber(summary.filesByStatus[status] ?? 0)}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -40,7 +40,7 @@ export const CoverageSummary = ({summary}: CoverageSummaryProps) => (
                     {Object.entries(summary.buyersByType).map(([type, count]) => (
                         <tr key={type}>
                             <th scope="row">{buyerTypeLabels[type] ?? type}</th>
-                            <td className="tabular">{formatNumber(count)}</td>
+                            <td className="tabular-nums">{formatNumber(count)}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -51,7 +51,7 @@ export const CoverageSummary = ({summary}: CoverageSummaryProps) => (
                     {summary.contractsByYear.map((row) => (
                         <tr key={row.year}>
                             <th scope="row">{row.year}.{row.incomplete && <span className={styles.hint}>nepotpuna godina</span>}</th>
-                            <td className="tabular">{formatNumber(row.contracts)}</td>
+                            <td className="tabular-nums">{formatNumber(row.contracts)}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -64,7 +64,7 @@ export const CoverageSummary = ({summary}: CoverageSummaryProps) => (
                     {Object.entries(summary.issuesByCode).map(([code, count]) => (
                         <tr key={code}>
                             <th scope="row">{issueCodeLabel(code)}</th>
-                            <td className="tabular">{formatNumber(count)}</td>
+                            <td className="tabular-nums">{formatNumber(count)}</td>
                         </tr>
                     ))}
                     <tr>
@@ -72,7 +72,7 @@ export const CoverageSummary = ({summary}: CoverageSummaryProps) => (
                             Ugovori s fizičkim osobama
                             <span className={styles.hint}>Ne prikazuju se (zaštita osobnih podataka).</span>
                         </th>
-                        <td className="tabular">{formatNumber(summary.hiddenContracts)}</td>
+                        <td className="tabular-nums">{formatNumber(summary.hiddenContracts)}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -1,5 +1,5 @@
 import type {IndicatorBadge} from "@/types";
-import {formatMagnitude, ruleLetter} from "@/utils";
+import {classNames, formatMagnitude, ruleLetter} from "@/utils";
 import styles from "./IndicatorTag.module.css";
 
 interface IndicatorTagProps {
@@ -15,7 +15,7 @@ export const IndicatorTag = ({indicator}: IndicatorTagProps) => {
     const letter = ruleLetter(indicator.ruleCode);
     if (indicator.possibleEntryError) {
         return (
-            <span className={`${styles.tag} ${styles.entryError}`} title="Informativno: vjerojatna greška u izvoru">
+            <span className={classNames(styles.tag, styles.entryError)} title="Informativno: vjerojatna greška u izvoru">
                 {letter} · moguća greška u unosu
             </span>
         );
@@ -23,13 +23,13 @@ export const IndicatorTag = ({indicator}: IndicatorTagProps) => {
     const magnitude = indicator.magnitudeValue === null ? "" : ` ${formatMagnitude(indicator.ruleCode, indicator.magnitudeValue)}`;
     if (indicator.severityNote === "informativno") {
         return (
-            <span className={`${styles.tag} ${styles.informative}`} title="Informativno: poznato moguće objašnjenje (npr. vlastito komunalno društvo)">
+            <span className={classNames(styles.tag, styles.informative)} title="Informativno: poznato moguće objašnjenje (npr. vlastito komunalno društvo)">
                 {letter}{magnitude} · informativno
             </span>
         );
     }
     return (
-        <span className={`${styles.tag} ${styles.signal}`} title="Vrijedi provjeriti">
+        <span className={classNames(styles.tag, styles.signal)} title="Vrijedi provjeriti">
             {letter}{magnitude}
         </span>
     );

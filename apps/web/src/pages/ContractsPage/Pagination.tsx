@@ -1,3 +1,4 @@
+import {Button, Icon} from "@/components";
 import {formatNumber} from "@/utils";
 import styles from "./ContractsPage.module.css";
 
@@ -14,17 +15,19 @@ export const Pagination = ({page, size, totalElements, onPageChange}: Pagination
     const last = Math.min(totalElements, (page + 1) * size);
     return (
         <nav className={styles.pagination} aria-label="Stranice rezultata">
-            <span className="tabular">
+            <span className={`tabular-nums ${styles.pageStatus}`}>
                 {formatNumber(first)}–{formatNumber(last)} od {formatNumber(totalElements)}
             </span>
             <span className={styles.pageButtons}>
-                <button type="button" className={styles.smallButton} disabled={page === 0} onClick={() => onPageChange(page - 1)}>
+                <Button variant="secondary" disabled={page === 0} onClick={() => onPageChange(page - 1)}>
+                    <Icon name="chevronLeft"/>
                     Prethodna
-                </button>
-                <span className="tabular">{page + 1} / {pageCount}</span>
-                <button type="button" className={styles.smallButton} disabled={page + 1 >= pageCount} onClick={() => onPageChange(page + 1)}>
+                </Button>
+                <span className={`tabular-nums ${styles.pageStatus}`}>Stranica {page + 1} od {pageCount}</span>
+                <Button variant="secondary" disabled={page + 1 >= pageCount} onClick={() => onPageChange(page + 1)}>
                     Sljedeća
-                </button>
+                    <Icon name="chevronRight"/>
+                </Button>
             </span>
         </nav>
     );

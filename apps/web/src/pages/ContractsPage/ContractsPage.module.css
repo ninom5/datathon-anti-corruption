@@ -1,187 +1,164 @@
-/* The synthetic banner spans the whole window, not just the content column. */
-.bleed {
-    margin: -24px calc(50% - 50vw) 20px;
-}
-
-.pageHeader {
-    margin-bottom: 16px;
-}
-
-.lead {
-    color: var(--muted);
-    max-width: 70ch;
-    margin: 6px 0 0;
-}
-
+/* Result summary: one plain line of real numbers, like the list summary in OtvoreniRadar. */
 .summary {
-    border-top: 2px solid var(--ink);
-    border-bottom: 1px solid var(--line);
-    padding: 12px 0;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
 }
 
 .summaryLine {
-    margin: 0;
-    font-size: 17px;
+    font-size: var(--font-size-lg);
+}
+
+.summaryLine strong {
+    font-weight: var(--font-weight-semibold);
 }
 
 .summaryNote {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 13px;
+    margin-top: var(--space-1);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
 }
 
 .dot {
-    color: var(--muted);
-    margin: 0 8px;
+    margin: 0 var(--space-2);
+    color: var(--color-text-muted);
 }
 
 .signalText {
-    color: var(--signal);
+    color: var(--color-signal);
 }
 
 .layout {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 24px;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: var(--space-5);
     align-items: start;
 }
 
+/* Filter panel: bordered surface, sticky under the header. */
 .filters {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-4));
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    position: sticky;
-    top: 16px;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
 }
 
 .filtersTitle {
-    font-size: 16px;
+    font-size: var(--font-size-lg);
 }
 
 .field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    font-size: 14px;
-    border: 0;
-    padding: 0;
+    gap: var(--space-1);
+    min-width: 0;
     margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
 }
 
 .field legend {
+    margin-bottom: var(--space-2);
     padding: 0;
-    margin-bottom: 4px;
-}
-
-.field select,
-.field input:not([type="radio"]):not([type="checkbox"]) {
-    width: 100%;
-    min-height: 34px;
-    padding: 4px 8px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
-}
-
-.field input[aria-invalid="true"] {
-    border-color: var(--signal);
 }
 
 .fieldError {
-    color: var(--signal);
-    font-size: 13px;
+    font-size: var(--font-size-xs);
+    color: var(--color-danger);
 }
 
 .inline {
     display: flex;
-    gap: 6px;
+    gap: var(--space-2);
 }
 
 .radio {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: var(--space-2);
+    min-height: 28px;
+    font-weight: var(--font-weight-regular);
     cursor: pointer;
+}
+
+.radio input {
+    flex-shrink: 0;
+    accent-color: var(--color-primary);
+}
+
+.ruleCount {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-muted);
 }
 
 .syntheticToggle {
-    padding: 8px;
-    border: 1px dashed var(--synthetic);
-    border-radius: var(--radius);
+    padding: var(--space-2) var(--space-3);
+    border: 1px dashed var(--color-synthetic);
+    border-radius: var(--radius-sm);
+    color: var(--color-synthetic);
+    background: var(--color-synthetic-soft);
 }
 
-.smallButton {
-    padding: 4px 10px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.smallButton:disabled {
-    opacity: 0.5;
-    cursor: default;
-}
-
-.linkButton {
+.resetButton {
     align-self: flex-start;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--accent);
-    text-decoration: underline;
-    cursor: pointer;
 }
 
 .results {
     min-width: 0;
 }
 
+/* While new results load the old ones stay, dimmed. */
 .results[aria-busy="true"] .table {
     opacity: 0.6;
 }
 
 .tableWrap {
     overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
 }
 
 .table th {
+    padding: var(--space-3);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
     text-align: left;
-    font-weight: 600;
-    color: var(--muted);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--line);
     white-space: nowrap;
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .table td {
-    padding: 6px 10px;
-    height: var(--row-height);
-    border-bottom: 1px solid var(--line);
+    padding: var(--space-3);
     vertical-align: top;
+    line-height: var(--line-height-snug);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .table tbody tr:last-child td {
     border-bottom: 0;
 }
 
+.table tbody tr {
+    transition: background-color var(--duration-fast) var(--easing);
+}
+
 .table tbody tr:hover {
-    background: var(--paper);
+    background: var(--color-surface-hover);
 }
 
 .numeric {
@@ -193,83 +170,87 @@
     text-align: right;
 }
 
-.subjectLink {
-    color: var(--ink);
-    text-decoration-color: var(--line);
-    text-underline-offset: 3px;
-}
-
 .date {
     white-space: nowrap;
 }
 
+.subjectLink {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    text-decoration: none;
+}
+
 .subjectLink:hover {
-    color: var(--accent);
+    color: var(--color-primary);
+    text-decoration: underline;
 }
 
 .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .syntheticRow {
-    box-shadow: inset 3px 0 0 var(--synthetic);
+    box-shadow: inset 3px 0 0 var(--color-synthetic);
 }
 
 .syntheticTag {
-    margin-left: 6px;
-    padding: 0 6px;
-    border-radius: 999px;
-    background: var(--synthetic);
-    color: #FFFFFF;
-    font-size: 11px;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--space-2);
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
     white-space: nowrap;
+    color: var(--color-synthetic);
+    background: var(--color-synthetic-soft);
 }
 
 .muted {
-    color: var(--muted);
+    color: var(--color-text-muted);
 }
 
 .footnote {
-    color: var(--muted);
-    font-size: 12px;
-    margin: 8px 0 0;
+    margin-top: var(--space-2);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-muted);
 }
 
 .pagination {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    margin-top: 12px;
-    font-size: 14px;
-    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
 }
 
 .pageButtons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
 }
 
-@media (max-width: 900px) {
+.pageStatus {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+@media (max-width: 960px) {
     .layout {
         grid-template-columns: 1fr;
     }
 
     .filters {
         position: static;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        padding: 12px;
-        background: var(--surface);
     }
 }
 
-/* Below 640 px the table becomes cards (docs/UI_UX.md §5). */
-@media (max-width: 640px) {
+/* Below 768 px the table becomes stacked rows (docs/UI_UX.md §5). */
+@media (max-width: 768px) {
     .table thead {
         display: none;
     }
@@ -283,26 +264,23 @@
     }
 
     .table tr {
-        padding: 8px 0;
-        border-bottom: 1px solid var(--line);
+        padding: var(--space-2) 0;
+        border-bottom: 1px solid var(--color-border);
     }
 
     .table td {
-        border: 0;
-        height: auto;
-        padding: 2px 12px;
+        padding: 2px var(--space-3);
         text-align: left;
+        border: 0;
     }
 
     .table td::before {
         content: attr(data-label) ": ";
-        color: var(--muted);
-        font-size: 12px;
+        font-size: var(--font-size-xs);
+        color: var(--color-text-muted);
     }
 
     .numeric {
         text-align: left;
     }
 }
-
-.ruleCount { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); }

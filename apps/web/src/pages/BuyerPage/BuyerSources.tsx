@@ -1,6 +1,6 @@
 import type {BuyerProfile} from "@/types";
 import {CPV_SOURCE, formatNumber} from "@/utils";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface BuyerSourcesProps { profile: BuyerProfile }
 

@@ -1,0 +1,33 @@
+/* Same shape as Badge: the rule letter carries the meaning, colour only supports it. */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 1px var(--space-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.4;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.signal {
+    color: var(--color-signal);
+    background: var(--color-signal-soft);
+    border-color: var(--color-signal-border);
+}
+
+.entryError {
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border-strong);
+    border-style: dashed;
+}
+
+.informative {
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+}

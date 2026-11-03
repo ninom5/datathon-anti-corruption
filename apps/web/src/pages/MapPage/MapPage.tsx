@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 import {useSearchParams} from "wouter";
-import {ErrorState, LoadingState} from "@/components";
+import {ErrorState, LoadingState, PageHeader, Select} from "@/components";
 import {useJlsShapes, useMunicipalities} from "@/hooks";
 import type {MunicipalityOverview} from "@/types";
 import {formatNumber, projectShapes} from "@/utils";
@@ -40,7 +40,7 @@ export const MapPage = () => {
         return <ErrorState message={`Granice JLS se nisu učitale. ${shapesQuery.error.message}`} onRetry={() => shapesQuery.refetch()}/>;
     }
     if (municipalitiesQuery.isPending || !projected || !shapes) {
-        return <LoadingState label="Učitavanje karte…"/>;
+        return <LoadingState message="Učitavanje karte…"/>;
     }
 
     const municipalities = municipalitiesQuery.data;
@@ -54,25 +54,25 @@ export const MapPage = () => {
 
     return (
         <>
-            <header className={styles.pageHeader}>
-                <h1>Karta: gdje ima podataka i indikatora</h1>
-                <p className={styles.lead}>
+            <PageHeader
+                title="Karta: gdje ima podataka i indikatora"
+                meta={<p className={styles.lead}>
                     <strong>{formatNumber(withData.length)} od {formatNumber(municipalities.length)}</strong> jedinica lokalne
                     samouprave objavljuje registar ugovora koji se može strojno pročitati. U njima je
                     {" "}<strong>{formatNumber(worthChecking)}</strong> indikatora koje vrijedi provjeriti. Šrafirane JLS
                     nemaju takav registar, što nije isto što i nula indikatora.
-                </p>
-            </header>
+                </p>}
+            />
 
             <label className={styles.quickPick}>
                 Brzi odabir JLS s podacima
-                <select value={selectedOib && byOib.get(selectedOib)?.contracts ? selectedOib : ""}
+                <Select value={selectedOib && byOib.get(selectedOib)?.contracts ? selectedOib : ""}
                         onChange={(event) => event.target.value && handleSelect(event.target.value)}>
                     <option value="">Odaberite…</option>
                     {withData.map((municipality) => (
                         <option key={municipality.oib} value={municipality.oib}>{municipality.name}</option>
                     ))}
-                </select>
+                </Select>
             </label>
 
             <div className={styles.layout}>

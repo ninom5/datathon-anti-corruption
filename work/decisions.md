@@ -145,3 +145,10 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **Usporedba je po jednoj godini sklapanja** (zadano: zadnja potpuna). Miješanje godina bi uspoređivalo JLS s različitim pokrivenim razdobljima. JLS bez ugovora u toj godini nije u usporedbi i ne računa se kao 0. Kategorija bez ugovora unutar JLS s podacima je stvarna 0.
 - **Nalaz (rizik za video):** uz sadašnju pokrivenost (33 JLS s podacima) gotovo nijedna skupina nema n ≥ 8 u istoj godini (npr. P5 2025.: 2 od 51). Usporedba će uglavnom pokazivati "Nedovoljno podataka". To je pošteno, ali za demo je jača priča karta (33 od 556 objavljuje strojno čitljiv registar). Mogući sljedeći korak je opcija "prosjek godišnje potrošnje preko dostupnih godina"; čeka odluku tima.
 - **Vite proxy:** nakon spajanja s #42 koristi se Ninova varijabla `API_URL` (moja `API_PROXY` je uklonjena, isti cilj).
+
+## 2026-11-03: refactor-ui – isti dizajn sustav kao OtvoreniRadar (korisnik)
+- **Grana `refactor-ui` (od `43-karta-usporedba`, jer ta već ima `main` + kartu).** Frontend preuzima dizajn sustav iz `FESB/datathon`: tokeni (`--color-*`, `--space-*`, `--radius-*`, `--font-size-*`), fontovi IBM Plex Sans + Source Serif 4, shell (ljepljivo zaglavlje, aktivna stavka kao zelena crta, mobilni izbornik, podnožje), komponente `Button`/`ButtonLink`, `Badge`, `Notice`, `Card`, `PageHeader`, `EmptyState`/`ErrorState`/`LoadingState`, `BackLink`, `ExternalLink`, `FactList`, `Select`, `TextInput`, `Icon` (kopirane bez izmjena).
+- Zašto: dva projekta istog tima izgledaju kao jedna obitelj proizvoda, a OtvoreniRadar sustav je već dokumentiran i provjeren za pristupačnost.
+- **Zadržano iz JavniRadara (pravila domene):** jantarni signal (`--color-signal`) umjesto crvene, ljubičasta traka za sintetičke podatke (svoj ton, ne AI ton), tri odvojene dimenzije indikatora, "Što ovo NE znači".
+- **Uklonjeno:** tamni način i velika slova iznad naslova (eyebrow), zaobljene "pill" oznake.
+- Komponente su sada u mapi po komponenti (`components/<Name>/`), kao u OtvoreniRadaru.

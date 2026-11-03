@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {EmptyState, ErrorState, LoadingState} from "@/components";
+import {Button, EmptyState, ErrorState, LoadingState, PageHeader} from "@/components";
 import {useSources, useSourcesSummary} from "@/hooks";
 import type {SourceDataset} from "@/types";
 import {formatNumber} from "@/utils";
@@ -23,11 +23,11 @@ export const SourcesPage = () => {
             return <ErrorState message={sources.error.message} onRetry={() => sources.refetch()}/>;
         }
         if (sources.isPending) {
-            return <LoadingState label="Učitavanje izvora…"/>;
+            return <LoadingState message="Učitavanje izvora…"/>;
         }
         const datasets = isImportedOnly ? sources.data.content.filter(hasImportedFile) : sources.data.content;
         if (datasets.length === 0) {
-            return <EmptyState title="Nema skupova za prikaz."><p>Pokrenite dohvat podataka ili isključite filtar.</p></EmptyState>;
+            return <EmptyState icon="database" title="Nema skupova za prikaz" hint="Pokrenite dohvat podataka ili isključite filtar."/>;
         }
         return <DatasetTable datasets={datasets}/>;
     };
@@ -36,17 +36,13 @@ export const SourcesPage = () => {
 
     return (
         <>
-            <header className={styles.pageHeader}>
-                <h1>Izvori i metodologija</h1>
-                <p className={styles.lead}>
-                    Svaki ugovor u JavniRadaru vodi do datoteke i retka iz kojeg je pročitan. Podaci se preuzimaju s
-                    Portala otvorenih podataka (data.gov.hr) uz poštivanje robots.txt-a; eojn.hr se ne pretražuje
-                    automatski.
-                </p>
-            </header>
+            <PageHeader
+                title="Izvori i metodologija"
+                description="Svaki ugovor u JavniRadaru vodi do datoteke i retka iz kojeg je pročitan. Podaci se preuzimaju s Portala otvorenih podataka (data.gov.hr) uz poštivanje robots.txt-a; eojn.hr se ne pretražuje automatski."
+            />
 
             {summary.error && <ErrorState message={summary.error.message} onRetry={() => summary.refetch()}/>}
-            {summary.isPending && <LoadingState label="Učitavanje pokrivenosti…"/>}
+            {summary.isPending && <LoadingState message="Učitavanje pokrivenosti…"/>}
             {summary.data && <CoverageSummary summary={summary.data}/>}
 
             <section aria-labelledby="datasets-title" className={styles.datasets}>
@@ -62,9 +58,9 @@ export const SourcesPage = () => {
                 {renderDatasets()}
                 {pageCount > 1 && (
                     <nav className={styles.pager} aria-label="Stranice skupova">
-                        <button type="button" disabled={page === 0} onClick={() => setPage(page - 1)}>Prethodna</button>
-                        <span className="tabular">{page + 1} / {pageCount}</span>
-                        <button type="button" disabled={page + 1 >= pageCount} onClick={() => setPage(page + 1)}>Sljedeća</button>
+                        <Button variant="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>Prethodna</Button>
+                        <span className="tabular-nums">{page + 1} / {pageCount}</span>
+                        <Button variant="secondary" disabled={page + 1 >= pageCount} onClick={() => setPage(page + 1)}>Sljedeća</Button>
                     </nav>
                 )}
             </section>

@@ -1,7 +1,7 @@
 import {OrganizationName} from "@/components";
 import type {BuyerProfile} from "@/types";
 import {formatEur, formatNumber} from "@/utils";
-import styles from "@/components/DataView.module.css";
+import styles from "@/components/DataView/DataView.module.css";
 
 interface BuyerSuppliersProps { profile: BuyerProfile }
 

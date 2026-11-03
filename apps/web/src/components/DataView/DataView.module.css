@@ -1,0 +1,302 @@
+/* Shared look of data sections on detail pages (buyer, indicator): section titles, notes, tables and charts. */
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-5);
+    padding: 0;
+    list-style: none;
+}
+
+.summaryBlock {
+    margin-bottom: var(--space-6);
+}
+
+.summary {
+    font-size: var(--font-size-lg);
+}
+
+.summary strong {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+}
+
+.dot {
+    margin: 0 var(--space-2);
+    color: var(--color-text-muted);
+}
+
+.note {
+    margin: var(--space-2) 0 var(--space-4);
+    max-width: 85ch;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.section {
+    min-width: 0;
+    margin-bottom: var(--space-6);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.plainSection {
+    min-width: 0;
+    margin-bottom: var(--space-6);
+}
+
+.plainSection h2 {
+    font-size: var(--font-size-xl);
+}
+
+.section h2 {
+    font-size: var(--font-size-xl);
+}
+
+.section h3 {
+    font-size: var(--font-size-lg);
+}
+
+.section p {
+    max-width: 85ch;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+}
+
+.disclosure {
+    margin-top: var(--space-4);
+}
+
+.disclosure summary {
+    width: fit-content;
+    padding: var(--space-2) 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.tableWrap {
+    width: 100%;
+    margin-top: var(--space-3);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.table caption {
+    margin-bottom: var(--space-2);
+    text-align: left;
+    color: var(--color-text-muted);
+}
+
+.table th,
+.table td {
+    padding: var(--space-2);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table thead th {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+}
+
+.table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.table .numeric {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.table .date {
+    white-space: nowrap;
+}
+
+.bars {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.barRow {
+    min-width: 0;
+}
+
+.barLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-5);
+    margin-bottom: var(--space-1);
+    font-size: var(--font-size-sm);
+}
+
+.barLabel span {
+    overflow-wrap: anywhere;
+}
+
+.barLabel strong {
+    white-space: nowrap;
+    font-weight: var(--font-weight-semibold);
+}
+
+.barRow svg {
+    display: block;
+    width: 100%;
+    height: 12px;
+}
+
+.track {
+    fill: var(--color-surface-subtle);
+}
+
+.signalFill {
+    fill: var(--color-signal);
+}
+
+.plotWrap {
+    overflow-x: auto;
+}
+
+.plot {
+    display: block;
+    width: 100%;
+    min-width: 580px;
+    color: var(--color-text);
+}
+
+.plot text {
+    fill: currentColor;
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-variant-numeric: tabular-nums;
+}
+
+.gridLine {
+    stroke: var(--color-border);
+    stroke-width: 1;
+}
+
+.cumulative {
+    fill: none;
+    stroke: var(--color-text);
+    stroke-width: 2;
+}
+
+.threshold {
+    stroke: var(--color-signal);
+    stroke-width: 2;
+    stroke-dasharray: 7 5;
+}
+
+.point {
+    fill: var(--color-signal);
+    stroke: var(--color-surface);
+    stroke-width: 1.5;
+}
+
+/* Context quoted from the source: a soft info panel, never the look of a verdict. */
+.context {
+    margin-bottom: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-info-soft);
+    border-radius: var(--radius-sm);
+}
+
+.context h2 {
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+}
+
+.context p {
+    margin-top: var(--space-1);
+}
+
+.sourceList {
+    padding-left: var(--space-5);
+    font-size: var(--font-size-sm);
+}
+
+.sourceList li {
+    margin: var(--space-2) 0;
+    overflow-wrap: anywhere;
+}
+
+.ruleCounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: var(--space-4) 0 var(--space-5);
+    padding: 0;
+    list-style: none;
+    font-size: var(--font-size-sm);
+}
+
+.ruleGroup {
+    margin-bottom: var(--space-6);
+}
+
+.ruleGroup h3 {
+    margin-bottom: var(--space-3);
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--font-size-xs);
+}
+
+.legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.legend svg {
+    width: 30px;
+    height: 14px;
+}
+
+@media (max-width: 960px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: var(--space-4);
+    }
+
+    .meta {
+        display: grid;
+        gap: var(--space-1);
+    }
+
+    .barLabel {
+        flex-wrap: wrap;
+    }
+
+    .table th,
+    .table td {
+        padding: var(--space-2) var(--space-1);
+    }
+}
