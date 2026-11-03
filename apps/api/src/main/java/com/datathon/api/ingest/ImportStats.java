@@ -13,13 +13,20 @@ public class ImportStats {
     private int superseded;
     private final Map<String, Integer> rejectedByCode = new TreeMap<>();
     private final Map<String, Integer> warningsByCode = new TreeMap<>();
+    private final Map<Integer, Integer> createdByYear = new TreeMap<>();
+    private final Map<Integer, Integer> skippedOverlapByYear = new TreeMap<>();
 
     void countRow() {
         rows++;
     }
 
-    void countCreated() {
+    void countCreated(int year) {
         created++;
+        createdByYear.merge(year, 1, Integer::sum);
+    }
+
+    void countSkippedOverlap(int year) {
+        skippedOverlapByYear.merge(year, 1, Integer::sum);
     }
 
     void countSuperseded() {
@@ -44,5 +51,7 @@ public class ImportStats {
         superseded += other.superseded;
         other.rejectedByCode.forEach((code, count) -> rejectedByCode.merge(code, count, Integer::sum));
         other.warningsByCode.forEach((code, count) -> warningsByCode.merge(code, count, Integer::sum));
+        other.createdByYear.forEach((year, count) -> createdByYear.merge(year, count, Integer::sum));
+        other.skippedOverlapByYear.forEach((year, count) -> skippedOverlapByYear.merge(year, count, Integer::sum));
     }
 }

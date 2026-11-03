@@ -70,7 +70,7 @@ export const fileStatusLabels: Record<FileStatus, string> = {
 };
 
 export const fileStatusHints: Record<FileStatus, string> = {
-    uvezeno: "Standardni EOJN izvoz (klasa A), pročitan parserom.",
+    uvezeno: "EOJN izvoz (standardni, klasa A, ili stariji izvještaj, klasa A2) pročitan parserom, ili referentni izvor (JPT, DZS).",
     format_nije_podrzan: "Vlastita tablica naručitelja (klase B i C); parser dolazi nakon POC-a.",
     nestrukturirano: "Naslovi, spojene ćelije ili tekst (klasa D).",
     necitljivo: "Datoteka je preuzeta, ali je oštećena ili nije u navedenom formatu.",
@@ -91,6 +91,8 @@ const qualityFlagLabels: Record<string, string> = {
     unreadable_completed_on: "Datum izvršenja nije čitljiv",
     date_in_future: "Datum je u budućnosti",
     hrk_after_euro: "Iznos u kunama nakon uvođenja eura",
+    supplier_consortium: "Zajednica ponuditelja (prikazan je prvi navedeni OIB)",
+    gross_below_net: "Iznos s PDV-om manji je od iznosa bez PDV-a",
 };
 
 export const qualityFlagLabel = (code: string) => qualityFlagLabels[code] ?? code;
@@ -106,6 +108,10 @@ const issueCodeLabels: Record<string, string> = {
     missing_date_signed: "Redak odbačen: nema datuma sklapanja",
     unreadable_date_signed: "Redak odbačen: datum sklapanja nije čitljiv",
     missing_amount: "Redak odbačen: nema iznosa",
+    overlaps_class_a: "Redak nije uvezen: isti naručitelj i godina već su u standardnom EOJN izvozu",
+    buyer_not_in_jpt: "Naručitelj nije jednoznačno pronađen u JPT registru",
+    reference_source_failed: "Referentni izvor (JPT ili DZS) nije dostupan",
+    dzs_unmatched: "JLS iz DZS popisa nije pronađena u JPT registru",
 };
 
 export const issueCodeLabel = (code: string) => issueCodeLabels[code] ?? qualityFlagLabel(code);

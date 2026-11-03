@@ -111,6 +111,26 @@ class RuleDTest {
         assertThat(draft.explanationHr()).contains("manji od iznosa bez PDV-a");
     }
 
+    /**
+     * Real A2 case (Općina Bistra, 2022): contract "82.375,00 HRK" (10.933,04 EUR), paid "82.375,00 EUR". The ratio
+     * equals the kuna/euro rate, so the record is shown as a probable currency mix-up, not as an overpayment.
+     */
+    @Test
+    void kunaEuroRatioIsInformative() {
+        Contract contract = contract(SubjectType.SERVICES, "8746.43", "8746.43");
+        contract.setTotalValue(null);
+        contract.setInitialValueGross(new BigDecimal("10933.04"));
+        contract.setPaidAmount(new BigDecimal("82375.00"));
+        var draft = overpayment.evaluate(contract).orElseThrow();
+        assertThat(draft.dataQuality()).isEqualTo(DataQuality.LOW);
+        assertThat(draft.severityNote()).isEqualTo(SeverityNote.INFORMATIVE);
+        assertThat(draft.explanationHr()).contains("tečaju kune i eura");
+        assertNoForbiddenWords(draft);
+
+        var nearRate = overpayment.evaluate(paid("10000", "70000")).orElseThrow();
+        assertThat(nearRate.severityNote()).as("7,0x is outside the 1,5 % tolerance").isEqualTo(SeverityNote.WORTH_CHECKING);
+    }
+
     private static Contract contract(SubjectType type, String initial, String total) {
         Contract contract = new Contract("https://primjerovo.invalid/contract-eo/T");
         contract.setSubjectType(type);

@@ -9,7 +9,7 @@ _Grane: radi se iz `main`. Za svaku karticu nova grana `<issue>-kratki-opis` (np
 | Issue | Kartica | Uloga | Prio | Veličina | Rok | Ovisi o | Prompt |
 |---|---|---|---|---|---|---|---|
 | #39 | Organizacija: ključevi (Sudreg, Claude API), uloge, odluka o drugom projektu, javni repo, pregled UI-ja | korisnik/tim | P0 | S | 03.11. | — | — |
-| #40 | Podaci: stari EOJN format (A2), JPT, DZS (+ Hvar kao Could) | DATA | P0 | L | 04.11. | — | `next-a2-jpt-fc.md` faze 1–2 |
+| #40 | Podaci: stari EOJN format (A2), JPT, DZS (+ Hvar kao Could). **Kod gotov 03.11. na grani `40-a2-jpt-dzs` (necommitano); Hvar nije rađen** | DATA | P0 | L | 04.11. | — | `next-a2-jpt-fc.md` faze 1–2 |
 | #41 | Pravila F i C + sintetički ground truth + API indikatora (`/indicators`, `/buyers/{oib}`, `ruleCode`, `band`) | BACK | P0 | L | 04.11. | #40 | `next-a2-jpt-fc.md` faze 3–4 |
 | #42 | UI: profil JLS, filter "Vrsta indikatora", prikaz F i C | FRONT | P0 | L | 05.11. | #41 | `next-a2-jpt-fc.md` faza 4 |
 | #43 | Karta (licenca GeoJSON-a ili fallback) i usporedba općina | FRONT | P0 | M | 06.11. | DZS iz #40 | — |

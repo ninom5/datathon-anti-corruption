@@ -25,6 +25,13 @@ class NormalizationTest {
         assertThat(Money.read("1.500,50", LocalDate.of(2025, 1, 1)).value()).isEqualByComparingTo("1500.50");
         assertThat(Money.read("7534,50", LocalDate.of(2022, 12, 31)).value()).isEqualByComparingTo("1000.00");
         assertThat(Money.read("1.500,00 kn mjesečno", LocalDate.of(2022, 1, 1)).status()).isEqualTo(Money.Status.PERIODIC);
+        // A2 reports: an explicit "EUR" wins over the signing date, a "(kn)" header over a plain number after 2022.
+        assertThat(Money.read("1.098,28 EUR", LocalDate.of(2022, 8, 17)).value()).isEqualByComparingTo("1098.28");
+        assertThat(Money.read("1.098,28 EUR", LocalDate.of(2022, 8, 17)).hrk()).isFalse();
+        assertThat(Money.read("75345", LocalDate.of(2023, 2, 1), Money.HeaderCurrency.HRK).value()).isEqualByComparingTo("10000.00");
+        assertThat(Money.read("3177.38", LocalDate.of(2022, 12, 1), Money.HeaderCurrency.EUR).value()).isEqualByComparingTo("3177.38");
+        assertThat(Money.read("75.345,00 HRK", LocalDate.of(2023, 2, 1), Money.HeaderCurrency.EUR).value())
+                .as("the cell marker wins over the header").isEqualByComparingTo("10000.00");
         assertThat(Money.read("nije poznato", LocalDate.of(2025, 1, 1)).status()).isEqualTo(Money.Status.UNREADABLE);
         assertThat(Money.read(" ", LocalDate.of(2025, 1, 1)).status()).isEqualTo(Money.Status.MISSING);
     }

@@ -70,3 +70,10 @@
 - `poc/vertical-slice` spojen u `main` fast-forwardom (0ca7dfb). Uključuje i `nmilas-poc`. Ništa nije pushano.
 - `work/tasks.md` prepisan u backlog T01–T29 + P1–P4 po ulogama DATA/BACK/FRONT, s rokovima, ovisnostima i promptovima. Arhiva prijave je skraćena.
 - Remote repo `ninom5/datathon-anti-corruption` je PRIVATE (provjereno `gh`).
+
+## 2026-11-03: #40 stari EOJN (A2), JPT, DZS (grana `40-a2-jpt-dzs`, necommitano)
+- A2 parser: 32 datoteke, **3.626 novih ugovora (2014–2025)**, 926 duplikata, 10 odbačenih; preklapanje s klasom A 0. Ukupno 5.958 ugovora, **34 JLS (prije 17)**.
+- Točnost A2: 20/20 (10 najvećih + 10 nasumičnih) s izvornim ćelijama.
+- JPT: 4.678 tijela, 3.897 s osnivačima; 15 parova u kojima je naručitelj osnivač dobavljača. DZS: 556/556 JLS spojeno, usporedne skupine P1–P7.
+- Nalaz: EOJN izvještaj označava kune kao "EUR" kod isplata za 2022.; D2 to sada prikazuje informativno (6 slučajeva).
+- `./mvnw test` 41/41; `yarn lint` i `yarn build` zeleno. Korisnik: asistent nikad ne commita.

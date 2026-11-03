@@ -31,7 +31,7 @@ public record RuleThresholds(List<ModificationLimits> contractModification, List
 
     /** JavniRadar heuristics for rule D, not legal thresholds (docs/ANOMALY_DETECTION.md §D). */
     public record RuleD(BigDecimal minInitialValueEur, BigDecimal overpaymentShare, BigDecimal overpaymentMinEur,
-                        BigDecimal implausibleRatio, String source) {
+                        BigDecimal implausibleRatio, BigDecimal currencyMixTolerance, String source) {
     }
 
     public interface Period {

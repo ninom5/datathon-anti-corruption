@@ -43,4 +43,16 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSp
     Page<Contract> findAll(Specification<Contract> specification, Pageable pageable);
 
     long countByIsSyntheticFalse();
+
+    /**
+     * True when the buyer already has standard EOJN export (class A) contracts signed in [from, to]. Used to skip
+     * A2 rows of that buyer and year, because A2 has no EOJN link to deduplicate on (docs/DATA_MODEL.md §3).
+     */
+    @Query("""
+            select count(c) > 0 from Contract c join c.buyer b
+            where c.eojnContractUrl is not null and c.isSynthetic = false
+              and c.dateSigned between :from and :to
+              and (b.oib = :buyerOib or b.nameNorm = :buyerNameNorm)""")
+    boolean existsClassAForBuyerBetween(@Param("buyerOib") String buyerOib, @Param("buyerNameNorm") String buyerNameNorm,
+                                         @Param("from") java.time.LocalDate from, @Param("to") java.time.LocalDate to);
 }

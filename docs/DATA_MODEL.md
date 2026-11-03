@@ -253,6 +253,7 @@ CREATE TABLE ingest_issue (id BIGSERIAL PRIMARY KEY, run_id BIGINT REFERENCES in
 | Organizacija | **OIB** (11 znamenki, valjana kontrolna znamenka ISO 7064 MOD 11,10) | Isti OIB je isti entitet. Naziv se uzima iz JPT-a (javna tijela) ili Sudrega (tvrtke), inače najčešći naziv iz ugovora |
 | Organizacija bez OIB-a | `name_norm` + mjesto | fuzzy (`similarity ≥ 0.9`) **samo kao prijedlog**; spaja se tek nakon ručne potvrde ili točnog podudaranja `name_norm` |
 | Ugovor (klasa A) | `eojn_contract_url` | isti ugovor se pojavljuje u više datoteka (izmjereno 659 duplikata): zadržava se zapis iz **najnovije** datoteke, a stariji se vežu kao povijest (`valid_from`) |
+| Ugovor (klasa A2, stari EOJN izvještaj) | `eojn-a2:` + `sha256(buyer_oib or name_norm, supplier_oib or name_norm, date_signed, initial_value, norm(subject))` | Unutar A2 noviji godišnji fajl zamjenjuje stariji redak. **Između formata:** ako naručitelj za istu godinu ima ugovore klase A, A2 redci te godine se ne uvoze. `raw_record` ostaje, a `ingest_issue` dobiva `overlaps_class_a`. A se uvozi prije A2 u svakom runu. Ograničenje: ako klasa A za tu godinu stigne tek u kasnijem runu, već uvezeni A2 redci se ne povlače (nije se dogodilo; 0 preklapanja 2026-11-03). |
 | Ugovor (ostalo) | `sha256(buyer_oib, contract_number, date_signed, supplier_oib or name_norm, round(total,0))` | |
 | Ugovor (OCDS) | `ocid + contracts[].id` | |
 | JLS | OIB iz JPT-a (`VrstaJPT` = Općina/Grad) | DZS se spaja po `(norm(county), norm(name))`; nespojeni idu u ručnu tablicu `municipality_name_alias` |
@@ -289,6 +290,13 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 - `is_synthetic = true` na organizaciji i ugovoru. OIB-i iz raspona `000000000xx` (namjerno nevaljani). Nazivi "Općina Primjerovo", "Primjer d.o.o.".
 - API vraća `"synthetic": true`, a UI prikazuje traku **"SINTETIČKI PODACI ZA DEMONSTRACIJU"**.
 - Sintetički i stvarni zapisi **nikad** ne ulaze u istu usporednu skupinu ni statistiku (`WHERE NOT is_synthetic` u svim agregatima, uz test).
+
+## 8a. Dodaci za #40 (`V2__a2_jpt_dzs.sql`, 2026-11-03)
+- `source_file.format_class` je `TEXT` s vrijednostima `A`, `A2`, `B`, `C`, `D`.
+- `organization`: `jpt_code`, `jpt_type`, `founders` (JSONB), kao u §2. Pune se iz JPT-a po OIB-u nakon svakog uvoza (`JptBodyRepository.enrichOrganizations`).
+- **`jpt_body`** (novo, odstupa od §2): snimka JPT registra (OIB, oznaka, naziv, vrsta, županija, osnivači, provenancija). Zasebna je tablica da 4.678 tijela ne postanu "naručitelji" u `organization`.
+- **`municipality`** je ključan po `oib` (iz JPT-a), a ne po `organization_id` kao u §2. Većina od 556 JLS nema ugovora, pa nema ni redak u `organization`. Stupci: `name`, `kind`, `county`, `population_2021`, `peer_group`, `provenance_id`. `has_contract_data` i pokrivenost računaju se upitom nad `contract`.
+- A2 ugovori: `eojn_contract_url` je NULL, `amendments_value_eur` i `total_value_eur` su NULL (u izvoru ih nema). Zbrojevi koriste `coalesce(total, initial)`.
 
 ## 8. Stanje implementacije (POC, `V1__init.sql`, 2026-11-02)
 **Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
