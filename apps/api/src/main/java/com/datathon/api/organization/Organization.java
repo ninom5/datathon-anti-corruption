@@ -37,6 +37,9 @@ public class Organization {
     private String nameNorm;
     private OrganizationType orgType;
     private String county;
+    /** From the JPT register (#40); null for organizations that are not public bodies. */
+    private String jptCode;
+    private String jptType;
     private boolean isSynthetic;
 
     @ManyToOne(fetch = FetchType.LAZY)

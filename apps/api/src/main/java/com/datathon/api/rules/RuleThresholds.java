@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties("javniradar.thresholds")
 public record RuleThresholds(List<ModificationLimits> contractModification, List<SimpleProcurement> simpleProcurement,
-                             RuleD ruleD) {
+                             RuleD ruleD, RuleF ruleF, RuleC ruleC, Bands bands) {
 
     /** ZJN limits for contract modifications, as a share of the initial value. */
     public record ModificationLimits(LocalDate validFrom, LocalDate validTo, BigDecimal deMinimisGoodsServices,
@@ -27,11 +27,37 @@ public record RuleThresholds(List<ModificationLimits> contractModification, List
 
     public record SimpleProcurement(LocalDate validFrom, LocalDate validTo, BigDecimal goodsServices, BigDecimal works,
                                     String source) implements Period {
+
+        /** Goods and services share one threshold; only works have their own (ZJN čl. 12 st. 1). */
+        public BigDecimal limit(SubjectType subjectType) {
+            return subjectType == SubjectType.WORKS ? works : goodsServices;
+        }
+    }
+
+    /** JavniRadar heuristics for rule F (docs/ANOMALY_DETECTION.md §F). */
+    public record RuleF(int windowDays, BigDecimal nearBand, BigDecimal maxShareFactor, int strongMinContracts,
+                        List<String> recurringCpv2, List<String> publicProcedureMarkers, String source) {
+    }
+
+    /** JavniRadar heuristics for rule C (docs/ANOMALY_DETECTION.md §C). */
+    public record RuleC(int periodYears, int minContracts, BigDecimal minTotalEur, int minDistinctYears,
+                        BigDecimal top1Share, BigDecimal hhi, int strongMinContracts, int minTopContracts,
+                        List<String> naturalMonopolyCpv2,
+                        String source) {
+    }
+
+    /** Bounds of the magnitude band per rule; a heuristic for filters, never a combined score. */
+    public record Bands(Band valueIncrease, Band overpayment, Band splitting, Band concentration) {
+    }
+
+    /** {@code strict}: the value must be above the bound; otherwise at or above it. */
+    public record Band(BigDecimal mediumFrom, BigDecimal highFrom, boolean strict) {
     }
 
     /** JavniRadar heuristics for rule D, not legal thresholds (docs/ANOMALY_DETECTION.md §D). */
     public record RuleD(BigDecimal minInitialValueEur, BigDecimal overpaymentShare, BigDecimal overpaymentMinEur,
-                        BigDecimal implausibleRatio, BigDecimal currencyMixTolerance, String source) {
+                        BigDecimal implausibleRatio, BigDecimal implausibleRatioWithoutNote,
+                        BigDecimal currencyMixTolerance, String source) {
     }
 
     public interface Period {
@@ -43,6 +69,10 @@ public record RuleThresholds(List<ModificationLimits> contractModification, List
         default boolean covers(LocalDate date) {
             return (validFrom() == null || !date.isBefore(validFrom())) && (validTo() == null || !date.isAfter(validTo()));
         }
+    }
+
+    public Optional<SimpleProcurement> simpleProcurementOn(LocalDate dateSigned) {
+        return simpleProcurement.stream().filter(period -> period.covers(dateSigned)).findFirst();
     }
 
     public Optional<ModificationLimits> modificationLimitsOn(LocalDate dateSigned) {

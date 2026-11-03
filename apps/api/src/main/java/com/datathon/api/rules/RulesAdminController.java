@@ -20,6 +20,6 @@ public class RulesAdminController {
     @PostMapping("/run")
     public Map<String, Integer> run(@RequestHeader(value = "X-Admin-Token", required = false) String adminToken) {
         adminKeyGuard.verify(adminToken);
-        return rulesService.runContractRules();
+        return rulesService.runRules();
     }
 }

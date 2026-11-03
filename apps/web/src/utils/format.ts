@@ -32,6 +32,22 @@ export const formatNumber = (value: number) => numberFormat.format(value);
 /** 0.75 -> "+75 %". */
 export const formatShare = (share: number) => percentFormat.format(share);
 
+const ratioFormat = new Intl.NumberFormat(LOCALE, {maximumFractionDigits: 2});
+
+/**
+ * Short magnitude for badges, in the unit of each rule: D1/D2 a share ("+75 %"), F sum / threshold ("2,49×"),
+ * C the HHI ("HHI 8.580").
+ */
+export const formatMagnitude = (ruleCode: string, value: number) => {
+    if (ruleCode === "F_SPLITTING") {
+        return `${ratioFormat.format(value)}×`;
+    }
+    if (ruleCode === "C_CONCENTRATION") {
+        return `HHI ${numberFormat.format(Math.round(value))}`;
+    }
+    return formatShare(value);
+};
+
 /** ISO date "2025-03-10" -> "10. 03. 2025.". Parsed as a local date so the day does not shift by time zone. */
 export const formatDate = (isoDate: string | null | undefined) => {
     if (!isoDate) {

@@ -220,6 +220,15 @@ context:
 
 **Vizualizacija:** složeni stupac po godinama (udio dobavljača) i Lorenzova linija; tablica ugovora s poveznicama.
 
+**Implementacija (`rules-v1`, 2026-11-03, #41):** `rules/ConcentrationRule` (sučelje `GroupRule`, nad svim ugovorima jednog naručitelja). Pragovi su u `thresholds.yaml` (`rule-c`).
+- Razdoblje *T* su **3 zadnje kalendarske godine u kojima naručitelj ima ugovore**. Vrijednost je `coalesce(ukupni, početni)` bez PDV-a (A2 nema ukupnog iznosa).
+- Ćelija ulazi u izračun ako ima n ≥ 5, ΣV ≥ 50.000 € i ≥ 2 različite godine. Indikator nastaje ako je top1 ≥ 0,70, HHI ≥ 5.000 i **najveći dobavljač ima ≥ 2 ugovora u ćeliji** (jedan veliki ugovor nije "ponovljena dodjela"; ručni pregled 2026-11-03: oko 7 od 22).
+- **Kvaliteta:** `visoka` samo ako su svi ugovori ćelije klase A bez upozorenja iz ingesta; inače `srednja`.
+- **Pouzdanost:** `srednja`, a `jaka` ako je n ≥ 15.
+- **`informativno`:** ako je prema JPT-u naručitelj osnivač najvećeg dobavljača (`organization.founders`). CPV 09/64/65 samo dodaju napomenu "mogući prirodni monopol", kao u dokumentu.
+- Indikator je `subject_type = buyer_cpv`. `subject_ref` sadrži `buyerOib`, `cpv2`, `years`, `topSupplierOib` i `contractIds`, a `evidence` navodi redak izvora za svaki ugovor ćelije.
+- Naziv obrta se ne navodi ("Obrt (naziv skriven)").
+
 ### Scenarij D – Povećanje vrijednosti i isplate iznad ugovorenog
 
 **Ulaz:**
@@ -278,7 +287,7 @@ UI prikazuje pravni kontekst samo kao **okvir**. Nikad ne tvrdi da je granica pr
   - `visoka` za redak klase A bez upozorenja iz ingesta;
   - `srednja` ako redak ima ikakvo upozorenje (npr. neispravan OIB, nečitljiv datum izvršenja) ili je ulaz izveden;
   - **`niska`** ako brojevi upućuju na grešku u izvoru:
-    - isplaćeni ili ukupni iznos je ≥ 10 × ugovorenog (`implausible-ratio`, heuristika, nije zakonski prag);
+    - isplaćeni ili ukupni iznos je ≥ 10 × ugovorenog (`implausible-ratio`, heuristika, nije zakonski prag); za D2 bez obrazloženja u registru granica je 5 × (`implausible-ratio-without-note`, #41: Ivanec 2021.–2022. ima niz isplata 9–10× bez obrazloženja);
     - napomena navodi jedinične cijene ili količine ("jedinič…");
     - iznos s PDV-om je manji od iznosa bez PDV-a (samo D2).
 - **Pouzdanost dokaza:** `srednja` jer su iznosi izravni, ali osnova izmjene ili isplate nije poznata; `slaba` kad je kvaliteta `niska`.
@@ -335,6 +344,19 @@ exclude: supplier is komunalno poduzeće in JPT owned by j; CPV for recurring su
 **Što NE znači:** "Ugovori mogu odgovarati odvojenim, unaprijed nepredvidivim potrebama. Ovaj obrazac sam po sebi ne dokazuje namjerno izbjegavanje postupka javne nabave."
 
 **Vizualizacija:** vremenska os s točkama ugovora, crtom praga i zbrojnom trakom za prozor.
+
+**Implementacija (`rules-v1`, 2026-11-03, #41):** `rules/SplittingRule` (`GroupRule`). Pragovi i heuristike su u `thresholds.yaml` (`simple-procurement`, `rule-f`). Odluke kojih nema u ovom dokumentu su u `work/decisions.md` (2026-11-03, #41).
+- **Pragovi po datumu sklapanja:**
+  - 2017.–2022.: 200.000 kn / 500.000 kn (ZJN 2016 čl. 12 st. 1, NN 120/16; provjereno), preračunato u 26.544,56 € / 66.361,40 €;
+  - 2023. – 15.05.2026.: 26.540 € / 66.360 €;
+  - od 16.05.2026.: 50.000 € / 100.000 €.
+  - Ugovori prije 2017. nemaju prag u konfiguraciji, pa se ne ocjenjuju.
+- **Kandidat:** ugovor s dobavljačem i CPV-om, s početnim iznosom bez PDV-a ispod praga svog datuma. Okvirni sporazumi se preskaču, kao i **ugovori iz postupka javne nabave po ZJN-u** (vrsta postupka sadrži "postupak", npr. lotovi otvorenog postupka; ručni pregled 2026-11-03 našao je 16 takvih od 164). Vrsta predmeta za A2 se izvodi iz CPV-a (`45` = radovi), pa je kvaliteta tada `srednja` i `missing_data` to navodi.
+- **Prozor:** razmak prvog i zadnjeg ugovora ≤ 90 dana (točno 90 ulazi). Prozor koji prelazi promjenu praga koristi **najniži** prag u prozoru. Prozori se ne preklapaju.
+- **CPV2:** ugovori koji nisu u CPV3 prozoru, a imaju različite CPV3 unutar istog CPV2, mogu dati indikator s dokazom `slaba`.
+- **`informativno`:** dobavljač u vlasništvu naručitelja (JPT) ili CPV 09/65 (ponavljajuće nabave).
+- **Pouzdanost:** `jaka` uz ≥ 3 ugovora, svaki ≥ 70 % praga; `slaba` uz podudaranje samo na CPV2; inače `srednja`.
+- Indikator je `subject_type = group`. `subject_ref` sadrži `buyerOib`, `supplierOib`, `cpv`, `cpvLevel`, `from`, `to` i `contractIds`. Veličina odstupanja je zbroj/prag (`omjer`).
 
 ### Scenarij G – Vremenske anomalije (prosinac, predizborno razdoblje)
 
@@ -472,6 +494,16 @@ Odgovori isključivo pozivom alata `zabiljezi_procjenu`.
   - podudaranje s pravilima (Cohenova kappa).
 - **Gdje se objavljuje:** stranica "Metodologija" i `docs/EVALUATION.md` (izrađuje se u izradi). **Ne objavljujemo brojke koje nismo izmjerili.**
 - **Povratna informacija:** gumb "Korisno / Pogrešno" na AI procjeni sprema u `feedback` (`target_type = ai_assessment`).
+
+## 4a. Pojas veličine odstupanja (`magnitude_band`, #41)
+`nizak` / `srednji` / `visok` po pravilu, granice u `thresholds.yaml` (`bands`). To je heuristika za filtre i izvješća, **nije** zbirna ocjena i ne spaja tri dimenzije.
+
+| Pravilo | Veličina | srednji od | visok od |
+|---|---|---|---|
+| D1 | rast (udio) | > 30 % (čl. 316) | > 50 % (čl. 317) |
+| D2 | preplata (udio) | > 30 % | > 100 % |
+| F | zbroj / prag | ≥ 1,5× | ≥ 2× |
+| C | HHI | ≥ 7.500 | ≥ 9.000 |
 
 ## 5. Testiranje pravila
 - Za svako pravilo: `fixtures/rules/{rule}/{pozitivan,negativan,rubni}.json`. Primjeri rubnih slučajeva: prozor koji prelazi 16.05.2026., okvirni sporazum, HRK ugovor, nedostajući OIB.

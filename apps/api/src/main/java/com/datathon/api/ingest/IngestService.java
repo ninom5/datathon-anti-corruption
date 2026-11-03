@@ -76,7 +76,7 @@ public class IngestService {
         stats.put("warningsByCode", importStats.getWarningsByCode());
         stats.put("legacyA2", legacyStatsOf(legacyStats));
         stats.put("organizationsEnrichedFromJpt", referenceDataService.enrichOrganizations());
-        stats.put("indicatorsByRule", rulesService.runContractRules());
+        stats.put("indicatorsByRule", rulesService.runRules());
         log.info("Ingest run {}: {}", runId, stats);
         return stats;
     }

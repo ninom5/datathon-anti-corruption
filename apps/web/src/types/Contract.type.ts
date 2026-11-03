@@ -1,4 +1,4 @@
-import type {Indicator, IndicatorBadge} from "./Indicator.type.ts";
+import type {Indicator, IndicatorBadge, MagnitudeBand, RuleCode} from "./Indicator.type.ts";
 import type {OrganizationRef} from "./Organization.type.ts";
 import type {Provenance} from "./Source.type.ts";
 
@@ -69,6 +69,9 @@ export interface ContractFilter {
     year?: number;
     hasIndicator?: boolean;
     severity?: Severity;
+    /** Contracts with an active indicator of one of these rules; combined with severity and band in one indicator. */
+    ruleCode?: RuleCode[];
+    band?: MagnitudeBand;
     synthetic?: boolean;
     sort?: "dateSigned" | "value";
     page?: number;
@@ -82,7 +85,10 @@ export interface ContractSummary {
     withIndicator: number;
     worthChecking: number;
     possibleEntryErrors: number;
-    excludedCraftContracts: number;
+    /** Contracts with crafts are counted in the numbers above; only lists with names leave them out. */
+    craftContracts: number;
+    /** Contracts with an indicator of each rule, under the filter without its own rule choice. */
+    contractsByRule: Record<RuleCode, number>;
     incompleteYears: number[];
     syntheticContracts: number;
 }

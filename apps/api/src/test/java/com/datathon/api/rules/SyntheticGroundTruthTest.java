@@ -39,7 +39,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 /**
- * Ground truth for rule D: the synthetic register goes through the real XLSX reader, parser and rules, and every row
+ * Ground truth for rules D, F and C: the synthetic register goes through the real XLSX reader, parser and rules, and every row
  * is compared with {@code fixtures/synthetic/expected.csv}. Prints a TP/FP/TN/FN matrix. Fails on any miss among
  * clear and data-quality cases; edge cases are only reported. Also checks that synthetic rows never change the
  * statistics of real data (a real register, Grad Osijek, is imported first).
@@ -71,16 +71,38 @@ class SyntheticGroundTruthTest {
     @Autowired
     private SourceFileRepository fileRepository;
 
-    record Expected(String ref, String category, String expected, String dataQuality, String severity, String reason) {
+    record Expected(String ref, String category, String expected, String dataQuality, String severity, String evidence,
+                    String reason) {
+
+        /** Contracts of one F or C case share the first three characters of their reference (F01A, F01B, ...). */
+        boolean isGroupCase() {
+            return ref.startsWith("F") || ref.startsWith("C");
+        }
+
+        String rule() {
+            return ref.substring(0, 1);
+        }
+
+        /**
+         * A row is judged only by the rule it was written for (S = D1/D2, F, C). Other rules may also fire on the
+         * same contracts (e.g. the D rows of Općina Primjerovo form a concentrated CPV cell); they are reported, not
+         * counted as false positives.
+         */
+        boolean isJudged(String ruleCode) {
+            if (!isGroupCase()) {
+                return ruleCode.startsWith("D_");
+            }
+            return ruleCode.equals(rule().equals("F") ? SplittingRule.RULE_CODE : ConcentrationRule.RULE_CODE);
+        }
     }
 
     record Outcome(Expected expected, String verdict, String actual, String detail) {
     }
 
     @Test
-    void ruleDMatchesGroundTruthAndSyntheticStaysOutOfRealStatistics() throws IOException {
+    void rulesMatchGroundTruthAndSyntheticStaysOutOfRealStatistics() throws IOException {
         importRealRegister();
-        rulesService.runContractRules();
+        rulesService.runRules();
         RealStats before = realStats();
 
         syntheticLoader.load();
@@ -99,6 +121,10 @@ class SyntheticGroundTruthTest {
         assertThat(count(outcomes, "jasno_negativan")).isGreaterThanOrEqualTo(5);
         assertThat(count(outcomes, "rubni")).isGreaterThanOrEqualTo(5);
         assertThat(count(outcomes, "kvaliteta")).isGreaterThanOrEqualTo(2);
+        for (String rule : List.of("F", "C")) {
+            assertThat(outcomes.stream().filter(outcome -> outcome.expected().isGroupCase() && outcome.expected().rule().equals(rule)
+                    && outcome.expected().category().equals("jasno_pozitivan")).count()).as("jasno pozitivni za " + rule).isGreaterThanOrEqualTo(2);
+        }
         assertAllIndicatorTextsAreNeutral();
         assertThat(magnitudeOf("S031", ValueIncreaseRule.RULE_CODE)).as("loša kvaliteta ne mijenja veličinu odstupanja")
                 .isEqualByComparingTo("0.40");
@@ -106,7 +132,7 @@ class SyntheticGroundTruthTest {
 
     private BigDecimal magnitudeOf(String ref, String ruleCode) {
         Contract contract = contractRepository.findByNaturalKey(URL_PREFIX + ref).orElseThrow();
-        return indicatorRepository.findByContractId(contract.getId()).stream()
+        return indicatorRepository.findActiveByContractId(contract.getId()).stream()
                 .filter(indicator -> indicator.getRuleCode().equals(ruleCode)).findFirst().orElseThrow().getMagnitudeValue();
     }
 
@@ -119,11 +145,12 @@ class SyntheticGroundTruthTest {
         }
         assertThat(contract).as("ugovor %s", expected.ref()).isPresent();
         assertThat(contract.get().isSynthetic()).isTrue();
-        List<Indicator> indicators = indicatorRepository.findByContractId(contract.get().getId());
+        List<Indicator> indicators = indicatorRepository.findActiveByContractId(contract.get().getId());
         String actual = indicators.isEmpty() ? "none" : indicators.stream().map(Indicator::getRuleCode).sorted().collect(Collectors.joining("+"));
         boolean isExpectedPositive = !expected.expected().equals("none");
         if (!isExpectedPositive) {
-            return new Outcome(expected, indicators.isEmpty() ? "OK TN" : "FP", actual, "");
+            boolean hasJudgedIndicator = indicators.stream().anyMatch(indicator -> expected.isJudged(indicator.getRuleCode()));
+            return new Outcome(expected, hasJudgedIndicator ? "FP" : "OK TN", actual, "");
         }
         Optional<Indicator> match = indicators.stream().filter(indicator -> indicator.getRuleCode().equals(expected.expected())).findFirst();
         if (match.isEmpty()) {
@@ -131,19 +158,37 @@ class SyntheticGroundTruthTest {
         }
         String quality = match.get().getDataQuality().code();
         String severity = match.get().getSeverityNote().code();
-        String detail = "kvaliteta=" + quality + ", " + severity + ", veličina=" + match.get().getMagnitudeLabel();
-        boolean areDimensionsRight = quality.equals(expected.dataQuality()) && severity.equals(expected.severity());
-        return new Outcome(expected, areDimensionsRight ? "OK TP" : "TP, krive dimenzije", actual, detail);
+        String strength = match.get().getEvidenceStrength().code();
+        String detail = "kvaliteta=" + quality + ", dokaz=" + strength + ", " + severity + ", pojas="
+                + (match.get().getMagnitudeBand() == null ? "-" : match.get().getMagnitudeBand().code())
+                + ", veličina=" + match.get().getMagnitudeLabel();
+        boolean areDimensionsRight = quality.equals(expected.dataQuality()) && severity.equals(expected.severity())
+                && (expected.evidence().isEmpty() || strength.equals(expected.evidence()));
+        if (!areDimensionsRight) {
+            return new Outcome(expected, "TP, krive dimenzije", actual, detail);
+        }
+        boolean isGroupRight = !expected.isGroupCase() || Set.copyOf(indicatorRepository.findContractIds(match.get().getId())).equals(caseContractIds(expected));
+        return new Outcome(expected, isGroupRight ? "OK TP" : "TP, kriva skupina", actual, detail);
+    }
+
+    /** Every synthetic contract of the case, e.g. F01A, F01B and F01C for F01A. */
+    private Set<Long> caseContractIds(Expected expected) {
+        String prefix = URL_PREFIX + expected.ref().substring(0, 3);
+        return contractRepository.findAll().stream()
+                .filter(contract -> contract.getNaturalKey().startsWith(prefix))
+                .map(Contract::getId)
+                .collect(Collectors.toSet());
     }
 
     private static String report(List<Outcome> outcomes) {
-        StringBuilder text = new StringBuilder("=== Pravilo D na sintetičkom skupu (rules-v1) ===\n");
+        StringBuilder text = new StringBuilder("=== Pravila D, F i C na sintetičkom skupu (rules-v1) ===\n");
         Map<String, Map<String, Integer>> matrix = new TreeMap<>();
         for (Outcome outcome : outcomes) {
             String cell = outcome.verdict().replace("OK ", "");
-            matrix.computeIfAbsent(outcome.expected().category(), key -> new TreeMap<>()).merge(cell, 1, Integer::sum);
+            String row = (outcome.expected().isGroupCase() ? outcome.expected().rule() : "D") + " " + outcome.expected().category();
+            matrix.computeIfAbsent(row, key -> new TreeMap<>()).merge(cell, 1, Integer::sum);
         }
-        matrix.forEach((category, cells) -> text.append(String.format("%-16s %s%n", category, cells)));
+        matrix.forEach((row, cells) -> text.append(String.format("%-20s %s%n", row, cells)));
         text.append("--- po zapisu ---\n");
         for (Outcome outcome : outcomes) {
             text.append(String.format("%s %-16s očekivano=%-16s stvarno=%-32s %-22s %s | %s%n", outcome.expected().ref(),
@@ -162,13 +207,15 @@ class SyntheticGroundTruthTest {
         assertThat(hits).isEmpty();
     }
 
-    record RealStats(long contracts, long valueIncrease, long overpayment) {
+    record RealStats(long contracts, long valueIncrease, long overpayment, long splitting, long concentration) {
     }
 
     private RealStats realStats() {
         return new RealStats(contractRepository.countByIsSyntheticFalse(),
                 indicatorRepository.countRealByRuleCode(ValueIncreaseRule.RULE_CODE),
-                indicatorRepository.countRealByRuleCode(OverpaymentRule.RULE_CODE));
+                indicatorRepository.countRealByRuleCode(OverpaymentRule.RULE_CODE),
+                indicatorRepository.countRealByRuleCode(SplittingRule.RULE_CODE),
+                indicatorRepository.countRealByRuleCode(ConcentrationRule.RULE_CODE));
     }
 
     private void importRealRegister() throws IOException {
@@ -190,7 +237,7 @@ class SyntheticGroundTruthTest {
             return new String(input.readAllBytes(), StandardCharsets.UTF_8).lines().skip(1)
                     .filter(line -> !line.isBlank())
                     .map(line -> line.split(";", -1))
-                    .map(cells -> new Expected(cells[0], cells[1], cells[2], cells[3], cells[4], cells[5]))
+                    .map(cells -> new Expected(cells[0], cells[1], cells[2], cells[3], cells[4], cells[5], cells[6]))
                     .toList();
         }
     }

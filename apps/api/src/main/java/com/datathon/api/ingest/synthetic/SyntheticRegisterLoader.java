@@ -7,6 +7,7 @@ import com.datathon.api.ingest.IngestRunRepository;
 import com.datathon.api.ingest.RegisterImporter;
 import com.datathon.api.ingest.SheetReader;
 import com.datathon.api.ingest.SheetReader.SheetData;
+import com.datathon.api.organization.OrganizationRepository;
 import com.datathon.api.rules.RulesService;
 import com.datathon.api.source.FormatClass;
 import com.datathon.api.source.RawRecordRepository;
@@ -44,6 +45,14 @@ public class SyntheticRegisterLoader {
     /** Reserved .invalid domain (RFC 2606), so a synthetic link can never open a real contract. */
     public static final String FILE_URL = "https://primjerovo.invalid/registar-ugovora-primjerovo.xlsx";
     private static final String DATASET_ID = "javniradar-sinteticki-registar";
+    /**
+     * Synthetic stand-in for JPT founders: the fictional municipal companies of the demo are "founded" by their
+     * fictional municipality, so rules C and F can show the informative case. Real organizations get founders only
+     * from the JPT register.
+     */
+    private static final Map<String, String> SYNTHETIC_FOUNDERS = Map.of(
+            "00000000033", "[{\"oib\": \"00000000003\", \"naziv\": \"Općina Uzorkovo\"}]",
+            "00000000043", "[{\"oib\": \"00000000004\", \"naziv\": \"Općina Probnik\"}]");
 
     private final SourceDatasetRepository datasetRepository;
     private final SourceFileRepository fileRepository;
@@ -51,6 +60,7 @@ public class SyntheticRegisterLoader {
     private final IngestRunRepository runRepository;
     private final RegisterImporter registerImporter;
     private final RulesService rulesService;
+    private final OrganizationRepository organizationRepository;
     private final JsonMapper jsonMapper;
 
     /** Idempotent: an unchanged synthetic file is not imported twice; rules are always recomputed. */
@@ -64,7 +74,8 @@ public class SyntheticRegisterLoader {
         if (!isKnown) {
             stats.put("import", importFile(readWorkbook(xlsx), xlsx.length, sha256));
         }
-        stats.put("indicatorsByRule", rulesService.runContractRules());
+        SYNTHETIC_FOUNDERS.forEach(organizationRepository::setSyntheticFounders);
+        stats.put("indicatorsByRule", rulesService.runRules());
         log.info("Synthetic register: {}", stats);
         return stats;
     }
@@ -100,7 +111,7 @@ public class SyntheticRegisterLoader {
     private SourceDataset syntheticDataset() {
         SourceDataset dataset = datasetRepository.findByPortalAndExternalId(SourceDataset.PORTAL_SYNTHETIC, DATASET_ID)
                 .orElseGet(() -> new SourceDataset(SourceDataset.PORTAL_SYNTHETIC, DATASET_ID));
-        dataset.setTitle("SINTETIČKI PODACI ZA DEMONSTRACIJU – registar ugovora (Općina Primjerovo, Općina Oglednik)");
+        dataset.setTitle("SINTETIČKI PODACI ZA DEMONSTRACIJU – registar ugovora (Općina Primjerovo, Općina Oglednik, Općina Uzorkovo, Općina Probnik)");
         dataset.setPublisher("JavniRadar (sintetički skup, nije stvarni izdavatelj)");
         dataset.setSynthetic(true);
         return datasetRepository.save(dataset);

@@ -38,11 +38,12 @@ class ContractControllerTest {
                 new OrganizationRef(11L, "00000000011", OrganizationRef.HIDDEN_CRAFT_NAME, "obrt", true, true),
                 "Rekonstrukcija ceste", "radovi", LocalDate.of(2025, 3, 1), 2025, false,
                 new BigDecimal("200000"), new BigDecimal("350000"), null,
-                List.of(new IndicatorBadge(5L, "D_VALUE_INCREASE", new BigDecimal("0.75"), "+75 %", "vrijedi_provjeriti", false)),
+                List.of(new IndicatorBadge(5L, "D_VALUE_INCREASE", new BigDecimal("0.75"), "+75 %", "visok", "vrijedi_provjeriti", false)),
                 true);
         given(contractService.find(any())).willReturn(new PageResponse<>(List.of(item), 1, 0, 20));
 
-        assertThat(mvc.get().uri("/api/v1/contracts?buyerOib=00000000001&year=2025&severity=informativno&synthetic=true"))
+        assertThat(mvc.get().uri("/api/v1/contracts?buyerOib=00000000001&year=2025&severity=informativno&synthetic=true"
+                + "&ruleCode=D_VALUE_INCREASE,F_SPLITTING&band=visok"))
                 .hasStatusOk()
                 .bodyJson()
                 .satisfies(json -> {
@@ -58,19 +59,23 @@ class ContractControllerTest {
         assertThat(filter.getValue().year()).isEqualTo(2025);
         assertThat(filter.getValue().severity()).isEqualTo("informativno");
         assertThat(filter.getValue().includesSynthetic()).isTrue();
+        assertThat(filter.getValue().ruleCodes()).containsExactly("D_VALUE_INCREASE", "F_SPLITTING");
+        assertThat(filter.getValue().band()).isEqualTo("visok");
     }
 
     @Test
     void summaryReportsPossibleEntryErrors() {
         given(contractService.summarize(any())).willReturn(
-                new ContractSummary(100, new BigDecimal("1000000"), 5, 7, 5, 2, 12, List.of(2026), 0));
+                new ContractSummary(100, new BigDecimal("1000000"), 5, 7, 5, 2, 12,
+                        java.util.Map.of("D_VALUE_INCREASE", 3L, "F_SPLITTING", 4L), List.of(2026), 0));
 
         assertThat(mvc.get().uri("/api/v1/contracts/summary"))
                 .hasStatusOk()
                 .bodyJson()
                 .satisfies(json -> {
                     assertThat(json).extractingPath("$.possibleEntryErrors").isEqualTo(2);
-                    assertThat(json).extractingPath("$.excludedCraftContracts").isEqualTo(12);
+                    assertThat(json).extractingPath("$.craftContracts").isEqualTo(12);
+                    assertThat(json).extractingPath("$.contractsByRule.F_SPLITTING").isEqualTo(4);
                 });
     }
 
@@ -80,6 +85,8 @@ class ContractControllerTest {
                 .hasStatus(400)
                 .bodyJson().extractingPath("$.message").isEqualTo("buyerOib: OIB mora imati 11 znamenki");
         assertThat(mvc.get().uri("/api/v1/contracts?severity=sve")).hasStatus(400);
+        assertThat(mvc.get().uri("/api/v1/contracts?ruleCode=X_UNKNOWN")).hasStatus(400);
+        assertThat(mvc.get().uri("/api/v1/contracts?band=ogroman")).hasStatus(400);
         assertThat(mvc.get().uri("/api/v1/contracts?year=abc")).hasStatus(400);
         assertThat(mvc.get().uri("/api/v1/contracts/abc")).hasStatus(400);
     }

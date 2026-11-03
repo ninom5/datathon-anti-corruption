@@ -127,8 +127,22 @@ class RuleDTest {
         assertThat(draft.explanationHr()).contains("tečaju kune i eura");
         assertNoForbiddenWords(draft);
 
-        var nearRate = overpayment.evaluate(paid("10000", "70000")).orElseThrow();
+        // With an explanation in the register the 10x bound applies, so only the currency check could flag 7,0x.
+        Contract explained = paid("10000", "70000");
+        explained.setPaymentNote("Dodatne isporuke po narudžbenicama");
+        var nearRate = overpayment.evaluate(explained).orElseThrow();
         assertThat(nearRate.severityNote()).as("7,0x is outside the 1,5 % tolerance").isEqualTo(SeverityNote.WORTH_CHECKING);
+        assertThat(nearRate.explanationHr()).doesNotContain("tečaju kune i eura");
+    }
+
+    /** Without an explanation 5x already reads as an entry error (work/decisions.md, 2026-11-03 #41). */
+    @Test
+    void largeOverpaymentWithoutNoteIsInformative() {
+        var draft = overpayment.evaluate(paid("10000", "60000")).orElseThrow();
+        assertThat(draft.dataQuality()).isEqualTo(DataQuality.LOW);
+        assertThat(draft.severityNote()).isEqualTo(SeverityNote.INFORMATIVE);
+        assertThat(draft.explanationHr()).contains("ne navodi obrazloženje");
+        assertNoForbiddenWords(draft);
     }
 
     private static Contract contract(SubjectType type, String initial, String total) {
