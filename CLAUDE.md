@@ -29,7 +29,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 ## Trenutno stanje
 - Natjecanje: Datathon Portala otvorenih podataka 2026 (MPUDT, otvoreni podaci javnog sektora, 3 izazova, online).
 - **Projekt: JavniRadar** (izazov A): analiza lokalne javne nabave i neuobičajenih obrazaca, s pravilima i AI procjenom. **Rok: rješenje + video (do 3 min) mailom na open.data@mpudt.hr do 9.11.2026. 24:00. Feature freeze 7.11. 20:00.**
-- Faza: **POC gotov i spojen u `main` (02.11.)**: 2.332 ugovora, 17 JLS, pravilo D, sintetički ground truth, istraživač. **#40 (A2, JPT, DZS) gotov 03.11. na grani `40-a2-jpt-dzs`, necommitano: 5.958 ugovora, 34 JLS.** Asistent nikad ne commita. Backlog T01–T29 u `work/tasks.md`; sljedeći prompt `work/prompts/next-a2-jpt-fc.md`. Lokalna baza: `javniradar-postgres` na portu 5434.
+- Faza: **POC gotov i spojen u `main` (02.11.)**: 2.332 ugovora, 17 JLS, pravilo D, sintetički ground truth, istraživač. **#40 (A2, JPT, DZS) spojen u `main` 03.11. (PR #49): 5.958 ugovora, 34 JLS.** Asistent nikad ne commita. Backlog T01–T29 u `work/tasks.md`; sljedeći prompt `work/prompts/next-41-pravila-f-c.md` (#41). Lokalna baza: `javniradar-postgres` na portu 5434.
 - Podaci (provjereno 1.11.):
   - glavni izvor su općinski registri ugovora u standardnom EOJN XLSX formatu (~30 JLS na data.gov.hr);
   - nacionalni JSON izvoz je samo uzorak od 20.000 redaka;
