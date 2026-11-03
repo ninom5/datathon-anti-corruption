@@ -1,12 +1,13 @@
 import {type FormEvent, useState} from "react";
-import type {BuyerOption} from "@/types";
-import {buyerTypeLabels} from "@/utils";
+import type {BuyerOption, ContractSummary} from "@/types";
+import {buyerTypeLabels, formatNumber, magnitudeBandOptions, readMagnitudeBand, ruleOptions} from "@/utils";
 import {type ExplorerState, type IndicatorChoice, isOib, type SortChoice} from "./explorerState.ts";
 import styles from "./ContractsPage.module.css";
 
 interface FilterPanelProps {
     state: ExplorerState;
     buyers: BuyerOption[];
+    ruleCounts?: ContractSummary["contractsByRule"];
     years: {year: number; incomplete: boolean}[];
     onChange: (next: Partial<ExplorerState>) => void;
     onReset: () => void;
@@ -25,7 +26,7 @@ const buyerLabel = (buyer: BuyerOption) => {
     return type && buyer.type !== "jls" ? `${buyer.name} (${type})` : buyer.name;
 };
 
-export const FilterPanel = ({state, buyers, years, onChange, onReset}: FilterPanelProps) => {
+export const FilterPanel = ({state, buyers, years, ruleCounts, onChange, onReset}: FilterPanelProps) => {
     const [supplierInput, setSupplierInput] = useState(state.supplierOib ?? "");
     const isSupplierInvalid = supplierInput !== "" && !isOib(supplierInput);
 
@@ -101,6 +102,31 @@ export const FilterPanel = ({state, buyers, years, onChange, onReset}: FilterPan
                     </label>
                 ))}
             </fieldset>
+
+            <fieldset className={styles.field}>
+                <legend>Vrsta indikatora</legend>
+                {ruleOptions.map((option) => (
+                    <label key={option.code} className={styles.radio}>
+                        <input type="checkbox" checked={state.ruleCode.includes(option.code)}
+                               onChange={(event) => onChange({ruleCode: event.target.checked
+                                   ? [...state.ruleCode, option.code]
+                                   : state.ruleCode.filter((code) => code !== option.code)})}/>
+                        <span>{option.short} · {option.label}</span>
+                        <span className={styles.ruleCount}>{ruleCounts ? formatNumber(ruleCounts[option.code] ?? 0) : "—"}</span>
+                    </label>
+                ))}
+                <p className={styles.footnote}>Broj stvarnih ugovora uz ostale filtre. Jedan ugovor može imati više vrsta.</p>
+            </fieldset>
+
+            <label className={styles.field}>
+                <span>Pojas</span>
+                <select value={state.band ?? ""} aria-describedby="band-hint"
+                        onChange={(event) => onChange({band: readMagnitudeBand(event.target.value)})}>
+                    <option value="">Svi pojasevi</option>
+                    {magnitudeBandOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+                <span id="band-hint" className={styles.footnote}>Pojas veličine odstupanja je heuristika unutar pravila, a ne ukupna ocjena.</span>
+            </label>
 
             <label className={styles.field}>
                 <span>Poredak</span>

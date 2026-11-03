@@ -1,4 +1,5 @@
-import type {ContractFilter} from "@/types";
+import {readMagnitudeBand, readRuleCodes, writeRuleCodes} from "@/utils";
+import type {ContractFilter, MagnitudeBand, RuleCode} from "@/types";
 
 export type IndicatorChoice = "all" | "any" | "worth" | "error" | "none";
 export type SortChoice = "dateSigned" | "value";
@@ -9,6 +10,8 @@ export interface ExplorerState {
     supplierOib?: string;
     year?: number;
     indicator: IndicatorChoice;
+    ruleCode: RuleCode[];
+    band?: MagnitudeBand;
     synthetic: boolean;
     sort: SortChoice;
     page: number;
@@ -31,6 +34,8 @@ export const readExplorerState = (params: URLSearchParams): ExplorerState => {
         supplierOib: isOib(supplier) ? supplier : undefined,
         year: Number.isInteger(year) && year > 1999 ? year : undefined,
         indicator: indicator && INDICATOR_CHOICES.includes(indicator) ? indicator : "all",
+        ruleCode: readRuleCodes(params.get("vrsta") ?? ""),
+        band: readMagnitudeBand(params.get("pojas")),
         synthetic: params.get("sinteticki") === "da",
         sort: params.get("poredak") === "iznos" ? "value" : "dateSigned",
         page: Number.isInteger(page) && page > 1 ? page - 1 : 0,
@@ -44,6 +49,8 @@ export const writeExplorerState = (state: ExplorerState): Record<string, string>
     if (state.supplierOib) params.dobavljac = state.supplierOib;
     if (state.year) params.godina = String(state.year);
     if (state.indicator !== "all") params.oznake = state.indicator;
+    if (state.ruleCode.length) params.vrsta = writeRuleCodes(state.ruleCode);
+    if (state.band) params.pojas = state.band;
     if (state.synthetic) params.sinteticki = "da";
     if (state.sort === "value") params.poredak = "iznos";
     if (state.page > 0) params.stranica = String(state.page + 1);
@@ -70,6 +77,8 @@ export const toContractFilter = (state: ExplorerState): ContractFilter => ({
     supplierOib: state.supplierOib,
     year: state.year,
     ...indicatorFilter(state.indicator),
+    ruleCode: state.ruleCode.length ? state.ruleCode : undefined,
+    band: state.band,
     synthetic: state.synthetic || undefined,
     sort: state.sort,
     page: state.page,

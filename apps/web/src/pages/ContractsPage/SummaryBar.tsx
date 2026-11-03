@@ -7,10 +7,7 @@ interface SummaryBarProps {
     isSyntheticShown: boolean;
 }
 
-/**
- * Totals over real data only. Crafts are left out of summaries (GDPR decision 2026-11-02), so the line says how
- * many were left out and the numbers can be reconciled with the table.
- */
+/** Totals over real data, including crafts; only their names are hidden. */
 export const SummaryBar = ({summary, isSyntheticShown}: SummaryBarProps) => (
     <section className={styles.summary} aria-label="Sažetak odabira">
         <p className={styles.summaryLine}>

@@ -11,9 +11,9 @@ export default defineConfig({
     },
   },
   server: {
-    // The API runs on :8080 locally; the axios baseURL is "/api". API_PROXY overrides it when 8080 is taken.
+    // The API runs on :8080 locally; the axios baseURL is "/api". API_URL overrides it when 8080 is taken.
     proxy: {
-      '/api': process.env.API_PROXY ?? 'http://localhost:8080',
+      '/api': process.env.API_URL ?? 'http://localhost:8080',
     },
   },
 })

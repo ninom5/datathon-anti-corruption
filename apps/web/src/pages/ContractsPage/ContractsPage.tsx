@@ -67,10 +67,13 @@ export const ContractsPage = () => {
                     vrijedi provjeriti, a ne da je nešto pogrešno.
                 </p>
             </header>
-            {summary.data && <SummaryBar summary={summary.data} isSyntheticShown={state.synthetic}/>}
+            {summary.error && <ErrorState message={summary.error.message} onRetry={() => summary.refetch()}/>}
+            {!summary.error && summary.data && <SummaryBar summary={summary.data} isSyntheticShown={state.synthetic}/>}
             <div className={styles.layout}>
                 <FilterPanel
+                    key={state.supplierOib ?? ""}
                     state={state}
+                    ruleCounts={summary.isFetching || summary.error ? undefined : summary.data?.contractsByRule}
                     buyers={buyers.data ?? []}
                     years={selectableYears(coverage.data?.contractsByYear ?? [], state.year)}
                     onChange={handleChange}

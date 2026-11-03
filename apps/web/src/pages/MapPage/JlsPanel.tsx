@@ -1,5 +1,5 @@
 import {Link} from "wouter";
-import {comparisonPath, contractsOfBuyerPath} from "@/routes";
+import {buyerPath, comparisonPath, contractsOfBuyerPath} from "@/routes";
 import type {MunicipalityOverview} from "@/types";
 import {formatNumber, plural} from "@/utils";
 import {FEW_CONTRACTS} from "./mapClasses.ts";
@@ -76,6 +76,7 @@ export const JlsPanel = ({municipality, isWithoutBoundary}: JlsPanelProps) => {
                         Indikator nije optužba: pokazuje obrazac koji vrijedi provjeriti u izvornom dokumentu.
                     </p>
                     <div className={styles.panelLinks}>
+                        <Link href={buyerPath(municipality.oib)}>Profil JLS</Link>
                         <Link href={contractsOfBuyerPath(municipality.oib)}>Ugovori i indikatori</Link>
                         <Link href={comparisonPath(municipality.oib)}>Usporedi sa sličnim JLS</Link>
                     </div>

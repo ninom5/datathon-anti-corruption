@@ -23,6 +23,8 @@ const toSummaryFilter = (filter: ContractFilter): ContractFilter => ({
     year: filter.year,
     hasIndicator: filter.hasIndicator,
     severity: filter.severity,
+    ruleCode: filter.ruleCode,
+    band: filter.band,
     synthetic: filter.synthetic,
 });
 

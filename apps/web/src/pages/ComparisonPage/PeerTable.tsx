@@ -1,5 +1,5 @@
 import {Link} from "wouter";
-import {contractsOfBuyerPath} from "@/routes";
+import {buyerPath} from "@/routes";
 import type {PeerMember} from "@/types";
 import {formatEur, formatEurRounded, formatNumber} from "@/utils";
 import styles from "./ComparisonPage.module.css";
@@ -29,7 +29,7 @@ export const PeerTable = ({members, isAllCategories}: PeerTableProps) => (
                     aria-current={member.selected ? "true" : undefined}>
                     <td>{index + 1}.</td>
                     <th scope="row">
-                        <Link href={contractsOfBuyerPath(member.oib)}>{member.name}</Link>
+                        <Link href={buyerPath(member.oib)}>{member.name}</Link>
                     </th>
                     <td className={styles.number}>
                         {member.population2021 === null ? "nije objavljeno" : formatNumber(member.population2021)}

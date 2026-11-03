@@ -103,6 +103,12 @@
 - Frontend: tipovi usklađeni sa stvarnim JSON-om (`BuyerProfile`, `Indicator`, `ContractSummary`), API funkcije `getIndicators` i `getBuyerProfile`. Oznaka u tablici prikazuje F kao "2,49×", a C kao "HHI 8.580". Informativni F i C nisu "greška u unosu".
 - Provjera: `./mvnw test` 46/46; `yarn lint` i `yarn build` zeleno; endpointi provjereni `curl`-om na lokalnoj bazi (port 8092, jer su 8080 i 8091 zauzeti).
 
+## 2026-11-03 (noć): #42 započet (grana `42-ui-fc-profil`, necommitano)
+- #41 je spojen u `main` (PR #50), pa je #42 grana iz `main`.
+- Faza 0 (backend) gotova: `GET /api/v1/indicators/{id}` (ravni `IndicatorResponse` + `contracts` + `subject`), `threshold` u `subject_ref` pravila F. `./mvnw test` 48/48.
+- Portovi 8080/8091/8092 zauzeti tuđim `ApiApplication` procesima; API lokalno na 8093, `vite.config.ts` čita `API_URL`.
+- Frontend (faze 1–3) nije započet. Detaljan popis gotovog i preostalog: `work/status-42.md`.
+
 ## 2026-11-03 (noć): #43 karta i usporedba općina (IvanMosa, grana `43-karta-usporedba`, necommitano)
 - #42 ostaje Ninu; #43 je dodijeljen IvanMosi na GitHubu.
 - Lokalno: nova baza (Docker), ingest i sintetika. Ovaj ingest ima 2.295 novih ugovora i 33 JLS s podacima; 21 datoteka se nije preuzela. API je radio na portu 8093, jer je na 8080 radio drugi projekt.

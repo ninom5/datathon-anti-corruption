@@ -29,7 +29,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 ## Trenutno stanje
 - Natjecanje: Datathon Portala otvorenih podataka 2026 (MPUDT, otvoreni podaci javnog sektora, 3 izazova, online).
 - **Projekt: JavniRadar** (izazov A): analiza lokalne javne nabave i neuobičajenih obrazaca, s pravilima i AI procjenom. **Rok: rješenje + video (do 3 min) mailom na open.data@mpudt.hr do 9.11.2026. 24:00. Feature freeze 7.11. 20:00.**
-- Faza: **POC gotov i spojen u `main` (02.11.)**: 2.332 ugovora, 17 JLS, pravilo D, sintetički ground truth, istraživač. **#40 (A2, JPT, DZS) spojen u `main` 03.11. (PR #49): 5.958 ugovora, 34 JLS.** Asistent nikad ne commita. **#41 (pravila F i C, API indikatora i profila) gotov 03.11. na grani `41-pravila-f-c`, necommitano.** Sljedeće: #42 (UI za F/C i profil JLS), prompt `work/prompts/next-42-ui-fc-profil.md`. Backlog u `work/tasks.md`. Lokalna baza: `javniradar-postgres` na portu 5434.
+- Faza: **POC gotov i spojen u `main` (02.11.)**: 2.332 ugovora, 17 JLS, pravilo D, sintetički ground truth, istraživač. **#40 (A2, JPT, DZS) spojen u `main` 03.11. (PR #49): 5.958 ugovora, 34 JLS.** Asistent nikad ne commita. **#41 (pravila F i C, API indikatora i profila) spojen u `main` 03.11. (PR #50).** **#42 (UI za F/C i profil JLS) u tijeku na grani `42-ui-fc-profil`, necommitano: backend gotov, UI preostaje; stanje u `work/status-42.md`**, prompt `work/prompts/next-42-ui-fc-profil.md`. Backlog u `work/tasks.md`. Lokalna baza: `javniradar-postgres` na portu 5434.
 - Podaci (provjereno 1.11.):
   - glavni izvor su općinski registri ugovora u standardnom EOJN XLSX formatu (~30 JLS na data.gov.hr);
   - nacionalni JSON izvoz je samo uzorak od 20.000 redaka;
@@ -43,7 +43,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - Sudreg ključ i Claude API ključ (korisnik);
   - javni GitHub (sigurnosna politika);
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
-- #43 (karta, usporedba) gotov 03.11. na grani `43-karta-usporedba` (IvanMosa, necommitano).
+- #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
 - Zadnje ažurirano: 2026-11-03
 
 ## Index
@@ -58,6 +58,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 | `work/ideas.md` | ideje i pristupi (s kritičkom ocjenom) |
 | `work/decisions.md` | odluke + obrazloženja |
 | `work/tasks.md` | tko radi što, status |
+| `work/status-42.md` | stanje #42: gotovo / preostalo, lokalno okruženje (API na 8093) |
 | `work/prompts/` | gotovi promptovi za agente (npr. `poc-implementation.md`) |
 | `log.md` | kronološki dnevnik |
 | `AGENTS.md` | tehnička pravila za AI agente (provenancija, neutralni jezik, AI procjena, sintetički podaci) |
