@@ -78,7 +78,7 @@ class AiContextBuilderTest {
     void keysAreSortedAndCompanyRegisterDataIsNeverInvented() {
         AiContext context = build();
 
-        assertThat(context.canonicalJson()).startsWith("{\"dobavljac\":{\"datum_osnivanja\":null,\"izvor\":\"nedostupno\"");
+        assertThat(context.canonicalJson()).startsWith("{\"dobavljac\":{\"datum_osnivanja\":null,\"djelatnost\":null,\"izvor\":\"nedostupno\"");
         @SuppressWarnings("unchecked")
         Map<String, Object> supplier = (Map<String, Object>) context.data().get("dobavljac");
         assertThat(supplier).containsEntry("nkd", null).containsEntry("datum_osnivanja", null)
