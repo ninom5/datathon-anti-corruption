@@ -45,7 +45,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
 - #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
 - **Grana `refactor-ui` (03.11., PR #53 prema `43-karta-usporedba`):** frontend preuzima dizajn sustav OtvoreniRadara (`FESB/datathon`); vidi `DESIGN_SYSTEM.md` i `work/decisions.md`.
-- **#45 (ispravak, Metodologija): grana `45-ispravak-metodologija`, PR prema `refactor-ui`.** #44 (AI) radi Nino.
+- **#45 (ispravak, Metodologija): grana `45-ispravak-metodologija`, PR #54 prema `main`.** #51 i #53 spojeni u `main` 03.11. #44 (AI) radi Nino.
 - Zadnje ažurirano: 2026-11-03
 
 ## Index

@@ -154,7 +154,7 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - Komponente su sada u mapi po komponenti (`components/<Name>/`), kao u OtvoreniRadaru.
 
 ## 2026-11-03: #45 – obrazac za ispravak i Metodologija (IvanMosa)
-- **Grana `45-ispravak-metodologija` od `refactor-ui`**, ne od `main`. Zašto: nove stranice koriste komponente iz redizajna (#53); iz `main` bi se pisale dvaput. PR ide u `refactor-ui`, pa se baza prebacuje kako se spajaju #51 i #53.
+- **Grana `45-ispravak-metodologija` od `refactor-ui`**, ne od `main`. Zašto: nove stranice koriste komponente iz redizajna (#53); iz `main` bi se pisale dvaput. PR #54 ide u `main`, jer su #51 i #53 spojeni prije otvaranja.
 - **`POST /api/v1/feedback` prima samo `indicator` i `contract`** i četiri vrste iz obrasca. `korisno`/`pogresno` i `ai_assessment` su u CHECK-u tablice, ali ih API još odbija: dodaje ih #44 (Nino) kad postoji tablica `ai_assessment`. **Migracija je `V4__feedback.sql`; ako #44 također uzme V4, onaj tko spaja drugi preimenuje svoju u V5.**
 - **Cilj mora biti javno vidljiv:** neaktivan indikator i ugovor s fizičkom osobom daju isti 404 kao nepostojeći (ista GDPR logika kao `ContractService`).
 - **E-mail je obavezan samo za pravo na odgovor i uklanjanje osobnih podataka** (moderator mora odgovoriti), inače neobavezan. API ga nikad ne vraća ni ne logira.

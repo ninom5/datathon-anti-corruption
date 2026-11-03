@@ -131,4 +131,4 @@
 ## 2026-11-03 – #45 ispravak i Metodologija
 - Ploča: #44 je In progress (Nino), pa je naš sljedeći #45. Grana `45-ispravak-metodologija` od `refactor-ui`.
 - Backend: `V4__feedback.sql`, `POST /api/v1/feedback` (validacija, 404 za skrivene ciljeve, 10/min po IP-u), 7 novih testova; `./mvnw test` zeleno. Lokalni API na 8093 ponovno pokrenut s novim jarom (migracija V4 primijenjena).
-- Frontend: `/ispravak` (obrazac), `/metodologija` (pravila D1, D2, F, C s pragovima i izvorima), poveznice s indikatora i ugovora, Metodologija u navigaciji. Build i lint prolaze, provjereno u pregledniku. Testne prijave obrisane iz lokalne baze. Commitano i otvoren PR prema `refactor-ui`.
+- Frontend: `/ispravak` (obrazac), `/metodologija` (pravila D1, D2, F, C s pragovima i izvorima), poveznice s indikatora i ugovora, Metodologija u navigaciji. Build i lint prolaze, provjereno u pregledniku. Testne prijave obrisane iz lokalne baze. Commitano, PR #54 prema `main` (#51 i #53 su u međuvremenu spojeni).
