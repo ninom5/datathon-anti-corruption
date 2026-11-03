@@ -307,7 +307,7 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 
 ## 8. Stanje implementacije (POC, `V1__init.sql`, 2026-11-02)
 **Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
-**Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `ai_assessment`, `llm_usage`, `feedback` (dolaze s pravilima F/C, AI-jem i Sudregom). Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.
+**Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `ai_assessment`, `llm_usage` (dolaze s AI-jem i Sudregom). `feedback` je dodan u `V4__feedback.sql` (#45), identičan shemi iznad. Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.
 
 **Dodaci u odnosu na §2** (obrazloženje u `work/decisions.md`):
 | Tablica | Stupac | Zašto |

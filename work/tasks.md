@@ -13,8 +13,8 @@ _Grane: radi se iz `main`. Za svaku karticu nova grana `<issue>-kratki-opis` (np
 | #41 | Pravila F i C + sintetički ground truth + API indikatora (`/indicators`, `/buyers/{oib}`, `ruleCode`, `band`). **Gotovo 03.11., spojeno PR #50** | BACK | P0 | L | 04.11. | #40 (spojen, PR #49) | `next-41-pravila-f-c.md` |
 | #42 | UI: profil JLS, filter "Vrsta indikatora", prikaz F i C. **Spojeno u `main` (PR #52)** | FRONT | P0 | L | 05.11. | #41 | `next-42-ui-fc-profil.md` |
 | #43 | Karta (licenca GeoJSON-a ili fallback) i usporedba općina. **IvanMosa, PR #51: `/karta`, `/usporedba`, `/municipalities` API, GeoJSON 542/556 JLS** | FRONT | P0 | M | 06.11. | DZS iz #40 | — |
-| #44 | AI procjena: backend (prompt, schema, validator, cache, budžet), evaluacija 40+60, blok u UI-ju, Sonnet re-check (Should) | BACK+FRONT | P0 | XL | 06.11. | Claude ključ, #41 | piše se nakon #41 |
-| #45 | Obrazac za ispravak (backend + UI) i stranica Metodologija | BACK+FRONT | P0 | M | 06.11. | — | — |
+| #44 | **Nino (In progress na ploči).** AI procjena: backend (prompt, schema, validator, cache, budžet), evaluacija 40+60, blok u UI-ju, Sonnet re-check (Should) | BACK+FRONT | P0 | XL | 06.11. | Claude ključ, #41 | piše se nakon #41 |
+| #45 | Obrazac za ispravak (backend + UI) i stranica Metodologija. **IvanMosa, grana `45-ispravak-metodologija` (od `refactor-ui`): `/feedback`, `/ispravak`, `/metodologija`** | BACK+FRONT | P0 | M | 06.11. | — | — |
 | #46 | Dodatni izvori (Should/Could): nacionalni uzorak, Sudreg/pravilo B, profil dobavljača, LLM ekstrakcija B/C, OCDS/G | DATA | P1 | L | 06.11. | ključevi | samo ako Must stoji dobro |
 | #47 | Deploy, seed snapshot, provjera provenancije, poliranje (mobitel, pristupačnost, fontovi) | svi | P0 | L | **07.11. 20:00** | sve Must | — |
 | #48 | Predaja: README, video v1/v2, mail na open.data@mpudt.hr | svi | P0 | L | **09.11. 18:00** | #47 | — |

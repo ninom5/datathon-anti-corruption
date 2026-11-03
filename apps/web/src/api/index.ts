@@ -5,3 +5,4 @@ export * from "./sources.api.ts";
 export * from "./indicators.api.ts";
 export * from "./params.ts";
 export * from "./municipalities.api.ts";
+export * from "./feedback.api.ts";

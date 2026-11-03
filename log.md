@@ -127,3 +127,8 @@
 
 ## 2026-11-03 – refactor-ui
 - Nova grana `refactor-ui` (od `43-karta-usporedba`). Frontend prebačen na dizajn sustav OtvoreniRadara: tokeni, fontovi, shell s mobilnim izbornikom, komponente (Button, Badge, PageHeader, stanja, Select, TextInput…), sve stranice na `PageHeader`/`BackLink`. Dodan `DESIGN_SYSTEM.md`, ažuriran `docs/UI_UX.md` §1. Tamni način uklonjen. Build i lint prolaze, provjereno u pregledniku (1280 px i mobitel). Na zahtjev korisnika commitano i otvoren PR #53 (baza `43-karta-usporedba`).
+
+## 2026-11-03 – #45 ispravak i Metodologija
+- Ploča: #44 je In progress (Nino), pa je naš sljedeći #45. Grana `45-ispravak-metodologija` od `refactor-ui`.
+- Backend: `V4__feedback.sql`, `POST /api/v1/feedback` (validacija, 404 za skrivene ciljeve, 10/min po IP-u), 7 novih testova; `./mvnw test` zeleno. Lokalni API na 8093 ponovno pokrenut s novim jarom (migracija V4 primijenjena).
+- Frontend: `/ispravak` (obrazac), `/metodologija` (pravila D1, D2, F, C s pragovima i izvorima), poveznice s indikatora i ugovora, Metodologija u navigaciji. Build i lint prolaze, provjereno u pregledniku. Testne prijave obrisane iz lokalne baze. Commitano i otvoren PR prema `refactor-ui`.

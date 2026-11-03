@@ -3,3 +3,4 @@ export * from "./useBuyers.ts";
 export * from "./useSources.ts";
 export * from "./useMunicipalities.ts";
 export * from "./useIndicator.ts";
+export * from "./useFeedback.ts";

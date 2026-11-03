@@ -92,6 +92,12 @@ public class ContractService {
         return counts;
     }
 
+    /** Whether the contract exists and may be shown, so other features (feedback) apply the same GDPR rule. */
+    @Transactional(readOnly = true)
+    public boolean isPublic(Long id) {
+        return contractRepository.findById(id).filter(ContractService::isShowable).isPresent();
+    }
+
     /** Contracts with natural persons are not exposed (GDPR); a 404 does not reveal that they exist. */
     private static boolean isShowable(Contract contract) {
         return contract.getSupplier() == null || contract.getSupplier().getOrgType() != OrganizationType.NATURAL_PERSON;

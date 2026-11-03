@@ -152,3 +152,13 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **Zadržano iz JavniRadara (pravila domene):** jantarni signal (`--color-signal`) umjesto crvene, ljubičasta traka za sintetičke podatke (svoj ton, ne AI ton), tri odvojene dimenzije indikatora, "Što ovo NE znači".
 - **Uklonjeno:** tamni način i velika slova iznad naslova (eyebrow), zaobljene "pill" oznake.
 - Komponente su sada u mapi po komponenti (`components/<Name>/`), kao u OtvoreniRadaru.
+
+## 2026-11-03: #45 – obrazac za ispravak i Metodologija (IvanMosa)
+- **Grana `45-ispravak-metodologija` od `refactor-ui`**, ne od `main`. Zašto: nove stranice koriste komponente iz redizajna (#53); iz `main` bi se pisale dvaput. PR ide u `refactor-ui`, pa se baza prebacuje kako se spajaju #51 i #53.
+- **`POST /api/v1/feedback` prima samo `indicator` i `contract`** i četiri vrste iz obrasca. `korisno`/`pogresno` i `ai_assessment` su u CHECK-u tablice, ali ih API još odbija: dodaje ih #44 (Nino) kad postoji tablica `ai_assessment`. **Migracija je `V4__feedback.sql`; ako #44 također uzme V4, onaj tko spaja drugi preimenuje svoju u V5.**
+- **Cilj mora biti javno vidljiv:** neaktivan indikator i ugovor s fizičkom osobom daju isti 404 kao nepostojeći (ista GDPR logika kao `ContractService`).
+- **E-mail je obavezan samo za pravo na odgovor i uklanjanje osobnih podataka** (moderator mora odgovoriti), inače neobavezan. API ga nikad ne vraća ni ne logira.
+- **Rate limit bez nove ovisnosti:** `FeedbackRateLimiter` u memoriji (10/min po adresi). Bucket4j bi bio nova ovisnost za jedan endpoint; za jednu instancu i demo je ovo dovoljno.
+- **Nema moderacijskog sučelja ni prikaza odgovora uz indikator** (Could u `FEATURES.md` F12). Prijave se čitaju iz baze (`moderation = 'novo'`).
+- **Metodologija je statičan tekst u `MethodologyPage/methodologyRules.ts`**, s vrijednostima prepisanima iz `thresholds.yaml`. Zašto: endpoint s pragovima je više posla nego koristi do 07.11. Cijena: pri promjeni praga treba promijeniti oba mjesta (zapisano u komentaru filea). AI evaluacija se ne navodi brojkama dok nije izmjerena (`ANOMALY_DETECTION.md` §4.6).
+- **„Izvori i metodologija” razdvojeno** na `/izvori` (podaci) i `/metodologija` (pravila); metodologija je u navigaciji jer je to odgovor na „zašto vam vjerovati” za žiri i video.

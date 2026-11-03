@@ -66,6 +66,11 @@ public class IndicatorService {
         return new IndicatorDetail(response, contracts, subjectOf(indicator));
     }
 
+    @Transactional(readOnly = true)
+    public boolean isActive(Long id) {
+        return indicatorRepository.findById(id).filter(found -> found.getStatus() == IndicatorStatus.ACTIVE).isPresent();
+    }
+
     private static boolean isNaturalPerson(Contract contract) {
         return contract.getSupplier() != null && contract.getSupplier().getOrgType() == OrganizationType.NATURAL_PERSON;
     }
