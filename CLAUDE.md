@@ -43,6 +43,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - Sudreg ključ i Claude API ključ (korisnik);
   - javni GitHub (sigurnosna politika);
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
+- #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
 - Zadnje ažurirano: 2026-11-03
 
 ## Index

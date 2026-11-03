@@ -108,3 +108,19 @@
 - Faza 0 (backend) gotova: `GET /api/v1/indicators/{id}` (ravni `IndicatorResponse` + `contracts` + `subject`), `threshold` u `subject_ref` pravila F. `./mvnw test` 48/48.
 - Portovi 8080/8091/8092 zauzeti tuđim `ApiApplication` procesima; API lokalno na 8093, `vite.config.ts` čita `API_URL`.
 - Frontend (faze 1–3) nije započet. Detaljan popis gotovog i preostalog: `work/status-42.md`.
+
+## 2026-11-03 (noć): #43 karta i usporedba općina (IvanMosa, grana `43-karta-usporedba`, necommitano)
+- #42 ostaje Ninu; #43 je dodijeljen IvanMosi na GitHubu.
+- Lokalno: nova baza (Docker), ingest i sintetika. Ovaj ingest ima 2.295 novih ugovora i 33 JLS s podacima; 21 datoteka se nije preuzela. API je radio na portu 8093, jer je na 8080 radio drugi projekt.
+- Izvor granica: geoBoundaries HRV ADM2 (OSM). DGU i Overpass su odbačeni (razlozi u `DATA_SOURCES.md` §9a). Rezultat je `public/geo/jls.geojson` (580 KB) s 542/556 JLS; 14 JLS nema granicu i navedeni su uz kartu.
+- Backend, paket `municipality`:
+  - `GET /api/v1/municipalities` (svih 556);
+  - `GET /api/v1/municipalities/{oib}/peers?year=&cpv2=` (medijan, rang, n, `sufficient`);
+  - `CpvDivisions` (nazivi CPV odjeljaka) i `PeerGroups.labelOf`.
+- Frontend:
+  - `/karta`: SVG karta, legenda, bočna ploča, tablica s pretragom;
+  - `/usporedba`: dot plot, tablica, "Što ovo NE znači";
+  - poveznice u navigaciji.
+- Provjera: `./mvnw test` 50/50; `yarn lint` i `yarn build` zeleno. U pregledniku su provjereni svijetli i tamni način, 1280 px, mobitel, tooltip, klik, prazno stanje te 404 i 400 iz API-ja.
+- Nalaz: usporedba skoro uvijek ima n < 8, pa prikazuje "Nedovoljno podataka" (vidi `decisions.md`). Iznimka za demo: P1 2025. ima n = 8 (npr. Stankovci, CPV 45).
+- Pregled prije PR-a: godina iz URL-a bez podataka sada ima svoju opciju; tooltip karte se otvara ulijevo u desnoj polovici; oznake medijana i odabrane JLS se više ne preklapaju.

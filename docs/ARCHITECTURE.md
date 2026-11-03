@@ -85,11 +85,11 @@ Nakon uvoza ingest pokreće deterministička pravila (`RulesService`). Pravila s
 | GET | `/contracts?buyer=&supplier=&cpv=&procedure=&min=&max=&from=&to=&has_indicator=&page=` | istraživač ugovora |
 | GET | `/contracts/{id}` | ugovor + indikatori + AI procjena + dokazi |
 | GET | `/buyers/{oib}` | profil naručitelja (JLS): potrošnja po CPV, po stanovniku, indikatori |
-| GET | `/buyers/{oib}/peers?cpv=` | usporedba sa skupinom |
+| GET | `/municipalities` | svih 556 JLS za kartu: ugovori, godine, indikatori "vrijedi provjeriti" i informativni, na 100 ugovora (`null` = nema registra) (#43) |
+| GET | `/municipalities/{oib}/peers?year=&cpv2=` | usporedba sa skupinom P1–P7: € po stanovniku, medijan, rang, n, `sufficient` (n ≥ 8) (#43) |
 | GET | `/suppliers/{oib}` | profil dobavljača (ugovori, naručitelji, Sudreg snapshot) |
 | GET | `/indicators?rule=&county=&buyer=` | popis indikatora |
 | GET | `/indicators/{id}` | detalj indikatora (3 dimenzije, dokazi, "što ovo NE znači") |
-| GET | `/map/counties/{code}` | JLS u županiji, broj indikatora, pokrivenost podacima |
 | GET | `/sources` | izvori, licence, zadnji uspješni dohvat, broj zapisa |
 | GET | `/methodology` | verzije pravila, pragovi, evaluacija AI-ja |
 | POST | `/feedback` | ispravak ili pravo na odgovor (`target_type`, `target_id`, `role`, `text`, `email`) |

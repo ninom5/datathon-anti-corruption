@@ -4,5 +4,7 @@ export * from "./NotFoundPage";
 export * from "./ContractsPage";
 export * from "./ContractPage";
 export * from "./SourcesPage";
+export * from "./MapPage";
+export * from "./ComparisonPage";
 export * from "./BuyerPage";
 export * from "./IndicatorPage";

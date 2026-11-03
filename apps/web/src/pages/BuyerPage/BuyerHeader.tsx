@@ -1,5 +1,5 @@
 import {Link} from "wouter";
-import {routes} from "@/routes";
+import {comparisonPath, mapPath, routes} from "@/routes";
 import type {BuyerProfile} from "@/types";
 import {formatEurRounded, formatNumber} from "@/utils";
 import styles from "@/components/DataView.module.css";
@@ -24,6 +24,13 @@ export const BuyerHeader = ({profile}: BuyerHeaderProps) => {
             <p className={styles.summary}><strong>{formatNumber(profile.contracts)}</strong> ugovora · <strong>{formatEurRounded(profile.totalValue)}</strong> bez PDV-a</p>
             <p className={styles.note}>Zbroj vrijednosti objavljenih ugovora za navedeno razdoblje. Koristi se ukupni iznos sa izmjenama, a ako nije objavljen, početni iznos; ovo nije zbroj isplata.</p>
             <Link href={`${routes.CONTRACTS}?${params}`}>Istraži ugovore ovog naručitelja →</Link>
+            {profile.municipality && profile.buyer.oib && (
+                <p>
+                    <Link href={comparisonPath(profile.buyer.oib)}>Usporedi sa sličnim JLS</Link>
+                    {" · "}
+                    <Link href={mapPath(profile.buyer.oib)}>Prikaži na karti</Link>
+                </p>
+            )}
         </header>
     );
 };
