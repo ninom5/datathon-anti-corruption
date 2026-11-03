@@ -65,3 +65,32 @@ export interface IndicatorFilter {
     page?: number;
     size?: number;
 }
+
+/** Only fields of the indicator's rule are sent; D1/D2 have a null subject. */
+export interface IndicatorSubject {
+    cpv?: string;
+    cpvLevel?: number;
+    from?: string;
+    to?: string;
+    threshold?: number;
+    supplierOib?: string;
+    cpv2?: string;
+    years?: number[];
+    topSupplierOib?: string;
+}
+
+export interface IndicatorContract {
+    id: number;
+    dateSigned: string | null;
+    subject: string;
+    cpv: string | null;
+    supplier: OrganizationRef | null;
+    initialValue: number | null;
+    totalValue: number | null;
+    procedureType: string | null;
+}
+
+export interface IndicatorDetail extends Indicator {
+    contracts: IndicatorContract[];
+    subject: IndicatorSubject | null;
+}

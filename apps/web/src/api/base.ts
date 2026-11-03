@@ -27,7 +27,7 @@ api.interceptors.response.use(
     (error: ErrorResponseType) => {
         if (error.response) {
             return Promise.reject(
-                new ApiError(error.response.data?.message || error.message, error.response.status),
+                new ApiError(error.response.data?.message || (error.response.status >= 500 ? 'Poslužitelj nije dostupan ili nije uspio obraditi zahtjev. Pokušajte ponovno.' : 'Zahtjev nije moguće obraditi. Provjerite adresu i filtre.'), error.response.status),
             );
         }
 

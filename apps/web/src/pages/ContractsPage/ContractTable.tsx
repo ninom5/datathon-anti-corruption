@@ -1,6 +1,6 @@
 import {Link} from "wouter";
 import {IndicatorTag, OrganizationName} from "@/components";
-import {contractPath} from "@/routes";
+import {buyerPath, contractPath} from "@/routes";
 import type {ContractListItem} from "@/types";
 import {formatDate, formatEurRounded} from "@/utils";
 import styles from "./ContractsPage.module.css";
@@ -33,7 +33,7 @@ export const ContractTable = ({contracts}: ContractTableProps) => (
                         {formatDate(contract.dateSigned)}
                         {contract.yearIncomplete && <span className={styles.muted}> *</span>}
                     </td>
-                    <td data-label="Naručitelj">{contract.buyer.name}</td>
+                    <td data-label="Naručitelj">{contract.buyer.oib ? <Link href={buyerPath(contract.buyer.oib)}>{contract.buyer.name}</Link> : contract.buyer.name}</td>
                     <td data-label="Dobavljač"><OrganizationName organization={contract.supplier}/></td>
                     <td data-label="Predmet">
                         <Link href={contractPath(contract.id)} className={styles.subjectLink}>{contract.subject}</Link>
