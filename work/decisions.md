@@ -131,3 +131,8 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **C traži da najveći dobavljač ima ≥ 2 ugovora u ćeliji** (`rule-c.min-top-contracts`). Scenarij C je "ponovljene dodjele"; u oko 7 od 22 stvarnih slučajeva udio je nosio jedan veliki ugovor (npr. Osijek 1 od 29, Štrigova 1 od 8).
 - **D2: `implausible-ratio-without-note: 5`.** Isplata ≥ 5× ugovorenog s PDV-om **bez obrazloženja u registru** daje kvalitetu `niska` i `informativno`. S obrazloženjem ostaje granica 10×. Razlog: Ivanec 2021.–2022. ima niz isplata 9–10× bez obrazloženja (npr. 11.010,44 → 110.101,44 €), što izgleda kao greška u unosu. Slučajevi s obrazloženjem ("dodatni radovi", "povećanje cijena") ostaju "vrijedi provjeriti".
 - **Nije uvedeno:** oznaka mogućeg duplikata (dva identična retka istog dana). Rijetko je (1 slučaj), a moglo bi sakriti stvarne ugovore.
+
+## 2026-11-03: #42, faza 0
+- **Detalj indikatora je ravan JSON** (`@JsonUnwrapped IndicatorResponse` + `contracts` + `subject`). Zašto: frontend tip `IndicatorDetail` jednostavno proširuje `Indicator`, a postojeće komponente (kartica, oznake) rade bez promjene.
+- **Prag za F sprema se u `subject_ref.threshold`** (najniži prag u prozoru). Zašto: UI crta crtu praga, a ne smije ga ponovno računati (pragovi po datumu su u `thresholds.yaml`, samo na backendu).
+- **Vite proxy čita `API_URL`** (zadano `http://localhost:8080`). Zašto: 8080 je lokalno zauzet tuđim procesom, a trajna promjena porta u repou nije dogovorena.

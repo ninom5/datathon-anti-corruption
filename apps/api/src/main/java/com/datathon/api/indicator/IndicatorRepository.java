@@ -2,6 +2,7 @@ package com.datathon.api.indicator;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +19,10 @@ public interface IndicatorRepository extends JpaRepository<Indicator, Long>, Jpa
     @Override
     @EntityGraph(attributePaths = {"buyer", "contract"})
     Page<Indicator> findAll(Specification<Indicator> specification, Pageable pageable);
+
+    /** One indicator for its detail page, with buyer and contract (D2 source explanation). */
+    @EntityGraph(attributePaths = {"buyer", "contract"})
+    Optional<Indicator> findDetailById(Long id);
 
     /** Active indicators about any of the contracts, including group indicators (F, C), with the contract they matched. */
     @Query("""

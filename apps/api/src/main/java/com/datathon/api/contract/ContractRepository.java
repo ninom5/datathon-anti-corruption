@@ -43,6 +43,10 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSp
     @EntityGraph(attributePaths = {"buyer", "supplier"})
     Page<Contract> findAll(Specification<Contract> specification, Pageable pageable);
 
+    /** Contracts of an indicator group, oldest first, with their supplier. */
+    @EntityGraph(attributePaths = {"supplier"})
+    List<Contract> findByIdInOrderByDateSignedAscIdAsc(java.util.Collection<Long> ids);
+
     long countByIsSyntheticFalse();
 
     /**

@@ -237,6 +237,8 @@ public class SplittingRule implements GroupRule {
         ref.put("cpvLevel", cpv.length());
         ref.put("from", window.members().getFirst().contract().getDateSigned().toString());
         ref.put("to", window.members().getLast().contract().getDateSigned().toString());
+        // The lowest threshold in the window, the one the sum is compared with; the UI draws it, never recomputes it.
+        ref.put("threshold", window.threshold());
         ref.put("contractIds", window.members().stream().map(member -> member.contract().getId()).toList());
         return ref;
     }
