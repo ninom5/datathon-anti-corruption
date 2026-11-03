@@ -1,4 +1,4 @@
-import type {DataQuality, EvidenceStrength, FileStatus, OrganizationType, SubjectType} from "@/types";
+import type {DataQuality, EvidenceStrength, FileStatus, MagnitudeBand, OrganizationType, RuleCode, SubjectType} from "@/types";
 
 /** Keyed by the API code; counties and other public bodies are not JLS. */
 export const buyerTypeLabels: Record<string, string | undefined> = {
@@ -53,10 +53,26 @@ export const evidenceStrengthLabels: Record<EvidenceStrength, string> = {
     slaba: "Slaba",
 };
 
-export const evidenceStrengthHints: Record<EvidenceStrength, string> = {
-    jaka: "Objavljeni podaci izravno i dosljedno podupiru obrazac.",
-    srednja: "Iznosi su izravno iz izvora, ali razlog nije objavljen.",
-    slaba: "Podaci obrazac podupiru samo posredno (npr. moguća greška pri unosu ili slabije podudaranje predmeta).",
+const contractEvidenceHints: Record<EvidenceStrength, string> = {
+    jaka: "Objavljeni iznosi izravno podupiru obrazac.",
+    srednja: "Razlika je izračunata iz iznosa u registru; sama ne potvrđuje razlog ni opravdanost promjene.",
+    slaba: "Moguća greška u izvoru smanjuje pouzdanost izračunate razlike.",
+};
+
+/** Descriptions of rules-v1; thresholds are evaluated only on the backend. */
+export const evidenceStrengthHints: Record<RuleCode, Record<EvidenceStrength, string>> = {
+    D_VALUE_INCREASE: contractEvidenceHints,
+    D_OVERPAYMENT: contractEvidenceHints,
+    F_SPLITTING: {
+        jaka: "Najmanje 3 ugovora, svaki s iznosom od najmanje 70 % praga; podudaranje na CPV3.",
+        srednja: "Isti dobavljač i CPV3 u vremenskom prozoru; uvjeti za jaku pouzdanost nisu svi ispunjeni.",
+        slaba: "Podudara se samo CPV odjeljak (prve 2 znamenke), uz različite podskupine. Predmeti mogu biti različiti.",
+    },
+    C_CONCENTRATION: {
+        jaka: "U odabranom CPV odjeljku i razdoblju ima najmanje 15 ugovora.",
+        srednja: "Obrazac se temelji na manjem broju ugovora (manje od 15) u odjeljku i razdoblju.",
+        slaba: "Objavljeni podaci daju ograničen dokaz koncentracije.",
+    },
 };
 
 export const ruleLetter = (ruleCode: string) => ruleCode.charAt(0);
@@ -115,3 +131,24 @@ const issueCodeLabels: Record<string, string> = {
 };
 
 export const issueCodeLabel = (code: string) => issueCodeLabels[code] ?? qualityFlagLabel(code);
+
+/** The one mapping between shareable Croatian URL codes and API rule codes. */
+export const ruleOptions: {short: string; code: RuleCode; label: string}[] = [
+    {short: "D1", code: "D_VALUE_INCREASE", label: "Povećanje vrijednosti"},
+    {short: "D2", code: "D_OVERPAYMENT", label: "Isplata iznad ugovorenog"},
+    {short: "F", code: "F_SPLITTING", label: "Moguće cjepkanje"},
+    {short: "C", code: "C_CONCENTRATION", label: "Koncentracija dobavljača"},
+];
+
+export const magnitudeBandOptions: {value: MagnitudeBand; label: string}[] = [
+    {value: "nizak", label: "Nizak"}, {value: "srednji", label: "Srednji"}, {value: "visok", label: "Visok"},
+];
+
+export const readRuleCodes = (value: string): RuleCode[] =>
+    ruleOptions.filter((option) => value.split(",").includes(option.short)).map((option) => option.code);
+
+export const writeRuleCodes = (codes: RuleCode[]) =>
+    ruleOptions.filter((option) => codes.includes(option.code)).map((option) => option.short).join(",");
+
+export const readMagnitudeBand = (value: string | null): MagnitudeBand | undefined =>
+    magnitudeBandOptions.find((option) => option.value === value)?.value;

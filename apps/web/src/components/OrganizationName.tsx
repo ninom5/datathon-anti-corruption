@@ -11,10 +11,11 @@ export const OrganizationName = ({organization, showOib = false}: OrganizationNa
     if (!organization) {
         return <span className={styles.muted}>nije objavljeno</span>;
     }
-    const isOibShown = showOib || organization.nameHidden;
+    const isNameHidden = organization.nameHidden || organization.type === "obrt";
+    const isOibShown = showOib || isNameHidden;
     return (
         <span>
-            <span className={organization.nameHidden ? styles.hidden : undefined}>{organization.name}</span>
+            <span className={isNameHidden ? styles.hidden : undefined}>{isNameHidden ? "Obrt (naziv skriven)" : organization.name}</span>
             {isOibShown && organization.oib && <span className={styles.oib}> · OIB {organization.oib}</span>}
         </span>
     );

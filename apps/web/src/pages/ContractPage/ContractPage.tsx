@@ -1,11 +1,10 @@
 import {Link, useParams} from "wouter";
-import {EmptyState, ErrorState, LoadingState, OrganizationName, SyntheticBanner} from "@/components";
+import {EmptyState, ErrorState, IndicatorCard, LoadingState, OrganizationName, SyntheticBanner} from "@/components";
 import {isClientError} from "@/api";
 import {useContract} from "@/hooks";
-import {routes} from "@/routes";
+import {buyerPath, routes} from "@/routes";
 import type {ContractDetail} from "@/types";
 import {buyerTypeLabels, formatDate, qualityFlagLabel, subjectTypeLabels} from "@/utils";
-import {IndicatorCard} from "./IndicatorCard.tsx";
 import {ProvenanceBlock} from "./ProvenanceBlock.tsx";
 import {ValuesTable} from "./ValuesTable.tsx";
 import styles from "./ContractPage.module.css";
@@ -53,7 +52,7 @@ const Indicators = ({contract}: {contract: ContractDetail}) => (
                 iznosi ne prelaze pragove pravila.
             </p>
         )}
-        {contract.indicators.map((indicator) => <IndicatorCard key={indicator.id} indicator={indicator}/>)}
+        {contract.indicators.map((indicator) => <IndicatorCard key={indicator.id} indicator={indicator} inContract/>)}
         {contract.supplier?.nameHidden && (
             <p className={styles.muted}>
                 AI procjena se ne radi za ugovore s obrtima, jer naziv obrta najčešće sadrži ime vlasnika.
@@ -71,7 +70,7 @@ const ContractView = ({contract}: {contract: ContractDetail}) => {
             <header className={styles.header}>
                 <h1>{contract.subject}</h1>
                 <p className={styles.parties}>
-                    <span>{contract.buyer.name}</span>
+                    {contract.buyer.oib ? <Link href={buyerPath(contract.buyer.oib)}>{contract.buyer.name}</Link> : <span>{contract.buyer.name}</span>}
                     {buyerType && <span className={styles.muted}> ({buyerType})</span>}
                     <span className={styles.arrow} aria-label="ugovor s">→</span>
                     <OrganizationName organization={contract.supplier} showOib/>
