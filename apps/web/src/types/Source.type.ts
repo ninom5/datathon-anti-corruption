@@ -21,7 +21,7 @@ export interface SourceFile {
     name: string | null;
     url: string;
     format: string | null;
-    formatClass: "A" | "B" | "C" | "D" | null;
+    formatClass: "A" | "A2" | "B" | "C" | "D" | null;
     status: FileStatus;
     httpStatus: number | null;
     retrievedAt: string;

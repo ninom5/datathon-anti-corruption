@@ -4,6 +4,7 @@ import com.datathon.api.ingest.FileStager.StagedFile;
 import com.datathon.api.integration.ckan.CkanClient;
 import com.datathon.api.integration.ckan.CkanPackage;
 import com.datathon.api.integration.ckan.CkanResource;
+import com.datathon.api.reference.ReferenceDataService;
 import com.datathon.api.rules.RulesService;
 import com.datathon.api.source.FormatClass;
 import java.time.Instant;
@@ -21,8 +22,8 @@ import tools.jackson.databind.json.JsonMapper;
 
 /**
  * One ingest run (docs/ARCHITECTURE.md §4): CKAN discovery, download and classification of every readable
- * "registar ugovora" resource, then import of class A files from oldest to newest so that the newest file wins
- * on duplicate contracts, then the contract rules. Started from the admin endpoint, never on application start-up.
+ * "registar ugovora" resource, then import of class A and then A2 files from oldest to newest so that the newest
+ * file wins on duplicate contracts, then the contract rules. Reference data (JPT, DZS) is refreshed first. Started from the admin endpoint, never on application start-up.
  */
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,7 @@ public class IngestService {
     private final IngestProperties properties;
     private final JsonMapper jsonMapper;
     private final RulesService rulesService;
+    private final ReferenceDataService referenceDataService;
 
     public IngestRun run() {
         IngestRun run = runRepository.save(IngestRun.start());
@@ -54,11 +56,15 @@ public class IngestService {
     }
 
     private Map<String, Object> execute(Long runId) {
+        Map<String, Object> referenceStats = referenceDataService.refresh(runId);
         List<CkanPackage> packages = ckanClient.searchPackages(properties.query());
         Map<String, Integer> skippedFormats = new TreeMap<>();
         List<StagedFile> staged = stageAll(runId, packages, skippedFormats);
-        ImportStats importStats = importClassA(runId, staged);
+        ImportStats importStats = importParsed(runId, staged, FormatClass.A);
+        // A2 after A: an A2 row is skipped when the buyer has class A data for the same year.
+        ImportStats legacyStats = importParsed(runId, staged, FormatClass.A2);
         Map<String, Object> stats = new LinkedHashMap<>();
+        stats.put("reference", referenceStats);
         stats.put("packages", packages.size());
         stats.put("filesStaged", staged.size());
         stats.put("filesByClass", countByClass(staged));
@@ -68,6 +74,8 @@ public class IngestService {
         stats.put("contractsSuperseded", importStats.getSuperseded());
         stats.put("rejectedByCode", importStats.getRejectedByCode());
         stats.put("warningsByCode", importStats.getWarningsByCode());
+        stats.put("legacyA2", legacyStatsOf(legacyStats));
+        stats.put("organizationsEnrichedFromJpt", referenceDataService.enrichOrganizations());
         stats.put("indicatorsByRule", rulesService.runContractRules());
         log.info("Ingest run {}: {}", runId, stats);
         return stats;
@@ -98,10 +106,23 @@ public class IngestService {
         }
     }
 
-    private ImportStats importClassA(Long runId, List<StagedFile> staged) {
+    private static Map<String, Object> legacyStatsOf(ImportStats legacy) {
+        Map<String, Object> stats = new LinkedHashMap<>();
+        stats.put("rows", legacy.getRows());
+        stats.put("contractsCreated", legacy.getCreated());
+        stats.put("contractsCreatedByYear", legacy.getCreatedByYear());
+        stats.put("contractsSuperseded", legacy.getSuperseded());
+        stats.put("skippedOverlapClassAByYear", legacy.getSkippedOverlapByYear());
+        stats.put("rejectedByCode", legacy.getRejectedByCode());
+        stats.put("warningsByCode", legacy.getWarningsByCode());
+        return stats;
+    }
+
+    /** Oldest file first, so that the newest file wins on duplicate contracts. */
+    private ImportStats importParsed(Long runId, List<StagedFile> staged, FormatClass formatClass) {
         ImportStats total = new ImportStats();
         staged.stream()
-                .filter(file -> file.formatClass() == FormatClass.A && file.isNew())
+                .filter(file -> file.formatClass() == formatClass && file.isNew())
                 .sorted(Comparator.comparing((StagedFile file) -> file.file().getResourceModified(),
                         Comparator.nullsFirst(Comparator.naturalOrder())))
                 .forEach(file -> total.add(importOne(runId, file)));
@@ -111,7 +132,9 @@ public class IngestService {
     /** One broken file must not stop the run (skill rule: log, skip, continue). */
     private ImportStats importOne(Long runId, StagedFile file) {
         try {
-            ImportStats stats = registerImporter.importClassA(runId, file.file(), file.sheets(), false);
+            ImportStats stats = file.formatClass() == FormatClass.A2
+                    ? registerImporter.importLegacy(runId, file.file(), file.sheets())
+                    : registerImporter.importClassA(runId, file.file(), file.sheets(), false);
             log.info("Imported {}: {} rows, {} rejected", file.file().getUrl(), stats.getRows(), stats.rejected());
             return stats;
         } catch (RuntimeException e) {

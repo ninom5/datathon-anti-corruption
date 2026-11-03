@@ -101,6 +101,27 @@ Prvi stvarni run ingesta (`POST /api/admin/ingest/run`, `PoliteHttpClient`, 1 za
   - Mikleuš: jedinična cijena 30,09 EUR upisana kao iznos ugovora.
 - Posljedica: pravilo D ima zaštite za takve retke (`ANOMALY_DETECTION.md` §D, "Implementacija").
 
+### 1.1b Stari EOJN izvještaj (klasa A2), parser od 2026-11-03 [VERIFICIRANO]
+- **Prepoznavanje:** red zaglavlja (u prvih 25 redaka) s barem 10 prepoznatih stupaca, među kojima moraju biti `Naziv i OIB ugovaratelja`, `Datum sklapanja…`, `Iznos bez PDV-a…` i `Predmet nabave`. Zaglavlja se uspoređuju po **početku teksta**, jer ih izdavatelji produljuju (`Datum sklapanja ugovora ili okvirnog sporazuma`, `Iznos bez PDV-a (kn)`). Stupci su u `LegacyColumn`.
+- **Dvije inačice u stvarnim datotekama:**
+  - EOJN izvoz "RPT_Ugovor": zaglavlje u 13.–14. retku, iznad njega "REGISTAR UGOVORA" i **"Naručitelj: GRAD X"**, a iznosi su tekst s valutom (`"198.338,34 HRK"`, `"4.000,00 EUR"`);
+  - pretipkane godišnje tablice (npr. HERA, Korčula): zaglavlje u 1.–4. retku, valuta u zaglavlju (`(kn)`, `(EUR)`) i obični brojevi u ćelijama.
+- **Naručitelj:** stupca nema. Uzima se iz retka "Naručitelj:", a ako ga nema, iz izdavatelja skupa na CKAN-u. OIB se traži u JPT-u po točnom normaliziranom nazivu koji mora biti jedinstven. Ako ga JPT ne nađe, koristi se postojeća organizacija s istim normaliziranim nazivom i OIB-om. Na stvarnim podacima svi A2 naručitelji (23) dobili su OIB.
+- **Dobavljač:** naziv i OIB su u jednoj ćeliji (`"Crodux plin d.o.o. 50388109754"`, `"HRVATSKI TELEKOM d.d.\nOIB: 81793146560"`). Uzima se prvi 11-znamenkasti broj. Ako ih je više (zajednica ponuditelja), uzima se nositelj i dodaje oznaka `supplier_consortium`. Strani PDV brojevi (`SI82719241`) nisu OIB.
+- **Iznosi:** nema iznosa izmjene ni ukupnog iznosa s izmjenama. Puni se samo početni iznos (`Iznos bez PDV-a`, `Ukupni iznos s PDV-om`), pa D1 preskače A2, a D2 uspoređuje isplatu s početnim iznosom s PDV-om. Valuta se određuje redom: oznaka u ćeliji, oznaka u zaglavlju, pa datum (prije 2023. = HRK).
+- **Prvi run (2026-11-03):**
+  - 32 datoteke A2 (prije su bile u klasi B), 4.562 retka;
+  - **3.626 novih ugovora**: 2014: 1, 2017: 10, 2018: 421, 2019: 559, 2020: 500, 2021: 715, 2022: 802, 2023: 505, 2024: 70, 2025: 43;
+  - 926 duplikata iz novijih godišnjih datoteka;
+  - odbačeno 10 redaka (8 bez datuma sklapanja, 2 bez iznosa);
+  - upozorenja: `unreadable_completed_on` 34, `cpv_invalid` 17, `supplier_oib_missing` 14, `supplier_consortium` 7, `amount_out_of_range` 7, ostalo ≤ 5;
+  - **preklapanje s klasom A po (naručitelj, godina): 0 redaka**, jer nijedan naručitelj nema oba formata za istu godinu. Pravilo je pokriveno testom (`LegacyImportTest`);
+  - ukupno sada **5.958 ugovora, 38 naručitelja, od toga 34 JLS** (prije 17).
+- **Provjera točnosti (2026-11-03):** 10 najvećih i 10 nasumičnih A2 ugovora uspoređeno je s izvornim ćelijama (openpyxl, neovisno o POI-u): datum, OIB dobavljača, iznos bez PDV-a, s PDV-om i isplaćeni iznos, uključujući pretvorbu HRK→EUR. **Svih 20 se podudara.**
+- **Greške u izvoru (vjerno prenesene, ne ispravljamo ih):**
+  - iznos s PDV-om manji od iznosa bez PDV-a (npr. Rovinj 2023: 4.211.200 € bez PDV-a i 52.640 € s PDV-om). Dobivaju oznaku `gross_below_net`;
+  - **zamjena kune i eura u isplati:** EOJN izvještaj sve iznose označava kao "EUR", a izdavatelji su za ugovore iz 2022. isplatu upisivali u kunama (Općina Bistra: ugovor `82.375,00 HRK`, isplata `82.375,00 EUR`). Pravilo D2 takve slučajeve (omjer ≈ 7,5345 ± 1,5 %) prikazuje kao informativne (`work/decisions.md`, 2026-11-03).
+
 ### 1.2 Polja standardnog EOJN izvoza (klasa A, stvarno zaglavlje iz `Grad Osijek / registar-ugovora.xlsx`) [VERIFICIRANO]
 
 | Stupac | Primjer | Popunjenost (n = 2.425) | Napomena |
@@ -234,6 +255,15 @@ Prvi stvarni run ingesta (`POST /api/admin/ingest/run`, `PoliteHttpClient`, 1 za
 
 ## 5. JPT – Popis brojčanih oznaka javnopravnih tijela (MPUDT)
 
+**Ponovna provjera i ingest (2026-11-03) [VERIFICIRANO]:**
+- `GET https://jpt.gov.hr/Backend_Prod/api/PopisOznakaNaDanasnjiDan` vraća HTTP 200, `application/json`, 4.527.638 B i **4.678 tijela**, svako s OIB-om (jedinstveni OIB-i);
+- `https://jpt.gov.hr/robots.txt` vraća HTTP 500 (ASP.NET greška), pa `PoliteHttpClient` primjenjuje "sve dopušteno";
+- `VrstaJPT` je dugi tekst, npr. `Jedinica lokalne i područne (regionalne) samouprave - Općina` (428), `… - Grad` (127), `… - Grad Zagreb` (1), `… - Županija` (20), te pravne osobe s javnim ovlastima ili javnom službom;
+- **`Osnivaci` je popunjen kod 3.897 tijela** (npr. `PODUZETNIČKA ZONA KRIŽ D.O.O.` → `[{"OIB":"94115544733","Naziv":"OPĆINA KRIŽ"}]`). Komunalna društva su u registru, pa se može utvrditi je li dobavljač u vlasništvu naručitelja;
+- `Zupanija` ponekad ima dvostruki razmak (`PRIMORSKO-GORANSKA  ŽUPANIJA`), koji se normalizira;
+- na stvarnim ugovorima je **15 parova naručitelj–dobavljač u kojima je naručitelj osnivač dobavljača** (npr. Grad Varaždinske Toplice → Forum Toplice d.o.o., 16 ugovora; Općina Bistra → Komunalno gospodarstvo Bistra, 6). To je kontekst "informativno" za pravila C i F (`JptDirectory.isSupplierFoundedByBuyer`);
+- spremljeno u `jpt_body` (svako tijelo ima `raw_record` i provenanciju `api`). Organizacije iz ugovora dobivaju `jpt_code`, `jpt_type`, `founders`, `county` i tip `jls`/`zupanija`. Obogaćene su 94 organizacije.
+
 | Svojstvo | Vrijednost [VERIFICIRANO 2026-11-01] |
 |---|---|
 | Skup | https://data.gov.hr/dataset/popis-javnopravnih-tijela, licenca otvorena |
@@ -250,6 +280,8 @@ Prvi stvarni run ingesta (`POST /api/admin/ingest/run`, `PoliteHttpClient`, 1 za
 Ovo je **pravi API**, što podiže bodove za kriterij "Upotreba otvorenih podataka".
 
 ## 6. DZS Popis stanovništva 2021
+
+**Ingest (2026-11-03) [VERIFICIRANO]:** resurs vraća HTTP 200 i 18.279.747 B. `podaci.dzs.hr/robots.txt` vraća 404. Čita se samo list `1.`, strujanjem (POI SAX, `DzsCensusReader`), jer učitavanje cijele radne knjige troši stotine MB. Spajanje s JPT-om po (županija, vrsta, naziv), normalizirano: **556/556 JLS spojeno, 0 nespojenih**, pa tablica `municipality_name_alias` nije potrebna. Usporedne skupine: P1 202, P2 193, P3 33, P4 70, P5 51, P6 6, P7 1. Gradske četvrti Zagreba i zbrojni retci županija se preskaču.
 
 | Svojstvo | Vrijednost [VERIFICIRANO] |
 |---|---|
@@ -342,7 +374,7 @@ Napomena: CKAN upiti s dijakriticima (`š`, `ž`) povremeno vraćaju prazan odgo
 
 | Skup | Izdavatelj | Poveznica |
 |---|---|---|
-| Registri ugovora JLS (klasa A, ~30 izdavatelja; točan popis generira ingest u `/api/sources`) | pojedine JLS | https://data.gov.hr (CKAN `q=registar ugovora`) |
+| Registri ugovora JLS (klase A i A2, 38 naručitelja; točan popis generira ingest u `/api/sources`) | pojedine JLS | https://data.gov.hr (CKAN `q=registar ugovora`) |
 | Registar Ugovora – EOJN sustav | Grad Zlatar | https://data.gov.hr/dataset/registar-ugovora-eojn-sustav |
 | Popis javnopravnih tijela | MPUDT | https://data.gov.hr/dataset/popis-javnopravnih-tijela |
 | Popis 2021 – stanovništvo po gradovima/općinama | DZS | https://data.gov.hr (skup `statistika-u-nizu-popis-stanovnistva-kucanstava-i-stanova-2021`) |

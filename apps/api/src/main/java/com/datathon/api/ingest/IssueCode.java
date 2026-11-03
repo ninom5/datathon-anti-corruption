@@ -30,9 +30,21 @@ public final class IssueCode {
     public static final String UNREADABLE_COMPLETED_ON = "unreadable_completed_on";
     public static final String DATE_IN_FUTURE = "date_in_future";
     public static final String HRK_AFTER_EURO = "hrk_after_euro";
+    /** A2: the supplier cell names several OIBs (consortium); the first one, the leader, is used. */
+    public static final String SUPPLIER_CONSORTIUM = "supplier_consortium";
+    /** Amount with VAT below the amount without VAT: one of them is mistyped or in another currency in the source. */
+    public static final String GROSS_BELOW_NET = "gross_below_net";
 
     // --- dedup (severity warning, not attached to a contract) ---
     public static final String SUPERSEDED_BY_NEWER_FILE = "superseded_by_newer_file";
+    /** A2 row not imported: the buyer has class A data for the same year (docs/DATA_MODEL.md §3). */
+    public static final String OVERLAPS_CLASS_A = "overlaps_class_a";
+    /** A2 file whose buyer could not be matched to an OIB in the JPT register. */
+    public static final String BUYER_NOT_IN_JPT = "buyer_not_in_jpt";
+
+    // --- reference data (JPT, DZS) ---
+    public static final String REFERENCE_SOURCE_FAILED = "reference_source_failed";
+    public static final String DZS_UNMATCHED = "dzs_unmatched";
 
     private IssueCode() {
     }

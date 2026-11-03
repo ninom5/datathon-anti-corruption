@@ -49,4 +49,8 @@ javniradar:
       # the published register (missing decimal comma) or a unit-price contract, so data quality drops to "niska" and
       # the indicator is informative only (work/decisions.md, 2026-11-02).
       implausible-ratio: 10
+      # Paid amount / contracted gross amount within this relative distance of 7,53450 (HRK per EUR): the old EOJN
+      # report (A2) labels every amount "EUR", but for 2022 contracts publishers entered the paid amount in kuna
+      # (2026-11-03 check: e.g. contract "82.375,00 HRK", paid "82.375,00 EUR"). Shown as informative only.
+      currency-mix-tolerance: 0.015
       source: "docs/ANOMALY_DETECTION.md §D (heuristika JavniRadara, nije zakonski prag)"

@@ -1,0 +1,163 @@
+[
+ {
+  "Oznaka": "238-16-22",
+  "DatumVazenjaOd": "2022-01-01 00:00:00.000",
+  "DatumVazenjaDo": null,
+  "VrstaJPT": "Pravna osoba koja obavlja javnu službu",
+  "OIB": "88060877962",
+  "Naziv": "PODUZETNIČKA ZONA KRIŽ D.O.O. ZA RAZVOJ PODUZETNIŠTVA, IZGRADNJU I UPRAVLJANJE KOMUNALNOM INFRASTRUKTUROM, OBJEKTIMA I PODUZETNIČKOM ZONOM",
+  "DatumOsnivanja": "2006-09-08 00:00:00.000",
+  "DatumUkidanja": null,
+  "Zupanija": "ZAGREBAČKA ŽUPANIJA",
+  "GradOpcina": "KRIŽ",
+  "Naselje": "KRIŽ",
+  "PostanskiBroj": "10314",
+  "Ulica": "ZAGREBAČKA ULICA",
+  "KucniBroj": "7",
+  "DodatakKucnomBroju": "",
+  "DodatneAdrese": [],
+  "AdresaPristupneTocke": null,
+  "Certifikat": null,
+  "CertifikatVrijediOd": null,
+  "CertifikatVrijediDo": null,
+  "CertifikatThumbprint": null,
+  "Osnivaci": [
+   {
+    "OIB": "94115544733",
+    "Naziv": "OPĆINA KRIŽ"
+   }
+  ],
+  "Email": [
+   "info@poduzetnicka-zona-kriz.hr"
+  ],
+  "KontaktZaDostavuPismena": [
+   {
+    "EmailAdresa": "info@poduzetnicka-zona-kriz.hr"
+   }
+  ],
+  "CijeJeTijeloPravniSlijednik": {
+   "OIB": null,
+   "Naziv": null,
+   "BrojcanaOznaka": null
+  },
+  "PravniSlijednici": []
+ },
+ {
+  "Oznaka": "2158-1",
+  "DatumVazenjaOd": "2022-01-01 00:00:00.000",
+  "DatumVazenjaDo": null,
+  "VrstaJPT": "Jedinica lokalne i područne (regionalne) samouprave - Grad",
+  "OIB": "30050049642",
+  "Naziv": "GRAD OSIJEK",
+  "DatumOsnivanja": "1992-12-30 00:00:00.000",
+  "DatumUkidanja": null,
+  "Zupanija": "OSJEČKO-BARANJSKA ŽUPANIJA",
+  "GradOpcina": "OSIJEK",
+  "Naselje": "OSIJEK",
+  "PostanskiBroj": "31000",
+  "Ulica": "FRANJE KUHAČA",
+  "KucniBroj": "9",
+  "DodatakKucnomBroju": "",
+  "DodatneAdrese": [],
+  "AdresaPristupneTocke": "https://domibus.seup.spi.hr/domibus/services/msh",
+  "Certifikat": null,
+  "CertifikatVrijediOd": null,
+  "CertifikatVrijediDo": null,
+  "CertifikatThumbprint": null,
+  "Osnivaci": [],
+  "Email": [
+   "info@osijek.hr"
+  ],
+  "KontaktZaDostavuPismena": [
+   {
+    "EmailAdresa": "info@osijek.hr"
+   }
+  ],
+  "CijeJeTijeloPravniSlijednik": {
+   "OIB": null,
+   "Naziv": null,
+   "BrojcanaOznaka": null
+  },
+  "PravniSlijednici": []
+ },
+ {
+  "Oznaka": "238-16",
+  "DatumVazenjaOd": "2022-01-01 00:00:00.000",
+  "DatumVazenjaDo": null,
+  "VrstaJPT": "Jedinica lokalne i područne (regionalne) samouprave - Općina",
+  "OIB": "94115544733",
+  "Naziv": "OPĆINA KRIŽ",
+  "DatumOsnivanja": "1992-12-30 00:00:00.000",
+  "DatumUkidanja": null,
+  "Zupanija": "ZAGREBAČKA ŽUPANIJA",
+  "GradOpcina": "KRIŽ",
+  "Naselje": "KRIŽ",
+  "PostanskiBroj": "10314",
+  "Ulica": "TRG SVETOG KRIŽA",
+  "KucniBroj": "5",
+  "DodatakKucnomBroju": "",
+  "DodatneAdrese": [],
+  "AdresaPristupneTocke": "https://domibus.seup.spi.hr/domibus/services/msh",
+  "Certifikat": null,
+  "CertifikatVrijediOd": null,
+  "CertifikatVrijediDo": null,
+  "CertifikatThumbprint": null,
+  "Osnivaci": [],
+  "Email": [
+   "info@opcina-kriz.hr"
+  ],
+  "KontaktZaDostavuPismena": [
+   {
+    "EmailAdresa": "info@opcina-kriz.hr"
+   }
+  ],
+  "CijeJeTijeloPravniSlijednik": {
+   "OIB": null,
+   "Naziv": null,
+   "BrojcanaOznaka": null
+  },
+  "PravniSlijednici": []
+ },
+ {
+  "Oznaka": "251",
+  "DatumVazenjaOd": "2022-01-01 00:00:00.000",
+  "DatumVazenjaDo": null,
+  "VrstaJPT": "Jedinica lokalne i područne (regionalne) samouprave - Grad Zagreb",
+  "OIB": "61817894937",
+  "Naziv": "GRAD ZAGREB",
+  "DatumOsnivanja": "1992-12-30 00:00:00.000",
+  "DatumUkidanja": null,
+  "Zupanija": "GRAD ZAGREB",
+  "GradOpcina": "GRAD ZAGREB",
+  "Naselje": "ZAGREB",
+  "PostanskiBroj": "10000",
+  "Ulica": "TRG STJEPANA RADIĆA",
+  "KucniBroj": "1",
+  "DodatakKucnomBroju": "",
+  "DodatneAdrese": [],
+  "AdresaPristupneTocke": "SeupPristup.zagreb.hr",
+  "Certifikat": "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",
+  "CertifikatVrijediOd": "2025-09-30T12:57:39",
+  "CertifikatVrijediDo": "2026-09-30T12:57:39",
+  "CertifikatThumbprint": "031F396633F3729BBA2B91FE7B48B458F9FEB9AE",
+  "Osnivaci": [],
+  "Email": [
+   "Ured.gradonacelnika@zagreb.hr",
+   "uredsko@zagreb.hr"
+  ],
+  "KontaktZaDostavuPismena": [
+   {
+    "EmailAdresa": "Ured.gradonacelnika@zagreb.hr"
+   },
+   {
+    "EmailAdresa": "uredsko@zagreb.hr"
+   }
+  ],
+  "CijeJeTijeloPravniSlijednik": {
+   "OIB": null,
+   "Naziv": null,
+   "BrojcanaOznaka": null
+  },
+  "PravniSlijednici": []
+ }
+]

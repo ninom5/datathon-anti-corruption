@@ -37,7 +37,7 @@ public class FileStager {
     public static final List<String> READABLE_FORMATS = List.of("XLSX", "XLS", "CSV");
     private static final Pattern HTTP_STATUS = Pattern.compile("HTTP (\\d{3})");
 
-    /** {@code sheets} is filled only for class A and only when the file is new (not imported in an earlier run). */
+    /** {@code sheets} is filled only for parsed classes (A, A2) and only when the file is new (not imported before). */
     public record StagedFile(SourceFile file, FormatClass formatClass, boolean isNew, List<SheetData> sheets) {
     }
 
@@ -93,7 +93,11 @@ public class FileStager {
         FormatClass formatClass = FormatClassifier.classify(sheets);
         file.setFormatClass(formatClass);
         fileRepository.save(file);
-        return new StagedFile(file, formatClass, true, formatClass == FormatClass.A ? sheets : List.of());
+        return new StagedFile(file, formatClass, true, isParsed(formatClass) ? sheets : List.of());
+    }
+
+    private static boolean isParsed(FormatClass formatClass) {
+        return formatClass == FormatClass.A || formatClass == FormatClass.A2;
     }
 
     private SourceDataset upsertDataset(CkanPackage ckanPackage) {
@@ -137,7 +141,7 @@ public class FileStager {
         }
     }
 
-    private static String sha256(byte[] body) {
+    public static String sha256(byte[] body) {
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(body));
         } catch (NoSuchAlgorithmException e) {

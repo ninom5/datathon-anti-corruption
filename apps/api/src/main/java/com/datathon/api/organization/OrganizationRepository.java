@@ -13,6 +13,8 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
     Optional<Organization> findFirstByOibIsNullAndNameNormAndIsSynthetic(String nameNorm, boolean isSynthetic);
 
+    List<Organization> findByNameNormAndOibIsNotNullAndIsSyntheticFalse(String nameNorm);
+
     /** Buyers with their number of contracts; synthetic buyers only when asked for. */
     @Query("""
             select new com.datathon.api.organization.dto.BuyerOption(b.id, b.oib, b.name, b.orgType, count(c), b.isSynthetic)

@@ -1,12 +1,13 @@
 package com.datathon.api.source.dto;
 
+import com.datathon.api.reference.ReferenceSources;
 import com.datathon.api.source.SourceFile;
 import java.time.Instant;
 
 /**
  * One downloaded file of a dataset and what happened to it.
  *
- * @param status    {@code uvezeno} (class A, parsed), {@code format_nije_podrzan} (class B or C, later),
+ * @param status    {@code uvezeno} (class A or A2 parsed, or a reference source: JPT, DZS), {@code format_nije_podrzan} (class B or C, later),
  *                  {@code nestrukturirano} (class D), {@code necitljivo} (downloaded but not readable) or
  *                  {@code nedostupno} (download failed)
  * @param rows      rows read from the file (raw records)
@@ -28,13 +29,19 @@ public record SourceFileResponse(Long id, String name, String url, String format
             return Integer.valueOf(200).equals(file.getHttpStatus()) ? "necitljivo" : "nedostupno";
         }
         if (file.getFormatClass() == null) {
-            return "necitljivo";
+            // Reference sources (JPT JSON, DZS census) are not contract registers and have no format class.
+            return isReferenceFile(file) ? "uvezeno" : "necitljivo";
         }
         return switch (file.getFormatClass()) {
-            case A -> "uvezeno";
+            case A, A2 -> "uvezeno";
             case B, C -> "format_nije_podrzan";
             case D -> "nestrukturirano";
         };
+    }
+
+    private static boolean isReferenceFile(SourceFile file) {
+        String portal = file.getDataset().getPortal();
+        return ReferenceSources.PORTAL_JPT.equals(portal) || ReferenceSources.PORTAL_DZS.equals(portal);
     }
 
 }

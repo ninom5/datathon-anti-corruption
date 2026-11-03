@@ -94,3 +94,17 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - Sažetak isključuje obrte, pa je "N mogućih grešaka u unosu" na stvarnim podacima **1**, a filtar istraživača pokazuje **4** ugovora. Tri od četiri informativna zapisa (Lepoglava) su ugovori s obrtima.
 - Odluka za POC: pravilo korisnika se poštuje. Sažetak uz brojke uvijek navodi koliko je ugovora s obrtima izostavljeno (`excludedCraftContracts`), da se brojke mogu uskladiti s tablicom.
 - **Otvoreno za korisnika:** brojanje (bez naziva) ne otkriva osobu. Možda je dovoljno isključiti obrte samo iz "top" lista s nazivima, a u brojkama ih ostaviti.
+
+## 2026-11-03: #40 – stari EOJN format (A2), JPT, DZS
+- **A2 je zasebna klasa formata** (`FormatClass.A2`, `LegacyRegisterParser`). Isti tok kao A: `raw_record`, provenancija, normalizacija i GDPR klasifikacija. Prirodni ključ je hash sadržaja, jer A2 nema EOJN URL (`DATA_MODEL.md` §3).
+  - Zašto: dodaje 17 JLS i povijest 2018.–2023. Pravila C i F trebaju više godina i više naručitelja.
+- **Naručitelj A2 bez OIB-a u izvoru:** naziv iz retka "Naručitelj:" ili izdavatelj CKAN skupa. OIB se traži jedinstvenim točnim podudaranjem normaliziranog naziva u JPT-u, a ako ga nema, postojećom organizacijom s istim nazivom i OIB-om. Bez nagađanja (dvije "Privlake" daju "nije pronađen").
+- **Valuta u A2:** redoslijed je oznaka u ćeliji, oznaka u zaglavlju, pa datum. Izričiti "EUR" u ćeliji sada pobjeđuje datum i u `Money` (klasa A ima brojeve, pa na nju ne utječe).
+- **D2 i zamjena kune i eura:** omjer isplate i ugovorenog iznosa s PDV-om unutar 1,5 % od 7,5345 daje `informativno`, kvalitetu `niska` i objašnjenje o vjerojatnoj zamjeni valute. Prag je u `thresholds.yaml` (`rule-d.currency-mix-tolerance`, heuristika, ne zakon).
+  - Zašto: na A2 je takvih bilo 6 od 76 D2 indikatora, i to među najvećima (+653 %). Nijedan ne bi preživio ručnu provjeru, a srušio bi vjerodostojnost u demu.
+  - Iznose ne pretvaramo, jer se iz registra ne vidi koji je od dva iznosa ispravan.
+  - `rule_version` ostaje `rules-v1`, jer se indikatori te verzije i dalje računaju iznova u svakom runu. Prije prvog stvarnog korisnika prelazimo na verzioniranje s `povucen`.
+- **Otvoreno za ručnu provjeru:** nekoliko D2 slučajeva s omjerom 9,0–9,99 (npr. Ivanec: 11.010,44 € ugovoreno, 110.101,44 € isplaćeno) izgleda kao pomaknut decimalni zarez. Ispod su praga `implausible-ratio: 10`, pa ostaju "vrijedi provjeriti". Ne mijenjamo prag naslijepo; odluka nakon pregleda 10 primjera (#41).
+- **JPT i DZS:** `jpt_body` i `municipality` po OIB-u (odstupanje od `DATA_MODEL.md` §2 opisano je u §8a). JPT i DZS osvježavaju se na početku svakog ingest runa; pad jednog izvora bilježi se kao `reference_source_failed` i ne zaustavlja run. DZS uvoz je idempotentan (ponovno spajanje nad istom datotekom).
+- **Grad Hvar (Could) nije rađen:** TLS posredni certifikat u vlastitom truststoreu ostaje otvoren zadatak. Provjera se ne isključuje.
+- **Korisnik 2026-11-03: asistent nikad ne commita** (ni push ni PR). Promjene ostaju necommitane na grani `40-a2-jpt-dzs`.

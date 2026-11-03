@@ -42,8 +42,6 @@ public class SourceFile {
     private String format;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(1)")
     private FormatClass formatClass;
 
     @JdbcTypeCode(SqlTypes.CHAR)
