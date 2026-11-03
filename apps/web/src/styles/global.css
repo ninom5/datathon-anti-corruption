@@ -12,6 +12,16 @@
     --synthetic: #7C3AED;
     --focus: #1D4ED8;
 
+    /* Map: one amber ramp, light to dark = more indicators per 100 contracts (dataviz: sequential, one hue). */
+    --map-0: #FEF3C7;
+    --map-1: #FCD34D;
+    --map-2: #F59E0B;
+    --map-3: #B45309;
+    --map-4: #78350F;
+    --map-no-data: #E5E7EB;
+    --map-no-data-line: #9CA3AF;
+    --map-border: #FFFFFF;
+
     --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
     --font-sans: Inter, "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
 
@@ -35,6 +45,15 @@
         --neutral-soft: #273244;
         --synthetic: #8B5CF6;
         --focus: #93C5FD;
+
+        --map-0: #3B2A0B;
+        --map-1: #78350F;
+        --map-2: #B45309;
+        --map-3: #F59E0B;
+        --map-4: #FCD34D;
+        --map-no-data: #273244;
+        --map-no-data-line: #4B5563;
+        --map-border: #1F2937;
     }
 }
 

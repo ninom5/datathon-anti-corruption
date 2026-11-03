@@ -29,6 +29,8 @@ export const AppLayout = ({children}: AppLayoutProps) => (
                 <Link href={routes.HOME} className={styles.brand}>JavniRadar</Link>
                 <nav aria-label="Glavna navigacija" className={styles.nav}>
                     <NavLink href={routes.CONTRACTS}>Istraži ugovore</NavLink>
+                    <NavLink href={routes.MAP}>Karta</NavLink>
+                    <NavLink href={routes.COMPARISON}>Usporedba</NavLink>
                     <NavLink href={routes.SOURCES}>Izvori</NavLink>
                 </nav>
             </div>

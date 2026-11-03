@@ -1,0 +1,222 @@
+.pageHeader {
+    margin-bottom: 16px;
+}
+
+.lead {
+    color: var(--muted);
+    max-width: 75ch;
+    margin: 6px 0 0;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.field select {
+    min-width: 220px;
+    max-width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.stale {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.headline {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    max-width: 75ch;
+    margin: 0 0 12px;
+}
+
+.warning {
+    background: var(--signal-soft);
+    border-left: 3px solid var(--signal);
+    padding: 8px 12px;
+    margin: 0 0 12px;
+    max-width: 75ch;
+    font-size: 14px;
+}
+
+.plotFrame {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 8px;
+}
+
+.plot {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.grid {
+    stroke: var(--line);
+    stroke-width: 1;
+}
+
+.axis {
+    stroke: var(--muted);
+    stroke-width: 1;
+}
+
+.tick {
+    font-size: 12px;
+    fill: var(--muted);
+    text-anchor: middle;
+}
+
+.median {
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+}
+
+.medianLabel {
+    font-size: 12px;
+    fill: var(--ink);
+    text-anchor: middle;
+}
+
+.dot {
+    fill: var(--muted);
+    stroke: var(--surface);
+    stroke-width: 2;
+    cursor: default;
+}
+
+.dotSelected {
+    fill: var(--accent);
+    stroke: var(--surface);
+    stroke-width: 2;
+}
+
+.selectedLabel {
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--ink);
+}
+
+.tooltip {
+    position: absolute;
+    transform: translate(-50%, calc(-100% - 12px));
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+    font-size: 13px;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.note {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 16px;
+}
+
+.notMeaning {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--neutral-soft);
+    padding: 12px 16px;
+    max-width: 75ch;
+    margin-bottom: 20px;
+}
+
+.notMeaning h2 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.notMeaning p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.tableScroll {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.caption {
+    text-align: left;
+    font-size: 13px;
+    color: var(--muted);
+    padding-bottom: 6px;
+}
+
+.table th,
+.table td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--line);
+}
+
+.table thead th {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.table tbody th {
+    font-weight: 400;
+}
+
+.selectedRow {
+    background: var(--neutral-soft);
+}
+
+.selectedRow th {
+    font-weight: 600 !important;
+}
+
+.number {
+    text-align: right !important;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.source {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 12px;
+}

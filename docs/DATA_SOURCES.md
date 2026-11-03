@@ -330,6 +330,24 @@ Ovo je **pravi API**, što podiže bodove za kriterij "Upotreba otvorenih podata
 | Izbori | lokalni izbori 1. krug **18.05.2025.** (NN 69/2025) [VERIFICIRANO]; 2. krug 01.06.2025. [NEVERIFICIRANO primarnim izvorom] | | scenarij G |
 | HNB tečaj | 7,53450 HRK/EUR (NN 85/2022, Uredba Vijeća (EU) 2022/1208) [VERIFICIRANO] | | konverzija |
 
+## 9a. Granice JLS za kartu (#43, provjereno 2026-11-03)
+
+| Kandidat | Što je provjereno | Odluka |
+|---|---|---|
+| DGU **Upravne jedinice INSPIRE** (`upravne-jedinice-inspire` na data.gov.hr, "Otvorena dozvola") | WFS `geoportal.dgu.hr/services/inspire/au/wfs` vraća `Service WFS is disabled`. ATOM `geoportal.dgu.hr/services/atom/au/xml` nudi samo GML ZIP od **219 MB** (ETRS89/LAEA), a polje `rights` kaže "ograničenje javnog pristupa prema članku 13 stavku 1 točki (e) INSPIRE Direktive". Postoji i WMS, ali to su slike, ne granice. | ne koristi se: licenca na portalu i u ATOM-u se razlikuju, a pretvorba GML-a od 219 MB ne stane u rok |
+| **geoBoundaries HRV ADM2** (gbOpen, `9469f09`) | API `geoboundaries.org/api/current/gbOpen/HRV/ADM2/`: izvor "Open Street Map, geoBoundaries", licenca **CC BY-SA 2.0** (`licenseSource` openstreetmap.org/copyright), 560 jedinica, godina 2021, ažurirano 19.01.2023. Pojednostavljeni GeoJSON ima 2,2 MB. | **koristi se** |
+| Overpass API (OSM) | `robots.txt` ima `Disallow: /api/` | ne koristi se (AGENTS.md: poštivanje robots.txt-a) |
+
+- **Obrada:** `apps/web/scripts/build_jls_geojson.py`. Skripta pojednostavljuje oblike (Douglas–Peucker 0,002°, 4 decimale) i dodaje OIB iz naše tablice `municipality` (JPT + DZS) spajanjem po imenu. Pritom miče prefiks i dijakritike, a od dvojezičnih imena uzima hrvatski dio. Istoimene JLS razdvaja po vrsti (Novigrad, Otok, Sveta Nedelja), a Privlaku po geografskoj dužini. Rezultat je `apps/web/public/geo/jls.geojson`, 580 KB.
+- **Ručne ispravke** su u `NAME_FIXES` u skripti:
+  - tipfeleri u OSM-u: Muter-Kornati, Opicina Pirovac, Hvratska Dubica, Donji Kukuzari, Magdenovac, Veliki Pisanica;
+  - "Grad Lobor" je zapravo Općina Lobor;
+  - otoci Lošinj, Unije, Susak, Ilovik, Vele Srakane i Vele Orjule pripadaju Gradu Malom Lošinju.
+- **Pokrivenost:** 542 od 556 JLS ima granicu.
+  - **Nemaju granicu (14):** Cres, Krk, Baška, Dobrinj, Punat, Vrbnik, Ivanska, Lišane Ostrovičke, Ljubešćica, Rovišće, **Stankovci** (ima podatke), Tisno, Tribunj i Zrinski Topolovac. U izvoru su otoci Krk i Cres jedan oblik za više JLS, a kopnene JLS nedostaju. Karta ih navodi ispod legende, a tablica ih sadrži.
+  - **13 oblika bez JLS** (Krk, Cres, otoci Kornata, Žut, Sit, Plavnik, Zeča) crtaju se iscrtkano kao "granice nisu dostupne".
+- **Atribucija** je na karti: "© OpenStreetMap suradnici (ODbL), geoBoundaries (CC BY-SA 2.0)". Izvedena datoteka je pod istim uvjetima (share-alike).
+
 ## 10. Pragovi (moraju biti u konfiguraciji, s datumom važenja)
 
 | Prag | Do 15.05.2026. | Od 16.05.2026. | Izvor |
@@ -382,3 +400,4 @@ Napomena: CKAN upiti s dijakriticima (`š`, `ž`) povremeno vraćaju prazan odgo
 | EOJN OCDS | Narodne novine d.d. / MPGI (EOJN) | https://data.open-contracting.org/en/publication/80 |
 | Sudski registar (ako stigne ključ) | Ministarstvo pravosuđa | https://sudreg-data.gov.hr |
 | ZJN, Pravilnik NN 86/2026 (pravila, ne podaci) | NN | https://narodne-novine.nn.hr |
+| Granice JLS (karta), izvedeno iz OpenStreetMapa | geoBoundaries / OSM suradnici | https://www.geoboundaries.org (HRV ADM2, gbOpen) |
