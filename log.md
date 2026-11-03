@@ -126,4 +126,4 @@
 - Pregled prije PR-a: godina iz URL-a bez podataka sada ima svoju opciju; tooltip karte se otvara ulijevo u desnoj polovici; oznake medijana i odabrane JLS se više ne preklapaju.
 
 ## 2026-11-03 – refactor-ui
-- Nova grana `refactor-ui` (od `43-karta-usporedba`). Frontend prebačen na dizajn sustav OtvoreniRadara: tokeni, fontovi, shell s mobilnim izbornikom, komponente (Button, Badge, PageHeader, stanja, Select, TextInput…), sve stranice na `PageHeader`/`BackLink`. Dodan `DESIGN_SYSTEM.md`, ažuriran `docs/UI_UX.md` §1. Tamni način uklonjen. Build i lint prolaze, provjereno u pregledniku (1280 px i mobitel). Ništa nije commitano.
+- Nova grana `refactor-ui` (od `43-karta-usporedba`). Frontend prebačen na dizajn sustav OtvoreniRadara: tokeni, fontovi, shell s mobilnim izbornikom, komponente (Button, Badge, PageHeader, stanja, Select, TextInput…), sve stranice na `PageHeader`/`BackLink`. Dodan `DESIGN_SYSTEM.md`, ažuriran `docs/UI_UX.md` §1. Tamni način uklonjen. Build i lint prolaze, provjereno u pregledniku (1280 px i mobitel). Na zahtjev korisnika commitano i otvoren PR #53 (baza `43-karta-usporedba`).
