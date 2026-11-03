@@ -11,7 +11,7 @@ _Grane: radi se iz `main`. Za svaku karticu nova grana `<issue>-kratki-opis` (np
 | #39 | Organizacija: ključevi (Sudreg, Claude API), uloge, odluka o drugom projektu, javni repo, pregled UI-ja | korisnik/tim | P0 | S | 03.11. | — | — |
 | #40 | Podaci: stari EOJN format (A2), JPT, DZS (+ Hvar kao Could). **Gotovo 03.11., spojeno PR #49; Hvar (Could) prebaciti u #46** | DATA | P0 | L | 04.11. | — | `next-a2-jpt-fc.md` faze 1–2 |
 | #41 | Pravila F i C + sintetički ground truth + API indikatora (`/indicators`, `/buyers/{oib}`, `ruleCode`, `band`). **Gotovo 03.11. na grani `41-pravila-f-c` (necommitano): F, C, popravci lažno pozitivnih, `/indicators`, `/buyers/{oib}`, `ruleCode`/`band`** | BACK | P0 | L | 04.11. | #40 (spojen, PR #49) | `next-41-pravila-f-c.md` |
-| #42 | UI: profil JLS, filter "Vrsta indikatora", prikaz F i C | FRONT | P0 | L | 05.11. | #41 | `next-a2-jpt-fc.md` faza 4 |
+| #42 | UI: profil JLS, filter "Vrsta indikatora", prikaz F i C | FRONT | P0 | L | 05.11. | #41 | `next-42-ui-fc-profil.md` |
 | #43 | Karta (licenca GeoJSON-a ili fallback) i usporedba općina | FRONT | P0 | M | 06.11. | DZS iz #40 | — |
 | #44 | AI procjena: backend (prompt, schema, validator, cache, budžet), evaluacija 40+60, blok u UI-ju, Sonnet re-check (Should) | BACK+FRONT | P0 | XL | 06.11. | Claude ključ, #41 | piše se nakon #41 |
 | #45 | Obrazac za ispravak (backend + UI) i stranica Metodologija | BACK+FRONT | P0 | M | 06.11. | — | — |
