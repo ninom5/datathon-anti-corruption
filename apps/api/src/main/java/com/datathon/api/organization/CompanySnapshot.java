@@ -29,6 +29,8 @@ import org.hibernate.type.SqlTypes;
 public class CompanySnapshot {
 
     public static final String SOURCE_SUDREG = "sudreg";
+    /** Synthetic demo data only (SINTETIČKI PODACI ZA DEMONSTRACIJU). */
+    public static final String SOURCE_FIXTURE = "fixture";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

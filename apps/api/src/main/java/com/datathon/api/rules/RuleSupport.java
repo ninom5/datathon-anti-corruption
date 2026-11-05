@@ -4,7 +4,6 @@ import com.datathon.api.contract.Contract;
 import com.datathon.api.contract.SubjectType;
 import com.datathon.api.indicator.DataQuality;
 import com.datathon.api.organization.Organization;
-import com.datathon.api.organization.OrganizationType;
 import com.datathon.api.organization.dto.OrganizationRef;
 import com.datathon.api.source.FormatClass;
 import com.datathon.api.source.Locators;
@@ -128,7 +127,7 @@ final class RuleSupport {
 
     /** Crafts are named after their owner, so texts never carry a craft's name (GDPR decision 2026-11-02). */
     static String supplierName(Organization supplier) {
-        String name = supplier.getOrgType() == OrganizationType.CRAFT ? OrganizationRef.HIDDEN_CRAFT_NAME : supplier.getName();
+        String name = OrganizationRef.displayName(supplier);
         return supplier.getOib() == null ? name : name + " (OIB " + supplier.getOib() + ")";
     }
 

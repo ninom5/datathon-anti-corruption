@@ -311,6 +311,12 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 - Prikazuje se samo **najnovija** procjena ugovora koja nije `zamijenjeno`, i to samo ako je `prihvaceno`. Ako je najnoviji odgovor za iste podatke odbačen, starija prihvaćena procjena se ne prikazuje.
 - `llm_usage.purpose = 'ai-flag'`; pogodak u cacheu se bilježi s `cache_hit = true` i troškom 0.
 
+## 8d. Sudski registar (#46, `V5__company_snapshot.sql`, 2026-11-05)
+- `company_snapshot` prema §2, uz dodatke: `not_found` (OIB nije u registru, ne pita se ponovno), `main_nkd_name`, `nkd_version`, `in_liquidation`, `status_text`. Snimka se nikad ne prepisuje; koristi se najnovija po organizaciji.
+- `main_nkd`: NKD 2025 iz `pretezita_djelatnost` (s nazivom) ili, za starije upise, samo šifra iz `glavna_djelatnost` (`nkd_version` = "šifra iz polja glavna_djelatnost, bez naziva"); verzija se ne pretpostavlja.
+- `payload` sadrži samo korištena polja (OIB, MBS, tvrtka, datumi, pravni oblik, NKD, postupak), bez e-mail adresa i sjedišta.
+- Dohvaćaju se samo dobavljači tipa `doo`, `jdoo`, `dd` i `javno_tijelo` iz stvarnih ugovora. Obrti, fizičke osobe i `ostalo` (u njemu su obrti s imenima vlasnika) nikad se ne šalju registru.
+
 ## 8. Stanje implementacije (POC, `V1__init.sql`, 2026-11-02)
 **Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
 **Još nije:** `municipality`, `company_snapshot`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`, `feedback` (dolaze s pravilima F/C, AI-jem i Sudregom). Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.

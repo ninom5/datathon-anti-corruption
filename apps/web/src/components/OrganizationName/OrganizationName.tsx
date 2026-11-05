@@ -6,7 +6,10 @@ interface OrganizationNameProps {
     showOib?: boolean;
 }
 
-/** A craft's name is hidden by the API (GDPR); the OIB stays so the record can still be checked in the source. */
+/**
+ * Names that may be a person's (crafts, unclassified suppliers) are replaced by the API with a placeholder (GDPR);
+ * the OIB stays so the record can still be checked in the source.
+ */
 export const OrganizationName = ({organization, showOib = false}: OrganizationNameProps) => {
     if (!organization) {
         return <span className={styles.muted}>nije objavljeno</span>;
@@ -15,7 +18,7 @@ export const OrganizationName = ({organization, showOib = false}: OrganizationNa
     const isOibShown = showOib || isNameHidden;
     return (
         <span>
-            <span className={isNameHidden ? styles.hidden : undefined}>{isNameHidden ? "Obrt (naziv skriven)" : organization.name}</span>
+            <span className={isNameHidden ? styles.hidden : undefined}>{isNameHidden && organization.type === "obrt" && !organization.nameHidden ? "Obrt (naziv skriven)" : organization.name}</span>
             {isOibShown && organization.oib && <span className={styles.oib}> · OIB {organization.oib}</span>}
         </span>
     );

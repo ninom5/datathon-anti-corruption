@@ -89,6 +89,12 @@ javniradar:
       natural-monopoly-cpv2: ["09", "64", "65"]   # energy, post/telecom, utilities: a note in the text only
       source: "docs/ANOMALY_DETECTION.md §C (heuristika JavniRadara, nije zakonski prag)"
 
+    # Rule B (docs/ANOMALY_DETECTION.md §B), needs Sudreg snapshots (#46). JavniRadar heuristics, not legal thresholds.
+    rule-b:
+      max-age-days: 180                   # company founded at most 180 days before the contract was signed
+      min-value-eur: 50000                # §B: simple procurement threshold for goods/services from 16.05.2026.
+      source: "docs/ANOMALY_DETECTION.md §B (heuristika JavniRadara, nije zakonski prag)"
+
     # Magnitude band (nizak / srednji / visok) for filters and reports. JavniRadar heuristic, never a combined score
     # (work/decisions.md, 2026-11-03 #41). strict: true means "above" the bound, false means "at or above".
     bands:
@@ -96,6 +102,8 @@ javniradar:
       overpayment: {medium-from: 0.30, high-from: 1.00, strict: true}
       splitting: {medium-from: 1.5, high-from: 2.0, strict: false}         # sum / threshold
       concentration: {medium-from: 7500, high-from: 9000, strict: false}   # HHI
+      # Rule B: fewer days between founding and contract = higher band; descending means "at or below the bound".
+      young-company: {medium-from: 120, high-from: 60, strict: false, descending: true}
 
   # Which contracts get an AI assessment (docs/ANOMALY_DETECTION.md §4.1, cost control). JavniRadar heuristics.
   ai:

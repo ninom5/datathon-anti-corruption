@@ -153,3 +153,14 @@
 - Novi endpointi `/api/admin/ai/eval/*` i `contractIds` na `/api/admin/ai/run`. Ukupni trošak do sada 0,66 USD.
 - Lokalno: port 8080 drži tuđi stari `ApiApplication` (PID 19120, kao u `status-42.md`), 8091–8094 također zauzeti; moj API radi na **8095** s `SPRING_DEVTOOLS_RESTART_ENABLED=false` (devtools restart usred runa je rušio pozive).
 
+## 2026-11-05 – #46 Sudreg, pravilo B, GDPR prikaz (grana `44-ai-procjena`)
+- Sudreg ključ provjeren stvarnim zahtjevom (token 200, `detalji_subjekta` 200). Djelatnost dolazi u dva oblika (NKD 2025 u `pretezita_djelatnost` ili samo broj `glavna_djelatnost` kod starijih upisa); `DATA_SOURCES.md` §7.
+- `V5__company_snapshot.sql`, `RestSudregClient` (preuzet iz `Desktop/datathon` i prilagođen), dohvat u pozadini `POST /api/admin/sudreg/run` + `GET /status` (1 zahtjev/s, samo `doo/jdoo/dd/javno_tijelo`, spremljen samo dio odgovora). Pun dohvat 1.577 dobavljača pokrenut 05.11. 18:28.
+- AI kontekst: NKD, naziv djelatnosti, datum osnivanja, stečaj/likvidacija s izvorom i datumom dohvata. AI kandidati više ne uključuju `ostalo`/`nepoznato`.
+- Pravilo B (`B_YOUNG_COMPANY`): ≤ 180 dana, ≥ 50.000 €, pojas po danima; sintetička fixture snimka za demo; UI filter "B".
+- GDPR: nazivi tipa `ostalo`/`nepoznato` skriveni osim institucija i JPT tijela (u podacima ≥ 10 osoba); klasifikator prepoznaje ",vl.", "član", "Ured ovl.".
+- Testovi: 88/88, `yarn lint` i `yarn build` prolaze. Popravljena ne-daemon dretva koja je usporavala kraj testova.
+- Sudreg dohvat gotov: 1.568 od 1.577 pronađeno (9 × HTTP 400). Snimke: 1.448 s datumom osnivanja, 1.005 s NKD-om (289 NKD 2025), 17 u stečaju ili likvidaciji.
+- Pravilo B na stvarnim podacima: 0 indikatora (31 mlada tvrtka, svi ugovori < 50.000 €); sintetički demo 1.
+- AI stvarni uzorak sa Sudregom: 13/60 oznaka (9 na neskladu NKD-a), kappa prema pravilima 0,057, 0,069 USD. Upisano u `EVALUATION.md`.
+

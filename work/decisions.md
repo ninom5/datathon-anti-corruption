@@ -173,3 +173,11 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **Pun run svih 2.212 stvarnih ugovora (~2,5–3,5 USD) je odgođen** dok se ne upišu ručne oznake i ne spoji Sudreg, da se ne plati dvaput. Za demo postoji ~90 stvarnih procjena (lokalna baza).
 - **UI:** `nema_oznake` se prikazuje kao "Bez dodatnih signala", uz rečenicu da AI nije našao ništa osim onoga što pokazuju pravila (semantika v2/v3).
 
+## 2026-11-05: #46 – Sudski registar (korisnik dao ključ)
+- **Dohvat po OIB-u (`/detalji_subjekta`), ne bulk `/subjekti`:** trebamo ~1.600 dobavljača, a bulk vraća cijeli registar. 1 zahtjev/s ≈ 27 min, jednom; snimke se spremaju u bazu, demo ne ovisi o Sudregu.
+- **Samo `doo`, `jdoo`, `dd`, `javno_tijelo`.** `ostalo` sadrži obrte s imenima vlasnika (npr. "… , DRAGUTIN KRIZMANIĆ"), pa se ti OIB-i ne šalju ni Sudregu ni modelu (AI kandidati sada isključuju i `ostalo` i `nepoznato`). **Riješeno 05.11. (vidi niže).**
+- **Spremljen je samo dio odgovora** (bez e-mail adresa i sjedišta): minimizacija podataka.
+- **NKD u dva oblika** (vidi `DATA_SOURCES.md` §7): stari oblik daje samo šifru; verzija klasifikacije se ne pretpostavlja.
+- **GDPR prikaz (05.11.): naziv dobavljača tipa `ostalo`/`nepoznato` skriva se, osim ako je očito institucija** (zavod, ustanova, zadruga, muzej, institut, centar…) **ili ima JPT oznaku** (`OrganizationRef.isNameHidden`, isto u tekstovima pravila). Zašto: u 107 takvih naziva bilo je najmanje 10 osoba ("TERMODOR, DRAGUTIN KRIZMANIĆ", "Dr. Neven Martinović", "Ante Vojvodić AT CORNER"…), a heuristike za imena ne hvataju sve. Cijena: desetak tvrtki (npr. "Bauhaus") prikazuje se kao "Naziv skriven (moguć obrt ili osoba)", uz OIB i poveznicu na izvor. Klasifikator dodatno prepoznaje ",vl.", "član …" i "Ured ovl." kao obrt (vrijedi za nove uvoze; prikaz radi i bez ponovnog uvoza).
+- **Pravilo B (`B_YOUNG_COMPANY`) uvedeno 05.11.** na Sudreg snimkama; detalji u `ANOMALY_DETECTION.md` §B (Implementacija). Pojas je jedina skala (≤ 60 / ≤ 120 / > 120 dana), bez posebne razine "viša pozornost".
+

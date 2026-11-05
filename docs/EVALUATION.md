@@ -66,10 +66,13 @@ Izmjereno bez ručnih oznaka (2026-11-04, `ai-flag-v3`, n = 60, 0 odbijenih vali
 | ai-flag-v2 | 30 / 60 | 0,033 |
 | ai-flag-v3 | 15 / 60 | 0,135 |
 | ai-flag-v3 + vrijednost s PDV-om | 12 / 60 | 0,444 |
+| ai-flag-v3 + PDV + Sudreg (NKD, datum osnivanja), 2026-11-05, 0,069 USD | 13 / 60 | 0,057 |
 
 Ručnim pregledom oznaka v2 nađena su dva sustavna izvora oznaka bez osnove:
 1. **"Nabava izuzeta od primjene ZJN" ispod praga.** To je uobičajeno jer se ispod praga ZJN ne primjenjuje. Popravljeno pravilima 12–14 u v3.
 2. **Isplata veća od ugovorene vrijednosti za točno 25 %.** To je PDV, jer kontekst nije imao vrijednost s PDV-om. Popravljeno poljem `ugovor.vrijednost_s_pdv_eur`.
+
+**Sa Sudreg podacima (05.11.):** 9 od 13 oznaka sada se temelji na neskladu registrirane djelatnosti (NKD) i predmeta. Dio njih je slab signal: glavna djelatnost iz registra ne ograničava druge djelatnosti tvrtke (npr. IT konzultant isporučuje kućišta za kamere). Model to navodi u legitimnim objašnjenjima, ali oznaka ostaje "vrijedi provjeriti". Bez ručnih oznaka nije poznato koliko je tih oznaka korisno; to je prvo pitanje za ručni pregled.
 
 Kappa prema pravilima mjeri podudaranje, ne točnost. AI namjerno traži signale koje pravila ne mjere (prompt, pravilo 8), pa visoka kappa nije cilj.
 

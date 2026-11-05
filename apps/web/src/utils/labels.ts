@@ -68,6 +68,11 @@ export const evidenceStrengthHints: Record<RuleCode, Record<EvidenceStrength, st
         srednja: "Isti dobavljač i CPV3 u vremenskom prozoru; uvjeti za jaku pouzdanost nisu svi ispunjeni.",
         slaba: "Podudara se samo CPV odjeljak (prve 2 znamenke), uz različite podskupine. Predmeti mogu biti različiti.",
     },
+    B_YOUNG_COMPANY: {
+        jaka: "Datum osnivanja iz Sudskog registra izravno podupire obrazac.",
+        srednja: "Datum osnivanja je iz Sudskog registra; mlada tvrtka može imati prethodnika ili iskusne osnivače.",
+        slaba: "Podaci iz registra su nepotpuni.",
+    },
     C_CONCENTRATION: {
         jaka: "U odabranom CPV odjeljku i razdoblju ima najmanje 15 ugovora.",
         srednja: "Obrazac se temelji na manjem broju ugovora (manje od 15) u odjeljku i razdoblju.",
@@ -138,6 +143,7 @@ export const ruleOptions: {short: string; code: RuleCode; label: string}[] = [
     {short: "D2", code: "D_OVERPAYMENT", label: "Isplata iznad ugovorenog"},
     {short: "F", code: "F_SPLITTING", label: "Moguće cjepkanje"},
     {short: "C", code: "C_CONCENTRATION", label: "Koncentracija dobavljača"},
+    {short: "B", code: "B_YOUNG_COMPANY", label: "Nedavno osnovana tvrtka"},
 ];
 
 export const magnitudeBandOptions: {value: MagnitudeBand; label: string}[] = [
