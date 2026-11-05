@@ -1,0 +1,22 @@
+{
+  "oznaka": "vrijedi_provjeriti",
+  "razlozi": [
+    {
+      "tvrdnja": "Iznos ugovora je velik u odnosu na opisani predmet, što vrijedi provjeriti.",
+      "polja": [
+        "ugovor.predmet",
+        "ugovor.vrijednost_eur"
+      ],
+      "izvori": [
+        "{{ugovor.izvor_url}}"
+      ]
+    }
+  ],
+  "nedostajuci_podaci": [
+    "broj zaprimljenih ponuda"
+  ],
+  "moguca_legitimna_objasnjenja": [
+    "Predmet može obuhvaćati više povezanih radova koji su opisani u dokumentaciji nabave."
+  ],
+  "pouzdanost": "srednja"
+}

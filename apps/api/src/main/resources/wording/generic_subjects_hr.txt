@@ -1,0 +1,17 @@
+# Generic contract subjects for the AI candidate selection (docs/ANOMALY_DETECTION.md §4.1: "nejasan predmet").
+# One phrase per line, matched case-insensitively as a substring of the subject. A subject shorter than
+# javniradar.ai.selection.min-subject-words also counts as vague. Lines starting with # are comments.
+usluge savjetovanja
+savjetodavne usluge
+konzultantske usluge
+intelektualne usluge
+ostale usluge
+razne usluge
+razni radovi
+ostali radovi
+dodatni radovi
+nepredviđeni radovi
+razni materijal
+ostali materijal
+ostala roba
+razna roba

@@ -5,6 +5,7 @@ import {useContract} from "@/hooks";
 import {buyerPath, routes} from "@/routes";
 import type {ContractDetail} from "@/types";
 import {buyerTypeLabels, formatDate, qualityFlagLabel, subjectTypeLabels} from "@/utils";
+import {AiAssessmentBlock} from "./AiAssessmentBlock.tsx";
 import {ProvenanceBlock} from "./ProvenanceBlock.tsx";
 import {ValuesTable} from "./ValuesTable.tsx";
 import styles from "./ContractPage.module.css";
@@ -53,11 +54,6 @@ const Indicators = ({contract}: {contract: ContractDetail}) => (
             </p>
         )}
         {contract.indicators.map((indicator) => <IndicatorCard key={indicator.id} indicator={indicator} inContract/>)}
-        {contract.supplier?.nameHidden && (
-            <p className={styles.muted}>
-                AI procjena se ne radi za ugovore s obrtima, jer naziv obrta najčešće sadrži ime vlasnika.
-            </p>
-        )}
     </section>
 );
 
@@ -88,6 +84,7 @@ const ContractView = ({contract}: {contract: ContractDetail}) => {
                 <div className={styles.mainColumn}>
                     <Indicators contract={contract}/>
                     <ContractFacts contract={contract}/>
+                    <AiAssessmentBlock contract={contract}/>
                 </div>
                 <div className={styles.sideColumn}>
                     <ValuesTable values={contract.values}/>

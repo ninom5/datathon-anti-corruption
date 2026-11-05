@@ -17,8 +17,8 @@ public final class OrganizationClassifier {
     private static final Pattern VOWEL = Pattern.compile("[AEIOUaeiou]");
     private static final List<String> FOREIGN_FORMS = List.of(" gmbh", " ltd", " inc", " s.p.a", " s.r.l", " kft", " sp. z o.o", " ag", " bv", " llc");
     /** Personal businesses whose registered name contains the owner's name. */
-    private static final List<String> CRAFT_WORDS = List.of("obrt", " vl.", " vl ", "opg ", "o.p.g", "obiteljsko poljoprivredno", "odvjetni",
-            "ured ovlašten", "ured ovlasten");
+    private static final List<String> CRAFT_WORDS = List.of("obrt", " vl.", " vl ", ",vl.", ",vl ", "opg ", "o.p.g",
+            "obiteljsko poljoprivredno", "odvjetni", "ured ovlašten", "ured ovlasten", "ured ovl.", " član ", " clan ");
     private static final List<String> INSTITUTION_WORDS = List.of(
             "grad", "općina", "opcina", "županij", "zupanij", "zavod", "ustanova", "društvo", "drustvo", "centar", "dom ",
             "škola", "skola", "vrtić", "vrtic", "klub", "savez", "udruga", "zadruga", "agencija", "fond", "institut",

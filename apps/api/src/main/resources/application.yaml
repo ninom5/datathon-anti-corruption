@@ -24,3 +24,33 @@ javniradar:
   ingest:
     cache-dir: ${INGEST_CACHE_DIR:./data/cache}
     query: registar ugovora
+  # AI assessment (docs/ANOMALY_DETECTION.md §4). Without ANTHROPIC_API_KEY the app and the rules run as usual and
+  # an AI run answers "AI nije konfiguriran". The selection heuristics are in config/thresholds.yaml (javniradar.ai.selection).
+  ai:
+    model: ${AI_MODEL:claude-haiku-5-5}
+    recheck-model: ${AI_RECHECK_MODEL:claude-sonnet-5-5}
+    effort: ${AI_EFFORT:medium}
+    max-tokens: ${AI_MAX_TOKENS:8000}
+    max-usd-per-run: ${AI_MAX_USD_PER_RUN:2.0}
+    max-calls-per-run: ${AI_MAX_CALLS_PER_RUN:300}
+    # Parallel model calls; the budget can be overshot by at most this many calls.
+    concurrency: 4
+    # USD per million tokens. Source: skill claude-api, "Current Models" table (cached 2026-10-06), Anthropic
+    # first-party rates; Haiku 5.5 price is for prompts up to 100K tokens. Check before a large run.
+    prices:
+      claude-haiku-5-5: { input: 0.10, output: 0.50 }
+      claude-sonnet-5-5: { input: 2.00, output: 10.00 }
+  # Sudski registar (docs/DATA_SOURCES.md §7). Without credentials NKD and founding date stay "nedostupno".
+  sudreg:
+    base-url: https://sudreg-data.gov.hr
+    client-id: ${SUDREG_CLIENT_ID:}
+    client-secret: ${SUDREG_CLIENT_SECRET:}
+    # At most one request per second, as for every other source (PoliteHttpClient).
+    min-interval-millis: 1000
+  anthropic:
+    api-key: ${ANTHROPIC_API_KEY:}
+    base-url: ${ANTHROPIC_BASE_URL:https://api.anthropic.com}
+    connect-timeout-seconds: 5
+    read-timeout-seconds: 90
+    # One retry for 429/5xx; after that the contract stays without an assessment and the run goes on.
+    max-retries: 1

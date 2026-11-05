@@ -28,19 +28,20 @@ public class MagnitudeBands {
             case OverpaymentRule.RULE_CODE -> bands.overpayment();
             case SplittingRule.RULE_CODE -> bands.splitting();
             case ConcentrationRule.RULE_CODE -> bands.concentration();
+            case YoungCompanyRule.RULE_CODE -> bands.youngCompany();
             default -> null;
         });
     }
 
     private static MagnitudeBand classify(Band band, BigDecimal magnitude) {
-        if (reaches(magnitude, band.highFrom(), band.strict())) {
+        if (reaches(magnitude, band.highFrom(), band)) {
             return MagnitudeBand.HIGH;
         }
-        return reaches(magnitude, band.mediumFrom(), band.strict()) ? MagnitudeBand.MEDIUM : MagnitudeBand.LOW;
+        return reaches(magnitude, band.mediumFrom(), band) ? MagnitudeBand.MEDIUM : MagnitudeBand.LOW;
     }
 
-    private static boolean reaches(BigDecimal value, BigDecimal bound, boolean isStrict) {
-        int comparison = value.compareTo(bound);
-        return isStrict ? comparison > 0 : comparison >= 0;
+    private static boolean reaches(BigDecimal value, BigDecimal bound, Band band) {
+        int comparison = band.descending() ? bound.compareTo(value) : value.compareTo(bound);
+        return band.strict() ? comparison > 0 : comparison >= 0;
     }
 }

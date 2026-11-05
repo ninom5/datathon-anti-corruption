@@ -7,6 +7,8 @@ import com.datathon.api.ingest.IngestRunRepository;
 import com.datathon.api.ingest.RegisterImporter;
 import com.datathon.api.ingest.SheetReader;
 import com.datathon.api.ingest.SheetReader.SheetData;
+import com.datathon.api.organization.CompanySnapshot;
+import com.datathon.api.organization.CompanySnapshotRepository;
 import com.datathon.api.organization.OrganizationRepository;
 import com.datathon.api.rules.RulesService;
 import com.datathon.api.source.FormatClass;
@@ -21,6 +23,7 @@ import java.io.UncheckedIOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,6 +57,14 @@ public class SyntheticRegisterLoader {
             "00000000033", "[{\"oib\": \"00000000003\", \"naziv\": \"Općina Uzorkovo\"}]",
             "00000000043", "[{\"oib\": \"00000000004\", \"naziv\": \"Općina Probnik\"}]");
 
+    /**
+     * Synthetic stand-in for a Sudreg snapshot (docs/ANOMALY_DETECTION.md §B): a fictional company "founded" 51 days
+     * before its 200.000 EUR contract, so rule B has a demo case. Source "fixture", never mixed with real snapshots.
+     */
+    static final String SYNTHETIC_YOUNG_COMPANY_OIB = "00000000054";
+    private static final LocalDate SYNTHETIC_YOUNG_COMPANY_FOUNDED = LocalDate.of(2024, 3, 15);
+
+    private final CompanySnapshotRepository snapshotRepository;
     private final SourceDatasetRepository datasetRepository;
     private final SourceFileRepository fileRepository;
     private final RawRecordRepository rawRecordRepository;
@@ -75,6 +86,7 @@ public class SyntheticRegisterLoader {
             stats.put("import", importFile(readWorkbook(xlsx), xlsx.length, sha256));
         }
         SYNTHETIC_FOUNDERS.forEach(organizationRepository::setSyntheticFounders);
+        addSyntheticCompanySnapshot();
         stats.put("indicatorsByRule", rulesService.runRules());
         log.info("Synthetic register: {}", stats);
         return stats;
@@ -139,5 +151,21 @@ public class SyntheticRegisterLoader {
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private void addSyntheticCompanySnapshot() {
+        organizationRepository.findByOib(SYNTHETIC_YOUNG_COMPANY_OIB)
+                .filter(organization -> organization.isSynthetic()
+                        && snapshotRepository.findLatest(organization.getId()).isEmpty())
+                .ifPresent(organization -> {
+                    CompanySnapshot snapshot = new CompanySnapshot(organization, CompanySnapshot.SOURCE_FIXTURE,
+                            Instant.now());
+                    snapshot.setFoundedOn(SYNTHETIC_YOUNG_COMPANY_FOUNDED);
+                    snapshot.setLegalForm("d.o.o.");
+                    snapshot.setMainNkd("41.00.0");
+                    snapshot.setMainNkdName("Građenje stambenih i nestambenih zgrada");
+                    snapshot.setNkdVersion("SINTETIČKI PODACI ZA DEMONSTRACIJU");
+                    snapshotRepository.save(snapshot);
+                });
     }
 }

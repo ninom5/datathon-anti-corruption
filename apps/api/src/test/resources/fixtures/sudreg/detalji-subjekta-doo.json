@@ -1,0 +1,34 @@
+{
+  "mbs": 110103693,
+  "potpuni_mbs": "110103693",
+  "oib": 52860656310,
+  "status": 1,
+  "datum_osnivanja": "2020-12-09T00:00:00",
+  "tvrtka": {
+    "ime": "CONSTRUCTA TERRA d.o.o. za građevinarstvo i usluge",
+    "naznaka_imena": "CONSTRUCTA TERRA"
+  },
+  "pravni_oblik": {
+    "vrsta_pravnog_oblika": {
+      "sifra": 5,
+      "naziv": "društvo s ograničenom odgovornošću",
+      "kratica": "d.o.o."
+    }
+  },
+  "pretezita_djelatnost": {
+    "nacionalna_klasifikacija_djelatnosti": {
+      "sifra": "41.00.0",
+      "puni_naziv": "Građenje stambenih i nestambenih zgrada",
+      "verzija": "NKD 2025"
+    }
+  },
+  "postupak": {
+    "postupak": {
+      "znacenje": "Bez postupka"
+    }
+  },
+  "stecajna_masa": 0,
+  "likvidacijska_masa": 0,
+  "glavna_djelatnost": null,
+  "_napomena": "Skraceni stvarni odgovor /api/javni/detalji_subjekta (2026-11-04), bez e-mail adresa, sjedista i promjena."
+}
