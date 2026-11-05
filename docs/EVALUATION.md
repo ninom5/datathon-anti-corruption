@@ -87,3 +87,41 @@ Jedan poziv stoji oko 0,0011–0,0016 USD. Svih 2.212 stvarnih ugovora koji ispu
 ## 4. Što slijedi
 - Dva člana tima upisuju oznake u `work/eval/real-sample-seed44.csv`. Zatim `POST /api/admin/ai/eval/real` (CSV u tijelu zahtjeva) računa metrike iz §4.6 i one se upisuju ovdje.
 - Kad se spoji Sudreg (#46), NKD i datum osnivanja postaju stvarni podaci. Tada se ponavljaju obje evaluacije.
+
+## 5. Usporedba s nalazima Državnog ureda za reviziju
+
+_Datum: 2026-11-05. Vanjska provjera pravila, ne AI-ja. Sirovi zapis (jedan redak po nalazu, poveznica, stranica, citat, `contract_id`) je u `work/eval/dur-nalazi.csv`. Izvor i način dohvata su u `docs/DATA_SOURCES.md` §14._
+
+**Pitanje:** jesu li pravila D, F, C i B označila ugovore koje je Državni ured za reviziju (DUR) u svojim izvješćima opisao kao propuste u javnoj nabavi?
+
+**Postupak:**
+1. Iz DUR-ovih popisa izvješća za godine objave 2019.–2026. izvađeno je 1.816 PDF poveznica. Ručno su probrana izvješća za naših 38 naručitelja.
+2. Preuzeto je i pročitano 17 izvješća (financijske revizije i jedna revizija usklađenosti) čija revidirana godina je mogla pasti u naše godine. **Revidirana godina preklapa se s našim ugovorima u 8 izvješća**: Čakovec 2018. (samo 3 ugovora), Lepoglava 2019., Rugvica 2019., Korčula 2021., Čavle 2021., HERA 2021.–2022., Kloštar Ivanić 2024. i Stankovci 2024.
+3. U tih 8 izvješća pročitani su odjeljci "Javna nabava" i svi nalozi DUR-a, a svaki nalaz o nabavi uparen je s bazom: naručitelj, godina, predmet, iznos (kune preračunate po 7,5345) i dobavljač.
+4. Pragovi i pravila nisu mijenjani.
+
+**Rezultat (16 nalaza o nabavi u 8 izvješća):**
+
+| Kategorija | Broj | Što znači |
+|---|---|---|
+| pogodak | **1** | nalaz je u bazi i odgovarajuće pravilo ga je označilo |
+| promašaj | 0 | nalaz je u bazi, a pravilo koje ga mjeri nije ga označilo |
+| nema podataka | 7 | ugovor nije u registru ili nedostaje polje koje pravilo treba |
+| izvan opsega | 8 | vrstu nalaza nijedno pravilo ne mjeri (plan nabave, broj ponuda, opći akti, procijenjena vrijednost) |
+
+**Primjeri:**
+- **Pogodak, pravilo F (Kloštar Ivanić, 2024.).** DUR je u nalazu naveo da je Općina opremu za četiri dječja igrališta nabavila u četiri postupka jednostavne nabave te da je "umjesto četiri postupka jednostavne nabave trebala planirati i provesti odgovarajući postupak javne nabave" ([izvješće, str. 36–37](https://www.revizija.hr/UserDocsImages/izvjesca-novo/Revizije%20-%202025/IZVJESCA_%20O_OBAVLJENIM_REVIZIJAMA/FIN_REVIZIJE/LOKALNE_JEDINICE/OPCINE/KLOSTAR%20IVANIC.pdf)). DUR navodi ukupno 121.075,25 € s PDV-om, a u bazi isplate za ta četiri ugovora iznose 121.075,26 €. Pravilo F označilo je tri ugovora s istim dobavljačem (1335, 1333, 1328; zbroj 2,83 × prag, snaga dokaza "jaka"). Četvrti ugovor (1338, drugi dobavljač) nije u skupini, jer F grupira po paru naručitelj–dobavljač, a DUR je zbrojio istovrsnu robu bez obzira na dobavljača.
+- **Nema podataka (Čavle, 2021.).** DUR je u nalazu naveo da je rekonstrukcija zgrade za pomoć starijim osobama ugovorena jednostavnom nabavom za 592.070 kn, iznad praga za radove, a izvedena je za 646.507 kn ([izvješće, str. 42](https://www.revizija.hr/UserDocsImages/izvjesca-novo/Revizije%20-%202023/IZVJESCA_%20O_OBAVLJENIM_REVIZIJAMA/FINANCIJSKE_REVIZIJE/LOKALNE_JEDINICE/OPCINE/CAVLE.pdf)). Ugovor nije u našoj bazi. DUR na istoj stranici navodi da registar EOJN-a za 2021. ne sadrži 50 postupaka jednostavne nabave, pa za Čavle 2021. imamo samo 3 ugovora.
+- **Izvan opsega (HERA, 2021.–2022.).** DUR je naveo osam ugovora jednostavne nabave sklopljenih s jednom ponudom na temelju ranijih ugovora ([izvješće, str. 51](https://www.revizija.hr/UserDocsImages/izvjesca-novo/Revizije%20-%202023/IZVJESCA_%20O_OBAVLJENIM_REVIZIJAMA/REVIZIJE_USKLADJENOSTI/PRORA%C4%8CUNSKI%20KORISNIK%20DP/HRVATSKA%20ENERGETSKA%20REGULATORNA%20AGENCIJA.pdf)). Svih osam je u bazi, ali broj ponuda u podacima ne postoji, pa ih nijedno pravilo nije označilo.
+
+**Što se iz ovoga smije zaključiti:**
+- Jedan pogodak je **pojedinačni primjer, a ne mjera odziva**. Uzorak usporedivih nalaza je premalen za postotke, pa se nijedan postotak ne navodi.
+- Najčešći razlog neslaganja nije prag pravila nego **pokrivenost registra**: 7 od 16 nalaza opisuje nabavu koja u registru ne postoji (narudžbenice, jednostavna nabava neupisana u EOJN, radovi bez ugovora). DUR time neovisno potvrđuje ograničenje koje navodimo u `DATA_SOURCES.md`: registar ugovora ne pokriva svu nabavu.
+- Nijedan nalaz nije pokazao da je neko pravilo propustilo slučaj koji mjeri (0 promašaja). To je slaba tvrdnja zbog malog broja nalaza.
+- AI procjena nije uspoređena: nijedan od 19 uparenih ugovora nema zapis u `ai_assessment`.
+
+**Pokrivenost:**
+- **Izvješće postoji, ali revidirana godina nije u našim podacima (9):** Cernik (2019.), Zaprešić (2020.), Zlatar (2021.), Blato (2022.), Osijek (2022.), Gornja Stubica (2024.), Biskupija (2024.), Čakovec (2024.) i Jarmina (2024.). Nalazi iz tih izvješća nisu uspoređivani.
+- **Izvješće je objavljeno prije naše prve godine (nije preuzeto):** Bjelovar, Bjelovarsko-bilogorska županija, Osijek i Hlebine (2019.); Domašinec i Kravarsko (2020.); Čađavica i Civljane (2021.); Dragalić i Štrigova (2022.); Koprivničko-križevačka županija (2024.).
+- **Na popisima 2019.–2026. nema financijske revizije:** Ivanec, Rovinj, Makarska, Varaždinske Toplice, Bistra, Sveti Filip i Jakov, Ozalj, Mikleuš, Posedarje, Funtana, Lasinja i dječji vrtić Selnički zvončići. Za neke od njih postoje izvješća o njihovim trgovačkim društvima ili ustanovama, ali ona nisu o istom naručitelju.
+- Provjere provedbe naloga i tematske revizije učinkovitosti (skloništa, poslovni prostori, komunalna infrastruktura) nisu čitane, jer nisu o nabavi naših ugovora.

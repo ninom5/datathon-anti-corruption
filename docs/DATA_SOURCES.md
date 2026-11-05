@@ -406,3 +406,19 @@ Napomena: CKAN upiti s dijakriticima (`š`, `ž`) povremeno vraćaju prazan odgo
 | Sudski registar (ako stigne ključ) | Ministarstvo pravosuđa | https://sudreg-data.gov.hr |
 | ZJN, Pravilnik NN 86/2026 (pravila, ne podaci) | NN | https://narodne-novine.nn.hr |
 | Granice JLS (karta), izvedeno iz OpenStreetMapa | geoBoundaries / OSM suradnici | https://www.geoboundaries.org (HRV ADM2, gbOpen) |
+| Izvješća o obavljenim revizijama (samo vanjska evaluacija, ne uvozi se u bazu) | Državni ured za reviziju | https://www.revizija.hr/izvjesca/10 |
+
+## Provjera velikih gradova (2026-11-05, #46)
+- **Split:** na data.gov.hr nema registra ugovora (CKAN pretraga "split ugovor", "split nabava": 0; "grad split": poslovni prostori, kakvoća zraka, isplate "Otvoreni grad" u HTML-u). Nije u pokrivenosti.
+- **Zagreb:** registri ugovora 2014.–2016. (`data.zagreb.hr`) vraćaju **HTTP 403** (ne zaobilazi se); datoteke klase C su ugovori o **zakupu poslovnih prostora**, ne nabava. Aktualnog registra nabave na Portalu nema.
+- **Rijeka:** skup "Registri javne i jednostavne nabave" (ažuriran 09.10.2026.) ima tri datoteke: registar JN i OS sa sadržajem iz 2017. (kune), "ispod zakonskog praga" iz 2016. i "jednostavna nabava do 2.650 €" 2018.–16.05.2026. (741 redak, **bez OIB-a dobavljača**). Aktualni registri ("eojn-novi/eojn-stari objava 31.01.2026") vraćaju **HTTP 404**. Rijekin `robots.txt` zabranjuje `/api/` i traži Crawl-Delay 10; 05.11. je greškom poslan jedan zahtjev na `/api/3/action/package_show` (više se ne koristi).
+- **Zaključak:** dodavanje Zagreba, Rijeke ili Splita prije feature freezea nije izvedivo iz otvorenih izvora. Nedostatak strojno čitljivog registra velikih gradova na Portalu je nalaz za preporuku MPUDT-u.
+
+## 14. Državni ured za reviziju (revizija.hr), provjereno 2026-11-05
+- **Namjena:** samo vanjska validacija pravila (`docs/EVALUATION.md` §5, `work/eval/dur-nalazi.csv`). Izvješća se ne uvoze u bazu i nisu u UI-ju.
+- **robots.txt:** `https://www.revizija.hr/robots.txt` vraća **HTTP 404**, dakle datoteka ne postoji. Po RFC 9309 to znači da nema ograničenja. Svejedno je korišteno najviše 1 zahtjev u ~1,2 s, redom, bez prijave i bez zaobilaženja.
+- **Popis izvješća:** `https://www.revizija.hr/izvjesca/10?t=1&godinaID=<id>&page=<n>` je HTML sa po 40 PDF poveznica. Godina se bira ID-om iz padajućeg izbornika (filtar je JS, ali URL radi bez JS-a): 2026 = 3164, 2025 = 3035, 2024 = 2901, 2023 = 2810, 2022 = 2686, 2021 = 1465, 2020 = 1275, 2019 = 1276. Za 2019.–2026. ukupno su 52 stranice popisa i 1.816 PDF-ova.
+- **PDF-ovi:** `https://www.revizija.hr/UserDocsImages/izvjesca-novo/Revizije - <godina>/...`. Poveznice na popisu imaju obrnute kose crte (`\`); u URL-u se zamjenjuju s `/` i kodiraju (razmaci, dijakritici). Tekst se izvlači s `pdftotext -enc UTF-8 -layout`; bez `-enc UTF-8` gube se dijakritici.
+- **Godina:** godina objave nije revidirana godina. Izvješće iz godine N obično revidira N−1, a ponekad N−2 (npr. Čavle 2023. → 2021.). Revidirana godina čita se s naslovnice ("… za 2021.").
+- **Pokrivenost za naše naručitelje:** financijske revizije JLS rade se rotacijski, pa za veći dio naših JLS u godinama koje imamo izvješća nema (popis u `EVALUATION.md` §5).
+- **Licenca:** na dohvaćenim stranicama nije navedena. Koristimo samo poveznice, broj stranice i citate do 15 riječi.

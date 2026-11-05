@@ -186,3 +186,11 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - Posljedica: preciznost, odziv i stopa lažno pozitivnih **na stvarnim ugovorima ostaju neizmjereni**. U videu, README-u i na stranici Metodologija smiju se navoditi samo izmjerene brojke iz `docs/EVALUATION.md` (sintetika 40 slučajeva, udio oznaka na uzorku, kappa prema pravilima), uz napomenu da ručna validacija stvarnih ugovora nije napravljena.
 - Pun AI run svih 2.212 ugovora i dalje čeka (nakon validacije ili odluke tima).
 
+
+## 2026-11-05: Usporedba s nalazima DUR-a (vanjska validacija), otvorena pitanja
+- **Rezultat:** 16 nalaza o nabavi u 8 izvješća: 1 pogodak (F, Kloštar Ivanić 2024.), 0 promašaja, 7 nema podataka, 8 izvan opsega. Detalji u `docs/EVALUATION.md` §5. Pragovi i pravila **nisu mijenjani**.
+- **Odluka (prema promptu):** s jednim pogotkom usporedba ide u Metodologiju i README, a **ne u video kao dokaz točnosti**. Primjer Kloštar Ivanića smije se navesti kao pojedinačni slučaj s poveznicom, bez postotaka.
+- **Otvoreno pitanje 1 (F):** DUR je zbrajao istovrsnu robu bez obzira na dobavljača; F grupira po paru naručitelj–dobavljač, pa je propustio 4. ugovor. Varijanta "isti naručitelj + CPV3 + 60 dana, svi dobavljači" bila bi bliža čl. 16. ZJN, ali vjerojatno daje više lažno pozitivnih. Ne raditi prije feature freezea bez mjerenja na sintetici.
+- **Otvoreno pitanje 2 (novo pravilo):** "jednostavna nabava" ili "izuzeta od ZJN" s vrijednošću ≥ prag ZJN na dan sklapanja (DUR: Čavle 2021.; AI je isto primijetio za Bistru, ugovor 5007). Pravilo je jednostavno, deterministički provjerljivo i izravno odgovara DUR-ovim nalogima. Najbolji kandidat ako ostane vremena.
+- **Otvoreno pitanje 3 (C):** ponavljanje istog dobavljača jednostavnom nabavom kroz više godina (DUR: HERA 2021.–2022.) pravilo C ne vidi, jer mjeri udio u godini. Za sada samo zapisano.
+- **Za kasnije (ne sada):** poveznica "Nalaz DUR-a" uz indikator kad postoji upareni nalaz (ručno održavana tablica). Nije nova značajka za ovaj rok.

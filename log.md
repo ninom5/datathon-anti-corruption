@@ -164,3 +164,10 @@
 - Pravilo B na stvarnim podacima: 0 indikatora (31 mlada tvrtka, svi ugovori < 50.000 €); sintetički demo 1.
 - AI stvarni uzorak sa Sudregom: 13/60 oznaka (9 na neskladu NKD-a), kappa prema pravilima 0,057, 0,069 USD. Upisano u `EVALUATION.md`.
 
+
+## 2026-11-05 – Validacija pravila prema nalazima DUR-a (grana `validacija-dur`)
+- robots.txt na revizija.hr vraća 404. Dohvaćene su 52 stranice popisa izvješća za 2019.–2026. (1.816 PDF-ova), redom i uz ~1,2 s razmaka, te 17 izvješća za naše naručitelje.
+- Revidirana godina preklapa se s našim ugovorima u 8 izvješća, koja daju 16 nalaza o nabavi: 1 pogodak, 0 promašaja, 7 nema podataka, 8 izvan opsega. Upisano u `work/eval/dur-nalazi.csv`, `docs/EVALUATION.md` §5, `docs/DATA_SOURCES.md` §14 i `work/decisions.md`.
+- Pogodak: Kloštar Ivanić 2024., četiri ugovora za dječja igrališta. DUR traži javnu nabavu umjesto četiri jednostavne, a pravilo F (indikator 3538) označilo je tri ugovora s istim dobavljačem. Iznos se slaže na cent (121.075,25 € prema DUR-u, 121.075,26 € u bazi).
+- Glavni zaključak: neslaganje je najčešće zbog pokrivenosti registra (narudžbenice i jednostavna nabava koja nije u EOJN-u), a ne zbog pragova.
+- Bez plaćenih LLM poziva, bez promjena pravila, koda i baze.
