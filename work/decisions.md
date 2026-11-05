@@ -181,3 +181,8 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **GDPR prikaz (05.11.): naziv dobavljača tipa `ostalo`/`nepoznato` skriva se, osim ako je očito institucija** (zavod, ustanova, zadruga, muzej, institut, centar…) **ili ima JPT oznaku** (`OrganizationRef.isNameHidden`, isto u tekstovima pravila). Zašto: u 107 takvih naziva bilo je najmanje 10 osoba ("TERMODOR, DRAGUTIN KRIZMANIĆ", "Dr. Neven Martinović", "Ante Vojvodić AT CORNER"…), a heuristike za imena ne hvataju sve. Cijena: desetak tvrtki (npr. "Bauhaus") prikazuje se kao "Naziv skriven (moguć obrt ili osoba)", uz OIB i poveznicu na izvor. Klasifikator dodatno prepoznaje ",vl.", "član …" i "Ured ovl." kao obrt (vrijedi za nove uvoze; prikaz radi i bez ponovnog uvoza).
 - **Pravilo B (`B_YOUNG_COMPANY`) uvedeno 05.11.** na Sudreg snimkama; detalji u `ANOMALY_DETECTION.md` §B (Implementacija). Pojas je jedina skala (≤ 60 / ≤ 120 / > 120 dana), bez posebne razine "viša pozornost".
 
+## 2026-11-05: #44 se spaja bez ručne validacije (korisnik)
+- Korisnik: ručno označavanje 60 stvarnih ugovora je preveliko za sada; grana se spaja, validacija kasnije.
+- Posljedica: preciznost, odziv i stopa lažno pozitivnih **na stvarnim ugovorima ostaju neizmjereni**. U videu, README-u i na stranici Metodologija smiju se navoditi samo izmjerene brojke iz `docs/EVALUATION.md` (sintetika 40 slučajeva, udio oznaka na uzorku, kappa prema pravilima), uz napomenu da ručna validacija stvarnih ugovora nije napravljena.
+- Pun AI run svih 2.212 ugovora i dalje čeka (nakon validacije ili odluke tima).
+
