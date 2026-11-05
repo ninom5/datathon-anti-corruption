@@ -34,7 +34,9 @@ public class CompanyRegisterService {
     private final OrganizationRepository organizationRepository;
     private final TransactionTemplate transactionTemplate;
     private final JsonMapper jsonMapper;
-    private final ExecutorService worker = Executors.newSingleThreadExecutor();
+    /** Daemon thread: an unfinished lookup must never keep the JVM (or a test run) from exiting. */
+    private final ExecutorService worker = Executors.newSingleThreadExecutor(
+            Thread.ofPlatform().name("sudreg-lookup").daemon().factory());
     private final AtomicReference<RunStatus> current = new AtomicReference<>(RunStatus.idle());
 
     /**

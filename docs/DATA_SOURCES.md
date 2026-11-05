@@ -306,7 +306,7 @@ Ovo je **pravi API**, što podiže bodove za kriterij "Upotreba otvorenih podata
 **Provjera s ključem (2026-11-04, korisnikov `SUDREG_CLIENT_ID/SECRET`) [VERIFICIRANO]:**
 - `POST /api/oauth/token` (Basic auth, `grant_type=client_credentials`) → HTTP 200, `token_type: bearer`, `expires_in: 21600` (6 h).
 - `GET /api/javni/detalji_subjekta?tip_identifikatora=oib&identifikator=52860656310&expand_relations=true` → HTTP 200. Ključevi odgovora: `oib, mbs, status, datum_osnivanja` (`"2020-12-09T00:00:00"`), `tvrtka.ime`, `pravni_oblik.vrsta_pravnog_oblika.kratica`, `pretezita_djelatnost.nacionalna_klasifikacija_djelatnosti {sifra: "41.00.0", puni_naziv, verzija: "NKD 2025"}`, `postupak.postupak.znacenje` ("Bez postupka"), `stecajna_masa`, `likvidacijska_masa`, `datum_brisanja` u `/subjekti`, `vrijeme_zadnje_izmjene`.
-- **`glavna_djelatnost` je `null`; NKD je u `pretezita_djelatnost`** (NKD 2025, šifra s podrazredom `41.00.0`). `RestSudregClient` iz `Desktop/datathon` čita `glavna_djelatnost`, pa se ne preuzima bez te izmjene.
+- **Djelatnost dolazi u dva oblika** (provjera 2026-11-05 na 6 tvrtki): novije tvrtke imaju `pretezita_djelatnost.nacionalna_klasifikacija_djelatnosti` (NKD 2025, šifra s podrazredom `41.00.0` i naziv) uz `glavna_djelatnost: null`; starije imaju samo broj `glavna_djelatnost` (npr. `6312` = 63.12), bez naziva i verzije, a `pretezita_djelatnost` je `null`. JavniRadar čita oba; za stari oblik verzija klasifikacije nije poznata i ne pretpostavlja se. `RestSudregClient` iz `Desktop/datathon` čita samo `glavna_djelatnost`.
 
 **Praznina:** obrti i fizičke osobe **nisu** u Sudskom registru. Obrtni registar nema provjeren otvoren API [NEVERIFICIRANO].
 

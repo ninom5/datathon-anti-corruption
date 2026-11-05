@@ -35,6 +35,21 @@ class SudregCompanyTest {
                 .doesNotContainKeys("email_adrese", "sjediste");
     }
 
+    /** Older entries (2026-11-05 check): no pretezita_djelatnost, only the number glavna_djelatnost. */
+    @Test
+    void olderEntryKeepsOnlyTheMainActivityCodeWithoutGuessingNameOrVersion() {
+        JsonNode answer = JsonMapper.shared().readTree("{\"oib\": 12345678901, \"glavna_djelatnost\": 6312,"
+                + " \"pretezita_djelatnost\": null, \"datum_osnivanja\": \"2016-10-11T00:00:00\"}");
+
+        SudregCompany company = SudregCompany.from(answer);
+
+        assertThat(company.nkdCode()).isEqualTo("63.12");
+        assertThat(company.nkdName()).isNull();
+        assertThat(company.nkdVersion()).isEqualTo(SudregCompany.MAIN_ACTIVITY_FIELD);
+        assertThat(SudregCompany.from(JsonMapper.shared().readTree("{\"oib\": 1, \"glavna_djelatnost\": 150}"))
+                .nkdCode()).isEqualTo("01.50");
+    }
+
     @Test
     void oibSentAsNumberKeepsItsLeadingZero() {
         JsonNode answer = JsonMapper.shared().readTree("{\"oib\": 1234567890, \"tvrtka\": {\"ime\": \"Primjer d.o.o.\"},"

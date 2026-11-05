@@ -122,7 +122,8 @@ final class AiContextBuilder {
         if (!company.foundInRegister()) {
             return "nije u Sudskom registru (provjereno " + company.retrievedOn() + ")";
         }
-        return "Sudski registar, sudreg-data.gov.hr (" + company.nkdVersion() + ", dohvaćeno " + company.retrievedOn() + ")";
+        String version = company.nkdVersion() == null ? "djelatnost nije upisana" : company.nkdVersion();
+        return "Sudski registar, sudreg-data.gov.hr (" + version + ", dohvaćeno " + company.retrievedOn() + ")";
     }
 
     /** A JLS with its population (DZS, Popis 2021) and peer group P1-P7. */
