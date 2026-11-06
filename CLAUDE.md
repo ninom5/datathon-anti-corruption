@@ -35,8 +35,8 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - nacionalni JSON izvoz je samo uzorak od 20.000 redaka;
   - EOJN OCDS postoji, ali je bez OIB-a;
   - broj ponuda nije dostupan;
-  - Sudreg vraća 401 bez ključa.
-- MVP pravila: D (izmjene/preplate), F (cjepkanje), C (koncentracija). B samo uz Sudreg ključ.
+  - Sudreg: ključ dobiven, dostupan od 05.11.
+- MVP pravila: D (izmjene/preplate), F (cjepkanje), C (koncentracija), B (mlada tvrtka, Sudreg, od 05.11.).
 - Ocjenjivanje: max 60 b. Najviše nose Izvedivost (10), UI/UX (10), video (10). Nagrada se ne dodjeljuje ispod 50 b.
 - Otvoreno:
   - stack: Java/Spring Boot POTVRĐEN 2.11.;
@@ -45,8 +45,9 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
 - #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
 - **Grana `refactor-ui` (03.11., PR #53 prema `43-karta-usporedba`):** frontend preuzima dizajn sustav OtvoreniRadara (`FESB/datathon`); vidi `DESIGN_SYSTEM.md` i `work/decisions.md`.
-- **#45 (ispravak, Metodologija): grana `45-ispravak-metodologija`, PR #54 prema `main`.** #51 i #53 spojeni u `main` 03.11. #44 (AI) radi Nino.
-- Zadnje ažurirano: 2026-11-03
+- **#44 (AI procjena) na grani `44-ai-procjena` (commitano do `wip`, 05.11.):** faze 1–4 gotove; prompt `ai-flag-v3`; rezultati u `docs/EVALUATION.md`. Tim treba ručno označiti `work/eval/real-sample-seed44.csv`. **Sudreg spojen 05.11.** (snimke dobavljača, NKD i datum osnivanja u AI kontekstu), **pravilo B** i GDPR skrivanje naziva tipa `ostalo` (necommitano). Lokalni API s ključevima na portu 8095.
+- **#45 (ispravak, Metodologija) spojen u `main` 06.11. (PR #54);** migracija feedbacka je `V6__feedback.sql`.
+- Zadnje ažurirano: 2026-11-06
 
 ## Index
 | File | Sadržaj |
@@ -74,6 +75,8 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 | `docs/UI_UX.md` | dizajn, ekrani (ASCII), pristupačnost |
 | `docs/MVP_ROADMAP.md` | plan po danima 2.–9.11., rizici, prihvatni kriteriji |
 | `docs/DEMO_SCENARIOS.md` | sintetički i stvarni demo, scenarij videa |
+| `docs/EVALUATION.md` | izmjerene metrike AI procjene (sintetika 40, stvarni uzorak 60) |
+| `work/eval/` | skup i rezultati AI evaluacije, CSV za ručne oznake + upute |
 
 ## Sigurnosna pravila organizacije
 Vrijede pravila iz organizacijskog CLAUDE.md-a (npr. ništa se ne objavljuje na javne platforme, ne pristupa se cookiejima). Podatke natjecanja i kod ne dijelimo javno bez provjere.

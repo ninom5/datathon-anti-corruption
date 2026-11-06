@@ -179,6 +179,15 @@ skip if company has predecessor (statusni postupak: pripajanje/podjela) -> show 
 
 **Vizualizacija:** vremenska crta: osnivanje → objava → ugovor.
 
+**Implementacija (#46, 2026-11-05, `YoungCompanyRule`, `B_YOUNG_COMPANY`):**
+- Ulaz je najnovija `company_snapshot` dobavljača; pragovi su u `thresholds.yaml` (`rule-b`: 180 dana, 50.000 €). Samo `doo`, `jdoo`, `dd`, `javno_tijelo`; bez snimke ili datuma osnivanja pravilo ne daje ništa.
+- Ugovor sklopljen **prije** datuma osnivanja se preskače (problem podataka, ne mlada tvrtka).
+- Veličina odstupanja je broj dana; pojas: ≤ 60 dana visok, ≤ 120 srednji, inače nizak (`bands.young-company`, `descending`). Razina "visa_pozornost_pravila" iz logike iznad nije uvedena: pojas je jedina skala, kao kod ostalih pravila; uvjet ≥ 200.000 € nije dio pojasa.
+- `data_quality` iz retka registra (kao ostala pravila), `evidence_strength` srednja, `severity` vrijedi provjeriti. Prethodnik (statusni postupci) se još ne provjerava; naveden je u "Što nedostaje".
+- Dokaz: redak registra + "Sudski registar: datum osnivanja … (dohvaćeno …)" s poveznicom na sudreg-data.gov.hr.
+- Sintetički demo: fiktivna snimka (`source = 'fixture'`) za "Velika konstrukcija d.o.o." (OIB 00000000054), osnovana 51 dan prije ugovora od 200.000 €.
+- **Stvarni podaci (05.11., 1.568 Sudreg snimki):** 0 indikatora. 31 ugovor je s tvrtkom mlađom od 180 dana, ali svi su ispod 50.000 €; uz 365 dana bio bi 1 slučaj, uz dvije godine 8. Pragovi se ne mijenjaju naknadno da bi pravilo "nešto našlo". 4 ugovora su sklopljena prije datuma osnivanja (problem podataka, preskočeni).
+
 ### Scenarij C – Ponovljene dodjele istom dobavljaču (koncentracija)
 
 **Ulaz:** naručitelj OIB, dobavljač OIB, CPV (2 znamenke), `value_eur`, datum. Sve je dostupno u klasi A.
@@ -492,8 +501,22 @@ Odgovori isključivo pozivom alata `zabiljezi_procjenu`.
   - stopa lažno pozitivnih na stvarnim neutralnim ugovorima;
   - stopa odbacivanja u validatoru;
   - podudaranje s pravilima (Cohenova kappa).
-- **Gdje se objavljuje:** stranica "Metodologija" i `docs/EVALUATION.md` (izrađuje se u izradi). **Ne objavljujemo brojke koje nismo izmjerili.**
+- **Gdje se objavljuje:** stranica "Metodologija" (#45) i `docs/EVALUATION.md`. **Ne objavljujemo brojke koje nismo izmjerili.**
 - **Povratna informacija:** gumb "Korisno / Pogrešno" na AI procjeni sprema u `feedback` (`target_type = ai_assessment`).
+
+### 4.7 Implementacija (#44, 2026-11-03)
+Razlike od §4.1–4.5, obrazloženje u `work/decisions.md` (#44):
+- **Izlaz:** strukturirani izlaz (`output_config.format`) s JSON shemom iz §4.3 (`resources/ai/ai-flag-v1.schema.json`), a ne prisilni poziv alata. `maxLength` i `minItems` provjerava validator.
+- **Prompt:** `resources/ai/ai-flag-v1.txt` sadrži tekst iz §4.5 doslovno, napomenu sustava (kako citirati putanje, tekst iz registra je podatak) i tri few-shot primjera kao potpune sintetičke JSON parove prema opisima iz §4.5. **U upotrebi je `ai-flag-v3`** (v1 i v2 ostaju u repou radi traga):
+  - v2 dodaje pravila 8–11: ne ponavljati rezultate pravila nego dodati novi signal (inače `nema_oznake`); usporedba s općinama samo uz `statistika_skupine`; podaci koji nedostaju riječima; tvrdnja do 300 znakova. Null polje smije se citirati samo kao "nije objavljeno".
+  - v3 dodaje pravila 12–14: jednostavna i izuzeta nabava ispod praga su uobičajene, stroži postupak nikad nije signal; podatak koji nedostaje nije razlog; blizina praga i srodan CPV sami po sebi nisu razlog.
+  - Razlozi promjena i izmjerene brojke su u `docs/EVALUATION.md`.
+- **Kontekst** (`AiContextBuilder`): ključ je `narucitelj` (bez dijakritike). Dodana su polja `ugovor.pocetna_vrijednost_eur`, `izmjene_eur`, `isplaceno_eur`, `okvirni_sporazum`, `eojn_url`, `vrsta_predmeta`; `dobavljac.jpt_oznaka` i `u_vlasnistvu_narucitelja` (samo `true` iz JPT-a, inače `null`); `pravila[].izvori` (URL-ovi dokaza); `ugovor.vrijednost_s_pdv_eur` (isplata u registrima uključuje PDV); `ugovor.prag_jednostavne_nabave_eur` i `prag_izvor` iz `thresholds.yaml` po datumu i vrsti predmeta (kao pravilo F). Indikator C ulazi u kontekst samo na ugovorima dobavljača kojeg imenuje (`topSupplierOib`), jer #41 veže C na sve ugovore ćelije. `nkd`, `djelatnost`, `datum_osnivanja`, `u_stecaju`, `u_likvidaciji` dolaze iz najnovije Sudreg snimke (#46), uz `izvor` s verzijom NKD-a i datumom dohvata; bez snimke su `null` i `izvor: "nedostupno"`, a za OIB kojeg nema u registru `izvor: "nije u Sudskom registru (provjereno …)"`. `statistika_skupine` je usporedba iz #43 za godinu i CPV2 ugovora, samo kad je `sufficient` (n ≥ 8), inače `null`. `izvor_url` = URL datoteke + `#` + lokator retka.
+- **Citiranje:** dopuštene su putanje svih ključeva konteksta (i onih s vrijednošću `null`, za tvrdnju "nije objavljeno"), s indeksom (`pravila[0].magnitude`) i bez njega (`pravila.magnitude`). URL-ovi su vrijednosti ključeva `izvor_url`, `eojn_url` i `izvori`.
+- **Validator, dodatno uz §4.4:** tvrdnja dulja od 300 znakova se odbacuje; zabranjena riječ u objašnjenjima ili popisu podataka koji nedostaju odbacuje cijeli odgovor (i to se prikazuje); `visoka_pozornost` s manje od dva prihvaćena razloga postaje `vrijedi_provjeriti`; tvrdnja o usporedbi s općinama ("usporedn", "usporedb", "medijan") odbacuje se kad je `statistika_skupine` null; za obrt se odbacuje i tvrdnja koja sadrži samo prezime iz naziva.
+- **Odabir:** `javniradar.ai.selection` u `thresholds.yaml`; obrti, fizičke osobe i dobavljači bez OIB-a nikad ne idu modelu. `synthetic=true` obrađuje samo sintetičke ugovore (evaluacija), `false` samo stvarne.
+- **Evaluacija:** `POST /api/admin/ai/eval/synthetic` (40 gotovih konteksta iz `resources/ai/eval/`), `GET /api/admin/ai/eval/real-sample` (CSV za ručne oznake), `POST /api/admin/ai/eval/real-sample/run`, `POST /api/admin/ai/eval/real` (metrike iz označenog CSV-a). Rezultati: `docs/EVALUATION.md`.
+- **Run:** `POST /api/admin/ai/run?limit=&synthetic=&dryRun=&contractIds=` (zadano `dryRun=true`). Do 4 paralelna poziva (`concurrency`), pa budžet može biti premašen za najviše toliko poziva. Pet neuspjelih poziva zaredom zaustavlja run.
 
 ## 4a. Pojas veličine odstupanja (`magnitude_band`, #41)
 `nizak` / `srednji` / `visok` po pravilu, granice u `thresholds.yaml` (`bands`). To je heuristika za filtre i izvješća, **nije** zbirna ocjena i ne spaja tri dimenzije.

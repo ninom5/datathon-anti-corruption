@@ -4,6 +4,7 @@ import com.datathon.api.rules.ConcentrationRule;
 import com.datathon.api.rules.OverpaymentRule;
 import com.datathon.api.rules.SplittingRule;
 import com.datathon.api.rules.ValueIncreaseRule;
+import com.datathon.api.rules.YoungCompanyRule;
 
 /** Croatian titles of the rules, as named in docs/ANOMALY_DETECTION.md. */
 public final class RuleTitles {
@@ -17,6 +18,7 @@ public final class RuleTitles {
             case OverpaymentRule.RULE_CODE -> "Isplaćeno više od ugovorenog";
             case SplittingRule.RULE_CODE -> "Više manjih ugovora s istim dobavljačem (moguće cjepkanje)";
             case ConcentrationRule.RULE_CODE -> "Ponovljene dodjele istom dobavljaču (koncentracija)";
+            case YoungCompanyRule.RULE_CODE -> "Nedavno osnovana tvrtka dobiva veći ugovor";
             default -> ruleCode;
         };
     }

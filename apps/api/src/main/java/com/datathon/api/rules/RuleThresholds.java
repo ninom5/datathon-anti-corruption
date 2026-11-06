@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties("javniradar.thresholds")
 public record RuleThresholds(List<ModificationLimits> contractModification, List<SimpleProcurement> simpleProcurement,
-                             RuleD ruleD, RuleF ruleF, RuleC ruleC, Bands bands) {
+                             RuleD ruleD, RuleF ruleF, RuleC ruleC, RuleB ruleB, Bands bands) {
 
     /** ZJN limits for contract modifications, as a share of the initial value. */
     public record ModificationLimits(LocalDate validFrom, LocalDate validTo, BigDecimal deMinimisGoodsServices,
@@ -46,12 +46,19 @@ public record RuleThresholds(List<ModificationLimits> contractModification, List
                         String source) {
     }
 
-    /** Bounds of the magnitude band per rule; a heuristic for filters, never a combined score. */
-    public record Bands(Band valueIncrease, Band overpayment, Band splitting, Band concentration) {
+    /** JavniRadar heuristics for rule B (docs/ANOMALY_DETECTION.md §B). */
+    public record RuleB(int maxAgeDays, BigDecimal minValueEur, String source) {
     }
 
-    /** {@code strict}: the value must be above the bound; otherwise at or above it. */
-    public record Band(BigDecimal mediumFrom, BigDecimal highFrom, boolean strict) {
+    /** Bounds of the magnitude band per rule; a heuristic for filters, never a combined score. */
+    public record Bands(Band valueIncrease, Band overpayment, Band splitting, Band concentration, Band youngCompany) {
+    }
+
+    /**
+     * {@code strict}: the value must be above the bound; otherwise at or above it. {@code descending}: a smaller value
+     * is a larger deviation (rule B: days since founding), so "reaching" a bound means at or below it.
+     */
+    public record Band(BigDecimal mediumFrom, BigDecimal highFrom, boolean strict, boolean descending) {
     }
 
     /** JavniRadar heuristics for rule D, not legal thresholds (docs/ANOMALY_DETECTION.md §D). */

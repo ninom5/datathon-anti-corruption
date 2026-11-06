@@ -1,0 +1,64 @@
+package com.datathon.api.integration.sudreg;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+
+/** Parsing of a real (trimmed) answer of /api/javni/detalji_subjekta, saved 2026-11-04. */
+class SudregCompanyTest {
+
+    private static JsonNode fixture() throws IOException {
+        try (InputStream in = new ClassPathResource("fixtures/sudreg/detalji-subjekta-doo.json").getInputStream()) {
+            return JsonMapper.shared().readTree(in);
+        }
+    }
+
+    @Test
+    void readsNkdFromPretezitaDjelatnostAndFoundingDate() throws IOException {
+        SudregCompany company = SudregCompany.from(fixture());
+
+        assertThat(company.oib()).isEqualTo("52860656310");
+        assertThat(company.foundedOn()).isEqualTo(LocalDate.of(2020, 12, 9));
+        assertThat(company.nkdCode()).isEqualTo("41.00.0");
+        assertThat(company.nkdName()).isEqualTo("Građenje stambenih i nestambenih zgrada");
+        assertThat(company.nkdVersion()).isEqualTo("NKD 2025");
+        assertThat(company.legalForm()).isEqualTo("d.o.o.");
+        assertThat(company.inBankruptcy()).isFalse();
+        assertThat(company.inLiquidation()).isFalse();
+        assertThat(company.reducedPayload()).containsKeys("oib", "nkd", "datum_osnivanja")
+                .doesNotContainKeys("email_adrese", "sjediste");
+    }
+
+    /** Older entries (2026-11-05 check): no pretezita_djelatnost, only the number glavna_djelatnost. */
+    @Test
+    void olderEntryKeepsOnlyTheMainActivityCodeWithoutGuessingNameOrVersion() {
+        JsonNode answer = JsonMapper.shared().readTree("{\"oib\": 12345678901, \"glavna_djelatnost\": 6312,"
+                + " \"pretezita_djelatnost\": null, \"datum_osnivanja\": \"2016-10-11T00:00:00\"}");
+
+        SudregCompany company = SudregCompany.from(answer);
+
+        assertThat(company.nkdCode()).isEqualTo("63.12");
+        assertThat(company.nkdName()).isNull();
+        assertThat(company.nkdVersion()).isEqualTo(SudregCompany.MAIN_ACTIVITY_FIELD);
+        assertThat(SudregCompany.from(JsonMapper.shared().readTree("{\"oib\": 1, \"glavna_djelatnost\": 150}"))
+                .nkdCode()).isEqualTo("01.50");
+    }
+
+    @Test
+    void oibSentAsNumberKeepsItsLeadingZero() {
+        JsonNode answer = JsonMapper.shared().readTree("{\"oib\": 1234567890, \"tvrtka\": {\"ime\": \"Primjer d.o.o.\"},"
+                + " \"postupak\": {\"postupak\": {\"znacenje\": \"Otvoren stečajni postupak\"}}}");
+
+        SudregCompany company = SudregCompany.from(answer);
+
+        assertThat(company.oib()).isEqualTo("01234567890");
+        assertThat(company.inBankruptcy()).isTrue();
+        assertThat(company.foundedOn()).isNull();
+    }
+}

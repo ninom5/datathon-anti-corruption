@@ -1,0 +1,1988 @@
+{
+ "version": "synthetic-cases-v2",
+ "note": "SINTETIČKI PODACI ZA DEMONSTRACIJU",
+ "cases": [
+  {
+   "id": "S01",
+   "scenario": "nesklad_nkd",
+   "expected": "visoka_pozornost",
+   "description": "NKD 62.01 ne odgovara predmetu; osnovan 2025-01-10",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": "2025-01-10",
+     "izvor": "fixture",
+     "jpt_oznaka": null,
+     "naziv": "Primjer IT d.o.o.",
+     "nkd": "62.01",
+     "oib": "00000000501",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45233140 - Radovi na cestama",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900001,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=3",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 86000.0,
+     "predmet": "Asfaltiranje nerazvrstanih cesta",
+     "vrijednost_eur": 86000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S02",
+   "scenario": "nesklad_nkd",
+   "expected": "vrijedi_provjeriti",
+   "description": "NKD 56.10 ne odgovara predmetu; osnovan 2016-03-02",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": "2016-03-02",
+     "izvor": "fixture",
+     "jpt_oznaka": null,
+     "naziv": "Primjer catering d.o.o.",
+     "nkd": "56.10",
+     "oib": "00000000502",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45232130 - Radovi na oborinskoj kanalizaciji",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900002,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=4",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 86000.0,
+     "predmet": "Izgradnja oborinske odvodnje",
+     "vrijednost_eur": 86000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S03",
+   "scenario": "nesklad_nkd",
+   "expected": "visoka_pozornost",
+   "description": "NKD 41.20 ne odgovara predmetu; osnovan 2024-11-20",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": "2024-11-20",
+     "izvor": "fixture",
+     "jpt_oznaka": null,
+     "naziv": "Primjer gradnja d.o.o.",
+     "nkd": "41.20",
+     "oib": "00000000503",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "22112000 - Udžbenici",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900003,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=5",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 86000.0,
+     "predmet": "Nabava školskih udžbenika",
+     "vrijednost_eur": 86000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S04",
+   "scenario": "nesklad_nkd",
+   "expected": "vrijedi_provjeriti",
+   "description": "NKD 96.02 ne odgovara predmetu; osnovan 2012-05-14",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": "2012-05-14",
+     "izvor": "fixture",
+     "jpt_oznaka": null,
+     "naziv": "Primjer frizerski salon d.o.o.",
+     "nkd": "96.02",
+     "oib": "00000000504",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "50232100 - Održavanje javne rasvjete",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900004,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=6",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 86000.0,
+     "predmet": "Održavanje javne rasvjete",
+     "vrijednost_eur": 86000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S05",
+   "scenario": "jednostavna_iznad_praga",
+   "expected": "vrijedi_provjeriti",
+   "description": "jednostavna nabava za 412000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 5 d.o.o.",
+     "nkd": null,
+     "oib": "00000000505",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "50324100 - Usluge održavanja sustava",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900005,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=7",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 412000.0,
+     "predmet": "Održavanje računalnih programa",
+     "vrijednost_eur": 412000.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S06",
+   "scenario": "jednostavna_iznad_praga",
+   "expected": "vrijedi_provjeriti",
+   "description": "jednostavna nabava za 188000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 6 d.o.o.",
+     "nkd": null,
+     "oib": "00000000506",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "34144510 - Vozila za odvoz otpada",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900006,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=8",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 188000.0,
+     "predmet": "Nabava komunalnog vozila",
+     "vrijednost_eur": 188000.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S07",
+   "scenario": "jednostavna_iznad_praga",
+   "expected": "vrijedi_provjeriti",
+   "description": "jednostavna nabava za 152000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 7 d.o.o.",
+     "nkd": null,
+     "oib": "00000000507",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45112723 - Krajobrazni radovi za igrališta",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900007,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=9",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 152000.0,
+     "predmet": "Uređenje dječjeg igrališta u središtu naselja",
+     "vrijednost_eur": 152000.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S08",
+   "scenario": "genericki_predmet",
+   "expected": "vrijedi_provjeriti",
+   "description": "generički predmet, 78000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer usluge 8 d.o.o.",
+     "nkd": null,
+     "oib": "00000000508",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "79411000 - Opće usluge savjetovanja u području upravljanja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900008,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=10",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 78000.0,
+     "predmet": "Usluge savjetovanja",
+     "vrijednost_eur": 78000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S09",
+   "scenario": "genericki_predmet",
+   "expected": "vrijedi_provjeriti",
+   "description": "generički predmet, 64000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer usluge 9 d.o.o.",
+     "nkd": null,
+     "oib": "00000000509",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "98000000 - Ostale komunalne, socijalne i osobne usluge",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900009,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=11",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 64000.0,
+     "predmet": "Ostale usluge",
+     "vrijednost_eur": 64000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S10",
+   "scenario": "genericki_predmet",
+   "expected": "vrijedi_provjeriti",
+   "description": "generički predmet, 121000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer usluge 10 d.o.o.",
+     "nkd": null,
+     "oib": "00000000510",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "98000000 - Ostale komunalne, socijalne i osobne usluge",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900010,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=12",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 121000.0,
+     "predmet": "Razni radovi",
+     "vrijednost_eur": 121000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S11",
+   "scenario": "genericki_i_f",
+   "expected": "visoka_pozornost",
+   "description": "generički predmet uz pravilo F",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer savjet 11 d.o.o.",
+     "nkd": null,
+     "oib": "00000000511",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "F_SPLITTING",
+      "naziv": "Više manjih ugovora s istim dobavljačem (moguće cjepkanje)",
+      "magnitude": "1,8 × prag",
+      "pojas": "srednji",
+      "evidence_strength": "jaka",
+      "data_quality": "visoka",
+      "oznaka": "vrijedi_provjeriti",
+      "objasnjenje": "3 ugovora istog dobavljača u 70 dana, zbroj 1,8 × prag jednostavne nabave.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=13"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "79411000 - Opće usluge savjetovanja u području upravljanja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900011,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=13",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 24800.0,
+     "predmet": "Usluge savjetovanja",
+     "vrijednost_eur": 24800.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S12",
+   "scenario": "genericki_i_f",
+   "expected": "visoka_pozornost",
+   "description": "generički predmet uz pravilo F",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer savjet 12 d.o.o.",
+     "nkd": null,
+     "oib": "00000000512",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "F_SPLITTING",
+      "naziv": "Više manjih ugovora s istim dobavljačem (moguće cjepkanje)",
+      "magnitude": "1,8 × prag",
+      "pojas": "srednji",
+      "evidence_strength": "jaka",
+      "data_quality": "visoka",
+      "oznaka": "vrijedi_provjeriti",
+      "objasnjenje": "3 ugovora istog dobavljača u 70 dana, zbroj 1,8 × prag jednostavne nabave.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=14"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "79411000 - Opće usluge savjetovanja u području upravljanja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900012,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=14",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 24800.0,
+     "predmet": "Razne usluge održavanja",
+     "vrijednost_eur": 24800.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S13",
+   "scenario": "cpv_nesklad",
+   "expected": "vrijedi_provjeriti",
+   "description": "CPV ne odgovara predmetu",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 13 d.d.",
+     "nkd": null,
+     "oib": "00000000513",
+     "pravni_oblik": "dd",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "30192000 - Uredske potrepštine",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900013,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=15",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 58000.0,
+     "predmet": "Opskrba električnom energijom",
+     "vrijednost_eur": 58000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S14",
+   "scenario": "cpv_nesklad",
+   "expected": "vrijedi_provjeriti",
+   "description": "CPV ne odgovara predmetu",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 14 d.d.",
+     "nkd": null,
+     "oib": "00000000514",
+     "pravni_oblik": "dd",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "15800000 - Razni prehrambeni proizvodi",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900014,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=16",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 58000.0,
+     "predmet": "Rekonstrukcija mrtvačnice",
+     "vrijednost_eur": 58000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S15",
+   "scenario": "cpv_nesklad",
+   "expected": "vrijedi_provjeriti",
+   "description": "CPV ne odgovara predmetu",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 15 d.d.",
+     "nkd": null,
+     "oib": "00000000515",
+     "pravni_oblik": "dd",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "48000000 - Programski paketi i informacijski sustavi",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900015,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=17",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 58000.0,
+     "predmet": "Košnja javnih površina",
+     "vrijednost_eur": 58000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S16",
+   "scenario": "isplata_tekst",
+   "expected": "vrijedi_provjeriti",
+   "description": "obrazloženje plaćanja navodi dodatke koji nisu upisani kao izmjena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer ceste 16 d.o.o.",
+     "nkd": null,
+     "oib": "00000000516",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "D_OVERPAYMENT",
+      "naziv": "Isplaćeno više od ugovorenog",
+      "magnitude": "+41 % iznad ugovorenog iznosa s PDV-om",
+      "pojas": "srednji",
+      "evidence_strength": "srednja",
+      "data_quality": "visoka",
+      "oznaka": "vrijedi_provjeriti",
+      "objasnjenje": "Isplaćeno je više od ugovorenog iznosa s PDV-om; registar ne navodi izmjenu.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=18"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": "Dodatak ugovoru br. 1 – dodatni radovi 210.000,00 kn bez PDV-a"
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45233140 - Radovi na cestama",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900016,
+     "isplaceno_eur": 141000.0,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=18",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 80000.0,
+     "predmet": "Rekonstrukcija nerazvrstane ceste",
+     "vrijednost_eur": 80000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S17",
+   "scenario": "isplata_tekst",
+   "expected": "vrijedi_provjeriti",
+   "description": "obrazloženje plaćanja navodi dodatke koji nisu upisani kao izmjena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer ceste 17 d.o.o.",
+     "nkd": null,
+     "oib": "00000000517",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "D_OVERPAYMENT",
+      "naziv": "Isplaćeno više od ugovorenog",
+      "magnitude": "+-1 % iznad ugovorenog iznosa s PDV-om",
+      "pojas": "srednji",
+      "evidence_strength": "srednja",
+      "data_quality": "visoka",
+      "oznaka": "vrijedi_provjeriti",
+      "objasnjenje": "Isplaćeno je više od ugovorenog iznosa s PDV-om; registar ne navodi izmjenu.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=19"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": "Isplaćeno po privremenim situacijama 1-6 i dodatku ugovoru (nepredviđeni radovi)"
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45233140 - Radovi na cestama",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900017,
+     "isplaceno_eur": 99000.0,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=19",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 80000.0,
+     "predmet": "Rekonstrukcija nerazvrstane ceste",
+     "vrijednost_eur": 80000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S18",
+   "scenario": "usporedba_skupine",
+   "expected": "vrijedi_provjeriti",
+   "description": "6.4× medijan skupine u kategoriji",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer konzalting 18 d.o.o.",
+     "nkd": null,
+     "oib": "00000000518",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": {
+     "godina": 2025,
+     "godina_nepotpuna": false,
+     "cpv2": "79",
+     "kategorija": "Poslovne usluge",
+     "usporedna_skupina": "P2",
+     "n_opcina_s_podacima": 11,
+     "medijan_eur_po_stanovniku": 2.5,
+     "ova_opcina_eur_po_stanovniku": 16.0,
+     "rang": 1
+    },
+    "ugovor": {
+     "cpv": "79411000 - Opće usluge savjetovanja u području upravljanja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900018,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=20",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 46000.0,
+     "predmet": "Usluge izrade strateških dokumenata",
+     "vrijednost_eur": 46000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S19",
+   "scenario": "usporedba_skupine",
+   "expected": "vrijedi_provjeriti",
+   "description": "4.1× medijan skupine u kategoriji",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer konzalting 19 d.o.o.",
+     "nkd": null,
+     "oib": "00000000519",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": {
+     "godina": 2025,
+     "godina_nepotpuna": false,
+     "cpv2": "79",
+     "kategorija": "Poslovne usluge",
+     "usporedna_skupina": "P2",
+     "n_opcina_s_podacima": 11,
+     "medijan_eur_po_stanovniku": 2.5,
+     "ova_opcina_eur_po_stanovniku": 10.25,
+     "rang": 1
+    },
+    "ugovor": {
+     "cpv": "79411000 - Opće usluge savjetovanja u području upravljanja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900019,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=21",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 46000.0,
+     "predmet": "Usluge izrade strateških dokumenata",
+     "vrijednost_eur": 46000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S20",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 20 d.o.o.",
+     "nkd": null,
+     "oib": "00000000520",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45233161 - Radovi na izgradnji pješačkih staza",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900020,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=22",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 186000.0,
+     "predmet": "Izgradnja nogostupa uz državnu cestu D8 u naselju Primjerovo, dionica km 2+100 do 2+650",
+     "vrijednost_eur": 186000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S21",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 21 d.o.o.",
+     "nkd": null,
+     "oib": "00000000521",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "30192000 - Uredske potrepštine",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900021,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=23",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 9800.0,
+     "predmet": "Nabava uredskog materijala za 2025. godinu prema troškovniku",
+     "vrijednost_eur": 9800.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S22",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 22 d.o.o.",
+     "nkd": null,
+     "oib": "00000000522",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "71320000 - Usluge tehničkog projektiranja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900022,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=24",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 24500.0,
+     "predmet": "Izrada projektne dokumentacije za rekonstrukciju dječjeg vrtića Sunce",
+     "vrijednost_eur": 24500.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S23",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 23 d.o.o.",
+     "nkd": null,
+     "oib": "00000000523",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45261900 - Popravak i održavanje krovova",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900023,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=25",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 54000.0,
+     "predmet": "Sanacija krovišta društvenog doma u naselju Oglednik",
+     "vrijednost_eur": 54000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S24",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 24 d.o.o.",
+     "nkd": null,
+     "oib": "00000000524",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "90620000 - Usluge čišćenja snijega",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900024,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=26",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 38000.0,
+     "predmet": "Usluga zimske službe na nerazvrstanim cestama 2025./2026.",
+     "vrijednost_eur": 38000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S25",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 25 d.o.o.",
+     "nkd": null,
+     "oib": "00000000525",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "34144210 - Vatrogasna vozila",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900025,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=27",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 310000.0,
+     "predmet": "Nabava vatrogasnog navalnog vozila za DVD Probnik",
+     "vrijednost_eur": 310000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S26",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 26 d.o.o.",
+     "nkd": null,
+     "oib": "00000000526",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45316110 - Postavljanje opreme za javnu rasvjetu",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900026,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=28",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 212000.0,
+     "predmet": "Rekonstrukcija javne rasvjete – zamjena 420 svjetiljki LED svjetiljkama",
+     "vrijednost_eur": 212000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S27",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 27 d.o.o.",
+     "nkd": null,
+     "oib": "00000000527",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "71520000 - Usluge nadzora gradnje",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900027,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=29",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 18900.0,
+     "predmet": "Stručni nadzor nad izgradnjom reciklažnog dvorišta",
+     "vrijednost_eur": 18900.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S28",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 28 d.o.o.",
+     "nkd": null,
+     "oib": "00000000528",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "09123000 - Prirodni plin",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900028,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=30",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 21000.0,
+     "predmet": "Opskrba prirodnim plinom za zgradu općinske uprave",
+     "vrijednost_eur": 21000.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S29",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 29 d.o.o.",
+     "nkd": null,
+     "oib": "00000000529",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "77310000 - Usluge sadnje i održavanja zelenih površina",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900029,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=31",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 47000.0,
+     "predmet": "Održavanje zelenih površina u naselju Uzorkovo 2025.",
+     "vrijednost_eur": 47000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S30",
+   "scenario": "uobicajen",
+   "expected": "nema_oznake",
+   "description": "uobičajen ugovor, polja usklađena",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 30 d.o.o.",
+     "nkd": null,
+     "oib": "00000000530",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "71355000 - Geodetske usluge",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900030,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=32",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 14700.0,
+     "predmet": "Geodetski elaborat za evidentiranje nerazvrstanih cesta",
+     "vrijednost_eur": 14700.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S31",
+   "scenario": "samo_pravilo_s_kontekstom",
+   "expected": "nema_oznake",
+   "description": "C na komunalnom društvu u vlasništvu općine (in-house)",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": "99999",
+     "naziv": "Primjer Komunalac d.o.o.",
+     "nkd": null,
+     "oib": "00000000531",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": true
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "C_CONCENTRATION",
+      "naziv": "Ponovljene dodjele istom dobavljaču (koncentracija)",
+      "magnitude": "HHI 10.000",
+      "pojas": "visok",
+      "evidence_strength": "srednja",
+      "data_quality": "visoka",
+      "oznaka": "informativno",
+      "objasnjenje": "Svi ugovori kategorije 90 u tri godine dodijeljeni su istom dobavljaču, komunalnom društvu naručitelja.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=33"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "90511000 - Usluge odvoza otpada",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900031,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=33",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 62000.0,
+     "predmet": "Odvoz komunalnog otpada",
+     "vrijednost_eur": 62000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S32",
+   "scenario": "samo_pravilo_s_kontekstom",
+   "expected": "nema_oznake",
+   "description": "C na opskrbi električnom energijom (malo dobavljača)",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer Energija d.d.",
+     "nkd": null,
+     "oib": "00000000532",
+     "pravni_oblik": "dd",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "C_CONCENTRATION",
+      "naziv": "Ponovljene dodjele istom dobavljaču (koncentracija)",
+      "magnitude": "HHI 9.600; najveći dobavljač 97,9 % vrijednosti",
+      "pojas": "visok",
+      "evidence_strength": "srednja",
+      "data_quality": "visoka",
+      "oznaka": "vrijedi_provjeriti",
+      "objasnjenje": "Opskrba energijom u kategoriji 09 većinom ide istom dobavljaču.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=34"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "09310000 - Električna energija",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900032,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=34",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 62000.0,
+     "predmet": "Opskrba električnom energijom za javnu rasvjetu",
+     "vrijednost_eur": 62000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S33",
+   "scenario": "samo_pravilo_s_kontekstom",
+   "expected": "nema_oznake",
+   "description": "D1 s objavljenim razlogom izmjene",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer gradnja d.o.o.",
+     "nkd": null,
+     "oib": "00000000533",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "D_VALUE_INCREASE",
+      "naziv": "Povećanje vrijednosti ugovora",
+      "magnitude": "+32 % u odnosu na početni iznos",
+      "pojas": "srednji",
+      "evidence_strength": "srednja",
+      "data_quality": "visoka",
+      "oznaka": "vrijedi_provjeriti",
+      "objasnjenje": "Ugovor je sklopljen na 150.000,00 €, a s izmjenama je 198.000,00 € (+32 %).",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=35"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": "Izmjena temeljem čl. 315. ZJN: opcija proširenja predviđena dokumentacijom o nabavi, odluka KLASA 400-01/25-01/7",
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45000000 - Građevinski radovi",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900033,
+     "isplaceno_eur": null,
+     "izmjene_eur": 48000.0,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=35",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 150000.0,
+     "predmet": "Izgradnja reciklažnog dvorišta",
+     "vrijednost_eur": 198000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S34",
+   "scenario": "samo_pravilo_s_kontekstom",
+   "expected": "nema_oznake",
+   "description": "F kod ponavljajuće nabave goriva (informativno)",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer Nafta d.d.",
+     "nkd": null,
+     "oib": "00000000534",
+     "pravni_oblik": "dd",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Grad Uzorkovo",
+     "oib": "00000000003",
+     "stanovnika": 14200,
+     "usporedna_skupina": "P4",
+     "vrsta": "jls"
+    },
+    "pravila": [
+     {
+      "rule_code": "F_SPLITTING",
+      "naziv": "Više manjih ugovora s istim dobavljačem (moguće cjepkanje)",
+      "magnitude": "1,6 × prag",
+      "pojas": "srednji",
+      "evidence_strength": "srednja",
+      "data_quality": "visoka",
+      "oznaka": "informativno",
+      "objasnjenje": "Ponavljajuća nabava goriva; kategorija 09 je ponavljajuća opskrba.",
+      "izvori": [
+       "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=36"
+      ]
+     }
+    ],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "09134100 - Dizelsko gorivo",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900034,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=36",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 62000.0,
+     "predmet": "Nabava goriva za službena vozila",
+     "vrijednost_eur": 62000.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S35",
+   "scenario": "nedostaju_podaci",
+   "expected": "nema_oznake",
+   "description": "mali iznos, malo podataka, ništa neuobičajeno",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 35 d.o.o.",
+     "nkd": null,
+     "oib": "00000000535",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": null,
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900035,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=37",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 3200.0,
+     "predmet": "Nabava sadnica za uređenje parka",
+     "vrijednost_eur": 3200.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "robe"
+    }
+   }
+  },
+  {
+   "id": "S36",
+   "scenario": "nedostaju_podaci",
+   "expected": "nema_oznake",
+   "description": "mali iznos, malo podataka, ništa neuobičajeno",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 36 d.o.o.",
+     "nkd": null,
+     "oib": "00000000536",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": null,
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900036,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=38",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 3200.0,
+     "predmet": "Tisak općinskog glasila",
+     "vrijednost_eur": 3200.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S37",
+   "scenario": "nedostaju_podaci",
+   "expected": "nema_oznake",
+   "description": "mali iznos, malo podataka, ništa neuobičajeno",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer 37 d.o.o.",
+     "nkd": null,
+     "oib": "00000000537",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Oglednik",
+     "oib": "00000000002",
+     "stanovnika": 1840,
+     "usporedna_skupina": "P1",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": null,
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900037,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=39",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 3200.0,
+     "predmet": "Popravak službenog vozila",
+     "vrijednost_eur": 3200.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S38",
+   "scenario": "usporedba_normalno",
+   "expected": "nema_oznake",
+   "description": "potrošnja blizu medijana skupine",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": null,
+     "izvor": "nedostupno",
+     "jpt_oznaka": null,
+     "naziv": "Primjer turizam 38 d.o.o.",
+     "nkd": null,
+     "oib": "00000000538",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": {
+     "godina": 2025,
+     "godina_nepotpuna": false,
+     "cpv2": "79",
+     "kategorija": "Poslovne usluge",
+     "usporedna_skupina": "P2",
+     "n_opcina_s_podacima": 11,
+     "medijan_eur_po_stanovniku": 2.5,
+     "ova_opcina_eur_po_stanovniku": 3.1,
+     "rang": 5
+    },
+    "ugovor": {
+     "cpv": "79411000 - Opće usluge savjetovanja u području upravljanja",
+     "datum": "2025-06-12",
+     "eojn_url": null,
+     "id": 900038,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=40",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 9600.0,
+     "predmet": "Izrada strategije razvoja turizma Općine Primjerovo 2026.-2030.",
+     "vrijednost_eur": 9600.0,
+     "vrsta_postupka": "Jednostavna nabava",
+     "vrsta_predmeta": "usluge"
+    }
+   }
+  },
+  {
+   "id": "S39",
+   "scenario": "mlada_tvrtka",
+   "expected": "vrijedi_provjeriti",
+   "description": "osnovan 2025-03-01, ugovor 240000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": "2025-03-01",
+     "izvor": "fixture",
+     "jpt_oznaka": null,
+     "naziv": "Primjer nova gradnja 39 d.o.o.",
+     "nkd": "41.20",
+     "oib": "00000000539",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Probnik",
+     "oib": "00000000004",
+     "stanovnika": 6100,
+     "usporedna_skupina": "P3",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45212225 - Građevinski radovi na sportskoj dvorani",
+     "datum": "2025-08-20",
+     "eojn_url": null,
+     "id": 900039,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=41",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 240000.0,
+     "predmet": "Izgradnja sportske dvorane – II. faza",
+     "vrijednost_eur": 240000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  },
+  {
+   "id": "S40",
+   "scenario": "mlada_tvrtka",
+   "expected": "vrijedi_provjeriti",
+   "description": "osnovan 2025-01-15, ugovor 180000.0 EUR",
+   "context": {
+    "dobavljac": {
+     "datum_osnivanja": "2025-01-15",
+     "izvor": "fixture",
+     "jpt_oznaka": null,
+     "naziv": "Primjer nova gradnja 40 d.o.o.",
+     "nkd": "41.20",
+     "oib": "00000000540",
+     "pravni_oblik": "doo",
+     "u_vlasnistvu_narucitelja": null
+    },
+    "narucitelj": {
+     "naziv": "Općina Primjerovo",
+     "oib": "00000000001",
+     "stanovnika": 3120,
+     "usporedna_skupina": "P2",
+     "vrsta": "jls"
+    },
+    "pravila": [],
+    "slobodni_tekst": {
+     "napomena": null,
+     "obrazlozenje_placanja": null
+    },
+    "statistika_skupine": null,
+    "ugovor": {
+     "cpv": "45212225 - Građevinski radovi na sportskoj dvorani",
+     "datum": "2025-08-20",
+     "eojn_url": null,
+     "id": 900040,
+     "isplaceno_eur": null,
+     "izmjene_eur": null,
+     "izvor_url": "https://primjer.invalid/eval/registar-ugovora.xlsx#sheet=1;row=42",
+     "okvirni_sporazum": false,
+     "pocetna_vrijednost_eur": 180000.0,
+     "predmet": "Izgradnja sportske dvorane – II. faza",
+     "vrijednost_eur": 180000.0,
+     "vrsta_postupka": "Otvoreni postupak",
+     "vrsta_predmeta": "radovi"
+    }
+   }
+  }
+ ]
+}

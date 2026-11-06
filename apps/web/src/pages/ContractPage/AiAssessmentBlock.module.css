@@ -1,0 +1,105 @@
+/* AI block: bordered surface with the AI hue as the left rule, so it never reads as a rule indicator (amber). */
+.block {
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-ai);
+    border-radius: var(--radius-md);
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-3);
+}
+
+.header h2 {
+    font-size: var(--font-size-lg);
+}
+
+.block h3 {
+    margin: var(--space-4) 0 var(--space-2);
+    font-size: var(--font-size-sm);
+}
+
+.muted {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.verdict {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+}
+
+.explanation {
+    margin: var(--space-2) 0 0;
+    font-size: var(--font-size-sm);
+}
+
+.label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 1px var(--space-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.labelSignal {
+    color: var(--color-signal);
+    background: var(--color-signal-soft);
+    border-color: var(--color-signal-border);
+}
+
+.labelNeutral {
+    color: var(--color-text-muted);
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border);
+}
+
+.reasons,
+.list {
+    margin: 0;
+    padding-left: var(--space-5);
+    font-size: var(--font-size-sm);
+}
+
+.reason + .reason {
+    margin-top: var(--space-3);
+}
+
+.reason p {
+    margin: 0;
+}
+
+.reasonMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin-top: var(--space-1) !important;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    overflow-wrap: anywhere;
+}
+
+.list li + li {
+    margin-top: var(--space-1);
+}
+
+.note {
+    margin: var(--space-4) 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+}

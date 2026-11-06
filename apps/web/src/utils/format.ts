@@ -36,9 +36,12 @@ const ratioFormat = new Intl.NumberFormat(LOCALE, {maximumFractionDigits: 2});
 
 /**
  * Short magnitude for badges, in the unit of each rule: D1/D2 a share ("+75 %"), F sum / threshold ("2,49×"),
- * C the HHI ("HHI 8.580").
+ * C the HHI ("HHI 8.580"), B days between founding and contract ("51 dan").
  */
 export const formatMagnitude = (ruleCode: string, value: number) => {
+    if (ruleCode === "B_YOUNG_COMPANY") {
+        return `${numberFormat.format(value)} ${plural(value, "dan", "dana", "dana")}`;
+    }
     if (ruleCode === "F_SPLITTING") {
         return `${ratioFormat.format(value)}×`;
     }

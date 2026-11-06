@@ -155,10 +155,44 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 
 ## 2026-11-03: #45 – obrazac za ispravak i Metodologija (IvanMosa)
 - **Grana `45-ispravak-metodologija` od `refactor-ui`**, ne od `main`. Zašto: nove stranice koriste komponente iz redizajna (#53); iz `main` bi se pisale dvaput. PR #54 ide u `main`, jer su #51 i #53 spojeni prije otvaranja.
-- **`POST /api/v1/feedback` prima samo `indicator` i `contract`** i četiri vrste iz obrasca. `korisno`/`pogresno` i `ai_assessment` su u CHECK-u tablice, ali ih API još odbija: dodaje ih #44 (Nino) kad postoji tablica `ai_assessment`. **Migracija je `V4__feedback.sql`; ako #44 također uzme V4, onaj tko spaja drugi preimenuje svoju u V5.**
+- **`POST /api/v1/feedback` prima samo `indicator` i `contract`** i četiri vrste iz obrasca. `korisno`/`pogresno` i `ai_assessment` su u CHECK-u tablice, ali ih API još odbija: dodaje ih #44 (Nino) kad postoji tablica `ai_assessment`. **Migracija je bila `V4__feedback.sql`; pri spajanju s `main` (06.11.) preimenovana je u `V6__feedback.sql`, jer su `V4` i `V5` zauzeli #44 i #46.**
 - **Cilj mora biti javno vidljiv:** neaktivan indikator i ugovor s fizičkom osobom daju isti 404 kao nepostojeći (ista GDPR logika kao `ContractService`).
 - **E-mail je obavezan samo za pravo na odgovor i uklanjanje osobnih podataka** (moderator mora odgovoriti), inače neobavezan. API ga nikad ne vraća ni ne logira.
 - **Rate limit bez nove ovisnosti:** `FeedbackRateLimiter` u memoriji (10/min po adresi). Bucket4j bi bio nova ovisnost za jedan endpoint; za jednu instancu i demo je ovo dovoljno.
 - **Nema moderacijskog sučelja ni prikaza odgovora uz indikator** (Could u `FEATURES.md` F12). Prijave se čitaju iz baze (`moderation = 'novo'`).
 - **Metodologija je statičan tekst u `MethodologyPage/methodologyRules.ts`**, s vrijednostima prepisanima iz `thresholds.yaml`. Zašto: endpoint s pragovima je više posla nego koristi do 07.11. Cijena: pri promjeni praga treba promijeniti oba mjesta (zapisano u komentaru filea). AI evaluacija se ne navodi brojkama dok nije izmjerena (`ANOMALY_DETECTION.md` §4.6).
 - **„Izvori i metodologija” razdvojeno** na `/izvori` (podaci) i `/metodologija` (pravila); metodologija je u navigaciji jer je to odgovor na „zašto vam vjerovati” za žiri i video.
+
+## 2026-11-03: #44 – AI procjena (potvrdio korisnik)
+- **Strukturirani izlaz (`output_config.format`, JSON shema iz `ANOMALY_DETECTION.md` §4.3) umjesto prisilnog poziva alata `zabiljezi_procjenu`.** Zašto: `claude-sonnet-5-5` (ponovna provjera, faza 5) vraća 400 na forsirani `tool_choice` (`tool`/`any`), a strukturirani izlaz jednako ograničava odgovor (enumi, obavezna polja). Isti obrazac već radi s Haiku 5.5 u `Desktop/datathon`. §4.3 dopušta "tool use / structured output". `minItems` i `maxLength` iz §4.3 provjerava validator, ne shema.
+- **Few-shot primjeri:** §4.5 ih samo opisuje, pa su napisani kao potpuni sintetički JSON primjeri točno prema tim opisima (u `resources/ai/ai-flag-v1.txt`). Svaka promjena teksta prompta = nova verzija.
+- **Nova ovisnost `com.anthropic:anthropic-java` 3.3.0** (ista kao u `Desktop/datathon`): službeni SDK s retryjem i timeoutima; alternativa (ručni `RestClient`) je više koda bez koristi.
+- **Bez ključa:** `LlmClient` ima `AnthropicLlmClient` (ključ iz env-a) i `FixtureLlmClient` (testovi). Bez ključa AI run vraća "AI nije konfiguriran", a pravila i UI rade dalje.
+- **Gumbi "Korisno / Pogrešno"** se ne rade u #44: `/feedback` (#45) još ne postoji.
+- **Validator je stroži od §4.4** (zapisano u `ANOMALY_DETECTION.md` §4.7): tvrdnja > 300 znakova se odbacuje; zabranjena riječ u objašnjenju ili popisu podataka koji nedostaju odbacuje cijeli odgovor, jer se i to prikazuje; `visoka_pozornost` s manje od dva prihvaćena razloga spušta se na `vrijedi_provjeriti` (pravilo 7 prompta). *Prvotno pravilo "null polje nije citabilno" je ukinuto 03.11.*: odbacivalo je legitimne tvrdnje "izmjene nisu objavljene", a §4.4 traži samo da polje postoji.
+- **`synthetic=true` u AI runu znači samo sintetički ugovori** (evaluacija bez troška na stvarnim), `false` samo stvarni. **`dryRun` je zadano `true`**, da pravi run uvijek traži izričit `dryRun=false`.
+- **Ključ konteksta je `narucitelj`** (bez dijakritike), jer model citira putanje doslovno.
+- **Paralelni pozivi (4):** 300 poziva jedan po jedan traje ~20 min. Cijena: budžet se može premašiti za najviše 4 poziva (desetinke centa s Haikuom).
+- **AI procjena na `IndicatorPage` ("procjena postoji za N od M ugovora skupine") nije rađena** (Should iz prompta, izvan opsega dok nema stvarnih procjena).
+
+## 2026-11-04: #44 – evaluacija i verzije prompta (korisnik: "radi što je najbolje")
+- **Prompt `ai-flag-v3` je u upotrebi.** v1 je ponavljao pravila (17 od 20 stvarnih ugovora s indikatorom "vrijedi provjeriti"); v2 traži novi signal; v3 ispravlja sustavne oznake bez osnove nađene ručnim pregledom stvarnog uzorka (izuzeta nabava ispod praga, nedostajući podaci kao razlog). Brojke su u `docs/EVALUATION.md`.
+- **Kontekst je dobio prag jednostavne nabave i vrijednost s PDV-om.** Bez praga model je "napamet" procjenjivao je li jednostavna nabava prevelika; bez bruto vrijednosti svaka isplata +25 % (PDV) izgledala je kao preplata. Oboje dolazi iz baze i `thresholds.yaml`, ne od modela.
+- **Indikator C ulazi u AI kontekst samo za ugovore dobavljača kojeg imenuje.** #41 veže C na sve ugovore ćelije (naručitelj + CPV2), pa bi model na ugovoru dobavljača Y čitao tvrdnju o dobavljaču X. **Isti prikaz postoji na stranici ugovora (#41/#42) i nije mijenjan; preporuka za #47: na ugovoru drugog dobavljača prikazati C kao kontekst skupine, ne kao oznaku tog ugovora.**
+- **Sintetički skup je ispravljan tri puta (v1→v4), samo zbog grešaka u podacima** (roba označena kao usluge, CPV, iznos iznad praga u skupini F). Nakon v4 se ne mijenja, da se ne prilagođava modelu; svi runovi su zapisani.
+- **Pun run svih 2.212 stvarnih ugovora (~2,5–3,5 USD) je odgođen** dok se ne upišu ručne oznake i ne spoji Sudreg, da se ne plati dvaput. Za demo postoji ~90 stvarnih procjena (lokalna baza).
+- **UI:** `nema_oznake` se prikazuje kao "Bez dodatnih signala", uz rečenicu da AI nije našao ništa osim onoga što pokazuju pravila (semantika v2/v3).
+
+## 2026-11-05: #46 – Sudski registar (korisnik dao ključ)
+- **Dohvat po OIB-u (`/detalji_subjekta`), ne bulk `/subjekti`:** trebamo ~1.600 dobavljača, a bulk vraća cijeli registar. 1 zahtjev/s ≈ 27 min, jednom; snimke se spremaju u bazu, demo ne ovisi o Sudregu.
+- **Samo `doo`, `jdoo`, `dd`, `javno_tijelo`.** `ostalo` sadrži obrte s imenima vlasnika (npr. "… , DRAGUTIN KRIZMANIĆ"), pa se ti OIB-i ne šalju ni Sudregu ni modelu (AI kandidati sada isključuju i `ostalo` i `nepoznato`). **Riješeno 05.11. (vidi niže).**
+- **Spremljen je samo dio odgovora** (bez e-mail adresa i sjedišta): minimizacija podataka.
+- **NKD u dva oblika** (vidi `DATA_SOURCES.md` §7): stari oblik daje samo šifru; verzija klasifikacije se ne pretpostavlja.
+- **GDPR prikaz (05.11.): naziv dobavljača tipa `ostalo`/`nepoznato` skriva se, osim ako je očito institucija** (zavod, ustanova, zadruga, muzej, institut, centar…) **ili ima JPT oznaku** (`OrganizationRef.isNameHidden`, isto u tekstovima pravila). Zašto: u 107 takvih naziva bilo je najmanje 10 osoba ("TERMODOR, DRAGUTIN KRIZMANIĆ", "Dr. Neven Martinović", "Ante Vojvodić AT CORNER"…), a heuristike za imena ne hvataju sve. Cijena: desetak tvrtki (npr. "Bauhaus") prikazuje se kao "Naziv skriven (moguć obrt ili osoba)", uz OIB i poveznicu na izvor. Klasifikator dodatno prepoznaje ",vl.", "član …" i "Ured ovl." kao obrt (vrijedi za nove uvoze; prikaz radi i bez ponovnog uvoza).
+- **Pravilo B (`B_YOUNG_COMPANY`) uvedeno 05.11.** na Sudreg snimkama; detalji u `ANOMALY_DETECTION.md` §B (Implementacija). Pojas je jedina skala (≤ 60 / ≤ 120 / > 120 dana), bez posebne razine "viša pozornost".
+
+## 2026-11-05: #44 se spaja bez ručne validacije (korisnik)
+- Korisnik: ručno označavanje 60 stvarnih ugovora je preveliko za sada; grana se spaja, validacija kasnije.
+- Posljedica: preciznost, odziv i stopa lažno pozitivnih **na stvarnim ugovorima ostaju neizmjereni**. U videu, README-u i na stranici Metodologija smiju se navoditi samo izmjerene brojke iz `docs/EVALUATION.md` (sintetika 40 slučajeva, udio oznaka na uzorku, kappa prema pravilima), uz napomenu da ručna validacija stvarnih ugovora nije napravljena.
+- Pun AI run svih 2.212 ugovora i dalje čeka (nakon validacije ili odluke tima).
+

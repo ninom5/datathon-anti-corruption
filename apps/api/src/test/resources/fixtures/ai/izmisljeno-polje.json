@@ -1,0 +1,19 @@
+{
+  "oznaka": "visoka_pozornost",
+  "razlozi": [
+    {
+      "tvrdnja": "Dobavljač ima premalo zaposlenih za ovaj posao.",
+      "polja": [
+        "dobavljac.broj_zaposlenih"
+      ],
+      "izvori": [
+        "{{ugovor.izvor_url}}"
+      ]
+    }
+  ],
+  "nedostajuci_podaci": [],
+  "moguca_legitimna_objasnjenja": [
+    "Dobavljač može koristiti podugovaratelje."
+  ],
+  "pouzdanost": "visoka"
+}

@@ -1,5 +1,6 @@
 package com.datathon.api.contract.dto;
 
+import com.datathon.api.assessment.dto.AiAssessmentResponse;
 import com.datathon.api.contract.Contract;
 import com.datathon.api.indicator.dto.IndicatorResponse;
 import com.datathon.api.organization.dto.OrganizationRef;
@@ -8,7 +9,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/** A contract with its values, rule indicators and the exact source row it was read from. */
+/**
+ * A contract with its values, rule indicators, the AI assessment (shown apart from the rules, never merged with them)
+ * and the exact source row it was read from.
+ *
+ * @param aiAssessment                  null when there is no accepted assessment
+ * @param aiAssessmentUnavailableReason why {@code aiAssessment} is null (e.g. crafts never get one); null otherwise
+ */
 public record ContractDetail(
         Long id,
         OrganizationRef buyer,
@@ -33,6 +40,8 @@ public record ContractDetail(
         String eojnTenderUrl,
         String frameworkAgreementUrl,
         List<IndicatorResponse> indicators,
+        AiAssessmentResponse aiAssessment,
+        String aiAssessmentUnavailableReason,
         ProvenanceResponse provenance,
         boolean synthetic) {
 
@@ -47,7 +56,9 @@ public record ContractDetail(
                          boolean convertedFromHrk) {
     }
 
-    public static ContractDetail from(Contract contract, List<IndicatorResponse> indicators, int incompleteFromYear) {
+    public static ContractDetail from(Contract contract, List<IndicatorResponse> indicators,
+                                      AiAssessmentResponse aiAssessment, String aiAssessmentUnavailableReason,
+                                      int incompleteFromYear) {
         Integer year = contract.getDateSigned() == null ? null : contract.getDateSigned().getYear();
         return new ContractDetail(contract.getId(), OrganizationRef.from(contract.getBuyer()),
                 OrganizationRef.from(contract.getSupplier()), contract.getSubject(),
@@ -57,8 +68,8 @@ public record ContractDetail(
                 contract.getDateSigned(), year, year != null && year >= incompleteFromYear, contract.getDurationText(),
                 contract.getCompletedOn(), values(contract), contract.getPaymentNote(), contract.getNote(),
                 contract.getEuFunded(), List.copyOf(contract.getQualityFlags()), contract.getEojnContractUrl(),
-                contract.getEojnTenderUrl(), contract.getFrameworkAgreementUrl(), indicators,
-                ProvenanceResponse.from(contract.getProvenance()), contract.isSynthetic());
+                contract.getEojnTenderUrl(), contract.getFrameworkAgreementUrl(), indicators, aiAssessment,
+                aiAssessmentUnavailableReason, ProvenanceResponse.from(contract.getProvenance()), contract.isSynthetic());
     }
 
     private static Values values(Contract contract) {

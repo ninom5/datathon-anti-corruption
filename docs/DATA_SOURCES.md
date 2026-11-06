@@ -15,7 +15,7 @@ Oznake: **[VERIFICIRANO]** = testirano (datum, rezultat) · **[SAMO DOKUMENTIRAN
 | 3 | EOJN OCDS (preko OCP Data Registryja) | Povijest 2018–2024 i interoperabilnost; **nema OIB-a** | Bulk JSONL/CSV/XLSX | VERIFICIRANO |
 | 4 | JPT – Popis javnopravnih tijela (MPUDT) | Šifrarnik naručitelja: OIB → tip, županija, osnivači | **Pravi REST API** | VERIFICIRANO |
 | 5 | DZS Popis 2021 po gradovima/općinama | Broj stanovnika, iznosi po stanovniku, usporedne skupine | XLSX preko CKAN-a | VERIFICIRANO |
-| 6 | Sudski registar (sudreg-data.gov.hr) | Datum osnivanja i NKD dobavljača (pravilo B, AI procjena) | REST API + OAuth2 | NEDOSTUPNO bez ključa (401) |
+| 6 | Sudski registar (sudreg-data.gov.hr) | Datum osnivanja i NKD dobavljača (pravilo B, AI procjena) | REST API + OAuth2 | **DOSTUPNO s ključem (provjereno 04.11.)**; bez ključa 401 |
 | 7 | Ostali registri uz općinske (formati B/C/D, PDF) | AI ekstrakcija (demo inovacije) | download + LLM | VERIFICIRANO (uzorak) |
 | 8 | TED API | Ugovori iznad EU pragova (kasnije) | Anonimni REST | VERIFICIRANO |
 | 9 | Registar birača (broj birača po adresi) | Rezervni proxy za stanovništvo | CSV 80 MB | SAMO METAPODACI |
@@ -302,6 +302,11 @@ Ovo je **pravi API**, što podiže bodove za kriterij "Upotreba otvorenih podata
 | Polja `subjekti` | `mbs, oib, mb, status, datum_osnivanja, datum_brisanja, glavna_djelatnost, stecajna_masa, likvidacijska_masa, …` |
 | Licenca | [NEVERIFICIRANO], treba pročitati uvjete pri registraciji |
 | Postojeći kod | `RestSudregClient` (OAuth2, token u memoriji) i `FixtureSudregClient` u repou `Desktop/datathon`, vidi `ARCHITECTURE.md` §2 |
+
+**Provjera s ključem (2026-11-04, korisnikov `SUDREG_CLIENT_ID/SECRET`) [VERIFICIRANO]:**
+- `POST /api/oauth/token` (Basic auth, `grant_type=client_credentials`) → HTTP 200, `token_type: bearer`, `expires_in: 21600` (6 h).
+- `GET /api/javni/detalji_subjekta?tip_identifikatora=oib&identifikator=52860656310&expand_relations=true` → HTTP 200. Ključevi odgovora: `oib, mbs, status, datum_osnivanja` (`"2020-12-09T00:00:00"`), `tvrtka.ime`, `pravni_oblik.vrsta_pravnog_oblika.kratica`, `pretezita_djelatnost.nacionalna_klasifikacija_djelatnosti {sifra: "41.00.0", puni_naziv, verzija: "NKD 2025"}`, `postupak.postupak.znacenje` ("Bez postupka"), `stecajna_masa`, `likvidacijska_masa`, `datum_brisanja` u `/subjekti`, `vrijeme_zadnje_izmjene`.
+- **Djelatnost dolazi u dva oblika** (provjera 2026-11-05 na 6 tvrtki): novije tvrtke imaju `pretezita_djelatnost.nacionalna_klasifikacija_djelatnosti` (NKD 2025, šifra s podrazredom `41.00.0` i naziv) uz `glavna_djelatnost: null`; starije imaju samo broj `glavna_djelatnost` (npr. `6312` = 63.12), bez naziva i verzije, a `pretezita_djelatnost` je `null`. JavniRadar čita oba; za stari oblik verzija klasifikacije nije poznata i ne pretpostavlja se. `RestSudregClient` iz `Desktop/datathon` čita samo `glavna_djelatnost`.
 
 **Praznina:** obrti i fizičke osobe **nisu** u Sudskom registru. Obrtni registar nema provjeren otvoren API [NEVERIFICIRANO].
 

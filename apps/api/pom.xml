@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
+		<anthropic-java.version>3.3.0</anthropic-java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,6 +54,12 @@
 			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
 		<!-- Reads (and, for the synthetic demo set, writes) contract registers in EOJN XLSX format. -->
+		<!-- Claude API for the AI assessment (#44, work/decisions.md); only used when ANTHROPIC_API_KEY is set. -->
+		<dependency>
+			<groupId>com.anthropic</groupId>
+			<artifactId>anthropic-java</artifactId>
+			<version>${anthropic-java.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>

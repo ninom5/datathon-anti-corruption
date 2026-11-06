@@ -1,4 +1,4 @@
-import type {DataQuality, EvidenceStrength, FileStatus, MagnitudeBand, OrganizationType, RuleCode, SubjectType} from "@/types";
+import type {AiConfidence, AiLabel, DataQuality, EvidenceStrength, FileStatus, MagnitudeBand, OrganizationType, RuleCode, SubjectType} from "@/types";
 
 /** Keyed by the API code; counties and other public bodies are not JLS. */
 export const buyerTypeLabels: Record<string, string | undefined> = {
@@ -67,6 +67,11 @@ export const evidenceStrengthHints: Record<RuleCode, Record<EvidenceStrength, st
         jaka: "Najmanje 3 ugovora, svaki s iznosom od najmanje 70 % praga; podudaranje na CPV3.",
         srednja: "Isti dobavljač i CPV3 u vremenskom prozoru; uvjeti za jaku pouzdanost nisu svi ispunjeni.",
         slaba: "Podudara se samo CPV odjeljak (prve 2 znamenke), uz različite podskupine. Predmeti mogu biti različiti.",
+    },
+    B_YOUNG_COMPANY: {
+        jaka: "Datum osnivanja iz Sudskog registra izravno podupire obrazac.",
+        srednja: "Datum osnivanja je iz Sudskog registra; mlada tvrtka može imati prethodnika ili iskusne osnivače.",
+        slaba: "Podaci iz registra su nepotpuni.",
     },
     C_CONCENTRATION: {
         jaka: "U odabranom CPV odjeljku i razdoblju ima najmanje 15 ugovora.",
@@ -138,6 +143,7 @@ export const ruleOptions: {short: string; code: RuleCode; label: string}[] = [
     {short: "D2", code: "D_OVERPAYMENT", label: "Isplata iznad ugovorenog"},
     {short: "F", code: "F_SPLITTING", label: "Moguće cjepkanje"},
     {short: "C", code: "C_CONCENTRATION", label: "Koncentracija dobavljača"},
+    {short: "B", code: "B_YOUNG_COMPANY", label: "Nedavno osnovana tvrtka"},
 ];
 
 export const magnitudeBandOptions: {value: MagnitudeBand; label: string}[] = [
@@ -152,3 +158,64 @@ export const writeRuleCodes = (codes: RuleCode[]) =>
 
 export const readMagnitudeBand = (value: string | null): MagnitudeBand | undefined =>
     magnitudeBandOptions.find((option) => option.value === value)?.value;
+
+export const aiLabelLabels: Record<AiLabel, string> = {
+    nema_oznake: "Bez dodatnih signala",
+    vrijedi_provjeriti: "Vrijedi provjeriti",
+    visoka_pozornost: "Visoka pozornost",
+};
+
+export const aiConfidenceLabels: Record<AiConfidence, string> = {
+    niska: "niska",
+    srednja: "srednja",
+    visoka: "visoka",
+};
+
+/** Context paths the AI cites, in words; unknown paths are shown as they are. */
+const aiFieldLabels: Record<string, string> = {
+    "ugovor.predmet": "predmet",
+    "ugovor.cpv": "CPV",
+    "ugovor.vrsta_predmeta": "vrsta predmeta",
+    "ugovor.vrijednost_eur": "vrijednost",
+    "ugovor.vrijednost_s_pdv_eur": "vrijednost s PDV-om",
+    "ugovor.prag_jednostavne_nabave_eur": "prag jednostavne nabave",
+    "ugovor.prag_izvor": "izvor praga",
+    "ugovor.eojn_url": "EOJN",
+    "ugovor.pocetna_vrijednost_eur": "početna vrijednost",
+    "ugovor.izmjene_eur": "izmjene",
+    "ugovor.isplaceno_eur": "isplaćeno",
+    "ugovor.datum": "datum sklapanja",
+    "ugovor.vrsta_postupka": "vrsta postupka",
+    "ugovor.okvirni_sporazum": "okvirni sporazum",
+    "dobavljac.naziv": "dobavljač",
+    "dobavljac.pravni_oblik": "pravni oblik dobavljača",
+    "dobavljac.u_vlasnistvu_narucitelja": "vlasništvo naručitelja (JPT)",
+    "narucitelj.naziv": "naručitelj",
+    "narucitelj.stanovnika": "broj stanovnika",
+    "narucitelj.usporedna_skupina": "usporedna skupina",
+    "slobodni_tekst.obrazlozenje_placanja": "obrazloženje plaćanja",
+    "slobodni_tekst.napomena": "napomena",
+};
+
+const aiRuleFieldLabels: Record<string, string> = {
+    rule_code: "pravilo",
+    naziv: "pravilo",
+    magnitude: "veličina odstupanja",
+    pojas: "pojas odstupanja",
+    evidence_strength: "pouzdanost dokaza",
+    data_quality: "kvaliteta podataka",
+    oznaka: "oznaka pravila",
+    objasnjenje: "objašnjenje pravila",
+    izvori: "dokazi pravila",
+};
+
+export const aiFieldLabel = (path: string) => {
+    const rule = /^pravila(\[\d+\])?(?:\.(.+))?$/.exec(path);
+    if (rule) {
+        return rule[2] ? `pravilo: ${aiRuleFieldLabels[rule[2]] ?? rule[2]}` : "rezultati pravila";
+    }
+    if (path.startsWith("statistika_skupine")) {
+        return "usporedba s općinama iste skupine";
+    }
+    return aiFieldLabels[path] ?? path;
+};
