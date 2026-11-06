@@ -5,7 +5,8 @@ import styles from "./HomePage.module.css";
 const BROWSE_LINKS = [
     {path: routes.MAP, label: "Karta", description: "koje JLS objavljuju registar ugovora"},
     {path: routes.COMPARISON, label: "Usporedba", description: "potrošnja po stanovniku među sličnim JLS"},
-    {path: routes.SOURCES, label: "Izvori i metodologija", description: "odakle dolaze podaci i kako se računaju oznake"},
+    {path: routes.METHODOLOGY, label: "Metodologija", description: "pravila, pragovi iz ZJN-a i što oznaka ne znači"},
+    {path: routes.SOURCES, label: "Izvori podataka", description: "skupovi, datoteke i datumi dohvata"},
 ];
 
 // What the product does in three steps, and the other ways in.

@@ -46,7 +46,8 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 - #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
 - **Grana `refactor-ui` (03.11., PR #53 prema `43-karta-usporedba`):** frontend preuzima dizajn sustav OtvoreniRadara (`FESB/datathon`); vidi `DESIGN_SYSTEM.md` i `work/decisions.md`.
 - **#44 (AI procjena) na grani `44-ai-procjena` (commitano do `wip`, 05.11.):** faze 1–4 gotove; prompt `ai-flag-v3`; rezultati u `docs/EVALUATION.md`. Tim treba ručno označiti `work/eval/real-sample-seed44.csv`. **Sudreg spojen 05.11.** (snimke dobavljača, NKD i datum osnivanja u AI kontekstu), **pravilo B** i GDPR skrivanje naziva tipa `ostalo` (necommitano). Lokalni API s ključevima na portu 8095.
-- Zadnje ažurirano: 2026-11-05
+- **#45 (ispravak, Metodologija) spojen u `main` 06.11. (PR #54);** migracija feedbacka je `V6__feedback.sql`.
+- Zadnje ažurirano: 2026-11-06
 
 ## Index
 | File | Sadržaj |

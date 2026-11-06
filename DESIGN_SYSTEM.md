@@ -28,7 +28,7 @@ If you change a token or a component, update this file in the same change. Code 
 - No dark mode (OtvoreniRadar has none; the video is recorded in light mode).
 
 ## 3. Components (`@/components`)
-Copied unchanged from OtvoreniRadar: `Button` / `ButtonLink` / `ExternalButtonLink`, `Badge`, `Notice`, `Card`, `PageHeader`, `EmptyState`, `ErrorState`, `LoadingState`, `BackLink`, `ExternalLink`, `FactList` + `UnknownValue` (default "nije objavljeno"), `Select`, `TextInput`, `Icon` (Lucide paths, no icon library).
+Copied unchanged from OtvoreniRadar: `Button` / `ButtonLink` / `ExternalButtonLink`, `Badge`, `Notice`, `Card`, `PageHeader`, `EmptyState`, `ErrorState`, `LoadingState`, `BackLink`, `ExternalLink`, `FactList` + `UnknownValue` (default "nije objavljeno"), `Select`, `TextInput`, `ChoiceChip`, `Icon` (Lucide paths, no icon library). `TextArea` is JavniRadar's own, with the `TextInput` look (correction form).
 
 JavniRadar components on the same tokens:
 
@@ -48,6 +48,8 @@ Folder rule: every component has its own folder with `Name.tsx`, `Name.module.cs
 - **Home:** `PageHeader` → two columns: framed facts list (serif numbers, one divider per fact) + 320 px "Kako radi" side panel with serif green step numbers.
 - **Explorer:** `PageHeader` → summary line of real numbers → 260 px bordered filter panel (sticky) + framed table (subtle header row, hover row, stacked rows under 768 px) → pagination with `Button`s.
 - **Details (contract, buyer, indicator):** `BackLink` → `PageHeader` → main column + 320 px aside of bordered panels (amounts, source). Chart and table sections are framed `Card`-like surfaces; lists of indicator cards are not framed again.
+- **Form (correction, `/ispravak`):** `BackLink` → `PageHeader` with the target in `meta` → bordered form (`ChoiceChip` radios, `TextArea`, `Select`, `TextInput`, inline errors, focus on the first invalid field) + 320 px panel "Što se događa s prijavom". Success replaces the form with a success `Notice`.
+- **Reading page (`/metodologija`):** narrow column (`--content-width-narrow`) + sticky "Na ovoj stranici" list; one bordered surface per rule with formula, threshold table (value + source) and "Što ovo NE znači".
 - **States:** `LoadingState` / `ErrorState` (with "Pokušaj ponovno") / `EmptyState` (title without full stop, hint, one secondary action).
 
 ## 5. Do and don't

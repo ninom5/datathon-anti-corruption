@@ -8,3 +8,5 @@ export * from "./MapPage";
 export * from "./ComparisonPage";
 export * from "./BuyerPage";
 export * from "./IndicatorPage";
+export * from "./FeedbackPage";
+export * from "./MethodologyPage";

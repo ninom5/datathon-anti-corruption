@@ -153,6 +153,16 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - **Uklonjeno:** tamni način i velika slova iznad naslova (eyebrow), zaobljene "pill" oznake.
 - Komponente su sada u mapi po komponenti (`components/<Name>/`), kao u OtvoreniRadaru.
 
+## 2026-11-03: #45 – obrazac za ispravak i Metodologija (IvanMosa)
+- **Grana `45-ispravak-metodologija` od `refactor-ui`**, ne od `main`. Zašto: nove stranice koriste komponente iz redizajna (#53); iz `main` bi se pisale dvaput. PR #54 ide u `main`, jer su #51 i #53 spojeni prije otvaranja.
+- **`POST /api/v1/feedback` prima samo `indicator` i `contract`** i četiri vrste iz obrasca. `korisno`/`pogresno` i `ai_assessment` su u CHECK-u tablice, ali ih API još odbija: dodaje ih #44 (Nino) kad postoji tablica `ai_assessment`. **Migracija je bila `V4__feedback.sql`; pri spajanju s `main` (06.11.) preimenovana je u `V6__feedback.sql`, jer su `V4` i `V5` zauzeli #44 i #46.**
+- **Cilj mora biti javno vidljiv:** neaktivan indikator i ugovor s fizičkom osobom daju isti 404 kao nepostojeći (ista GDPR logika kao `ContractService`).
+- **E-mail je obavezan samo za pravo na odgovor i uklanjanje osobnih podataka** (moderator mora odgovoriti), inače neobavezan. API ga nikad ne vraća ni ne logira.
+- **Rate limit bez nove ovisnosti:** `FeedbackRateLimiter` u memoriji (10/min po adresi). Bucket4j bi bio nova ovisnost za jedan endpoint; za jednu instancu i demo je ovo dovoljno.
+- **Nema moderacijskog sučelja ni prikaza odgovora uz indikator** (Could u `FEATURES.md` F12). Prijave se čitaju iz baze (`moderation = 'novo'`).
+- **Metodologija je statičan tekst u `MethodologyPage/methodologyRules.ts`**, s vrijednostima prepisanima iz `thresholds.yaml`. Zašto: endpoint s pragovima je više posla nego koristi do 07.11. Cijena: pri promjeni praga treba promijeniti oba mjesta (zapisano u komentaru filea). AI evaluacija se ne navodi brojkama dok nije izmjerena (`ANOMALY_DETECTION.md` §4.6).
+- **„Izvori i metodologija” razdvojeno** na `/izvori` (podaci) i `/metodologija` (pravila); metodologija je u navigaciji jer je to odgovor na „zašto vam vjerovati” za žiri i video.
+
 ## 2026-11-03: #44 – AI procjena (potvrdio korisnik)
 - **Strukturirani izlaz (`output_config.format`, JSON shema iz `ANOMALY_DETECTION.md` §4.3) umjesto prisilnog poziva alata `zabiljezi_procjenu`.** Zašto: `claude-sonnet-5-5` (ponovna provjera, faza 5) vraća 400 na forsirani `tool_choice` (`tool`/`any`), a strukturirani izlaz jednako ograničava odgovor (enumi, obavezna polja). Isti obrazac već radi s Haiku 5.5 u `Desktop/datathon`. §4.3 dopušta "tool use / structured output". `minItems` i `maxLength` iz §4.3 provjerava validator, ne shema.
 - **Few-shot primjeri:** §4.5 ih samo opisuje, pa su napisani kao potpuni sintetički JSON primjeri točno prema tim opisima (u `resources/ai/ai-flag-v1.txt`). Svaka promjena teksta prompta = nova verzija.

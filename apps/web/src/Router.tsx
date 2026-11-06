@@ -1,6 +1,6 @@
 import {Route, Switch} from 'wouter';
 import {routes} from '@/routes';
-import {BuyerPage, ComparisonPage, ContractPage, ContractsPage, HomePage, IndicatorPage, MapPage, NotFoundPage, SourcesPage} from "@/pages";
+import {BuyerPage, ComparisonPage, ContractPage, ContractsPage, FeedbackPage, HomePage, IndicatorPage, MapPage, MethodologyPage, NotFoundPage, SourcesPage} from "@/pages";
 import {AppLayout} from "@/layouts";
 
 export const Router = () => {
@@ -15,6 +15,8 @@ export const Router = () => {
                 <Route path={routes.SOURCES} component={SourcesPage}/>
                 <Route path={routes.MAP} component={MapPage}/>
                 <Route path={routes.COMPARISON} component={ComparisonPage}/>
+                <Route path={routes.METHODOLOGY} component={MethodologyPage}/>
+                <Route path={routes.FEEDBACK} component={FeedbackPage}/>
                 <Route component={NotFoundPage}/>
             </Switch>
         </AppLayout>

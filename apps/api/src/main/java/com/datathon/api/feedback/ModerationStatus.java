@@ -1,0 +1,30 @@
+package com.datathon.api.feedback;
+
+import com.datathon.api.common.persistence.DatabaseCode;
+import com.datathon.api.common.persistence.DatabaseCodeConverter;
+import jakarta.persistence.Converter;
+
+/** Feedback is shown next to an indicator only after manual moderation (docs/FEATURES.md F12). */
+public enum ModerationStatus implements DatabaseCode {
+    NEW("novo"),
+    PUBLISHED("objavljeno"),
+    REJECTED("odbijeno");
+
+    private final String code;
+
+    ModerationStatus(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public String code() {
+        return code;
+    }
+
+    @Converter(autoApply = true)
+    public static class JpaConverter extends DatabaseCodeConverter<ModerationStatus> {
+        public JpaConverter() {
+            super(ModerationStatus.class);
+        }
+    }
+}
