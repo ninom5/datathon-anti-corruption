@@ -6,9 +6,11 @@ import com.datathon.api.source.dto.SourceDatasetResponse;
 import com.datathon.api.source.dto.SourceFileResponse;
 import com.datathon.api.source.dto.SourcesSummary;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,7 @@ public class SourceService {
 
     @Transactional(readOnly = true)
     public SourcesSummary summarize() {
-        List<SourceFile> files = fileRepository.findByDatasetIsSyntheticFalse();
+        List<SourceFile> files = withoutRepeatedFailures(fileRepository.findByDatasetIsSyntheticFalse());
         Map<String, Long> filesByStatus = files.stream()
                 .collect(Collectors.groupingBy(SourceFileResponse::statusOf, TreeMap::new, Collectors.counting()));
         int incompleteFromYear = dataCoverage.incompleteFromYear();
@@ -53,7 +55,7 @@ public class SourceService {
     }
 
     private Map<Long, List<SourceFileResponse>> filesByDataset(List<Long> datasetIds) {
-        List<SourceFile> files = datasetIds.isEmpty() ? List.of() : fileRepository.findByDatasetIds(datasetIds);
+        List<SourceFile> files = datasetIds.isEmpty() ? List.of() : withoutRepeatedFailures(fileRepository.findByDatasetIds(datasetIds));
         List<Long> fileIds = files.stream().map(SourceFile::getId).toList();
         Map<Long, Long> rows = statistics.rowsPerFile(fileIds);
         Map<Long, Long> contracts = statistics.contractsPerFile(fileIds);
@@ -63,5 +65,23 @@ public class SourceService {
                     .add(SourceFileResponse.from(file, rows.getOrDefault(file.getId(), 0L), contracts.getOrDefault(file.getId(), 0L)));
         }
         return byDataset;
+    }
+
+    /**
+     * Every ingest run stores a new row for a download that failed again, so the same 20 unavailable URLs were counted
+     * once per run (60, then 80 "nedostupno"). A failed download is shown once per URL, the latest attempt, and not at
+     * all when the same URL was downloaded successfully in another run.
+     */
+    static List<SourceFile> withoutRepeatedFailures(List<SourceFile> files) {
+        Set<String> downloaded = files.stream().filter(file -> file.getSha256() != null).map(SourceFile::getUrl)
+                .collect(Collectors.toSet());
+        Map<String, SourceFile> latestFailure = new HashMap<>();
+        for (SourceFile file : files) {
+            if (file.getSha256() == null && !downloaded.contains(file.getUrl())) {
+                latestFailure.merge(file.getUrl(), file, (kept, next) -> next.getId() > kept.getId() ? next : kept);
+            }
+        }
+        Set<SourceFile> keptFailures = Set.copyOf(latestFailure.values());
+        return files.stream().filter(file -> file.getSha256() != null || keptFailures.contains(file)).toList();
     }
 }

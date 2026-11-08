@@ -1,6 +1,5 @@
 package com.datathon.api.ingest.normalize;
 
-import com.datathon.api.ingest.extract.AmountParser;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -77,6 +76,28 @@ public final class Money {
         if (EXCEL_NUMBER.matcher(compact).matches()) {
             return Optional.of(new BigDecimal(compact));
         }
-        return AmountParser.parseStructured(text);
+        if (!isPlainAmount(text)) {
+            return Optional.empty();
+        }
+        // The cell is now known to be "1.500,50" or "1 500,50" with an optional sign and currency, so the number is read
+        // directly; AmountParser stopped at the first space and read "1 500,50 kn" as 1 kn.
+        String number = CURRENCY_TOKEN.matcher(text.toLowerCase(Locale.ROOT)).replaceAll("")
+                .replaceAll("[.\\s\\u00a0]", "").replace(',', '.');
+        return Optional.of(new BigDecimal(number));
     }
+
+    /**
+     * A cell may hold only a number and a currency marker. Real registers have durations in amount columns when
+     * columns are shifted ("3 MJESECA", "30 DANA", Općina Cernik 2022), unit prices ("257,50 kn / tona") and ranges
+     * ("30.000,00 kn / 35.000,00 kn"); reading the first number of such text gave amounts like 3 EUR.
+     */
+    private static boolean isPlainAmount(String text) {
+        String rest = CURRENCY_TOKEN.matcher(text.toLowerCase(Locale.ROOT)).replaceAll("");
+        return AMOUNT_CHARS.matcher(rest).matches();
+    }
+
+    private static final Pattern CURRENCY_TOKEN = Pattern.compile("\\bkuna\\b|\\bkn\\b|\\bhrk\\b|\\beura?\\b|\\be\\b|€");
+    /** Thousands groups with dots or spaces, up to two decimals: rejects dates ("28.02.2023") and file numbers ("2178-16-02-22-7"). */
+    private static final Pattern AMOUNT_CHARS = Pattern.compile(
+            "\\s*-?\\s*(?:\\d{1,3}(?:[.\\s\\u00a0]\\d{3})+|\\d+)(?:,\\d{1,2})?\\s*");
 }

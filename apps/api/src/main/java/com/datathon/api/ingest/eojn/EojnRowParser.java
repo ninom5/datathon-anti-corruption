@@ -8,6 +8,7 @@ import com.datathon.api.ingest.SheetReader.SheetRow;
 import com.datathon.api.ingest.normalize.Dates;
 import com.datathon.api.ingest.normalize.Money;
 import com.datathon.api.ingest.normalize.Oibs;
+import com.datathon.api.ingest.normalize.VatCheck;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -122,6 +123,9 @@ public final class EojnRowParser {
         if (isOutOfRange(amounts.initial().value()) || isOutOfRange(amounts.total().value())) {
             flags.add(IssueCode.AMOUNT_OUT_OF_RANGE);
         }
+        VatCheck.addFlags(flags,
+                new BigDecimal[] {amounts.initial().value(), amounts.initialGross().value()},
+                new BigDecimal[] {amounts.total().value(), amounts.totalGross().value()});
         return amounts;
     }
 

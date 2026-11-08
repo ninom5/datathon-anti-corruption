@@ -208,7 +208,7 @@ public class SplittingRule implements GroupRule {
         text.append(". Svaki je ispod praga jednostavne nabave ").append(isWorks ? "za radove" : "za robe i usluge")
                 .append(" koji je vrijedio na dan sklapanja. Ukupno vrijede ").append(eur(window.sum()))
                 .append(" bez PDV-a, što je ").append(decimal(ratio)).append(" × prag od ").append(eur(window.threshold())).append('.');
-        if (members.stream().map(Candidate::threshold).distinct().count() > 1) {
+        if (isThresholdChange(members)) {
             text.append(" Razdoblje obuhvaća promjenu praga, pa se zbroj uspoređuje s nižim pragom.");
         }
         if (isOwnCompany) {
@@ -241,5 +241,15 @@ public class SplittingRule implements GroupRule {
         ref.put("threshold", window.threshold());
         ref.put("contractIds", window.members().stream().map(member -> member.contract().getId()).toList());
         return ref;
+    }
+
+    /**
+     * 200.000 kn converted at 7,53450 is 26.544,56 EUR and the 2023 threshold is 26.540 EUR: the same legal threshold,
+     * so a window over 1.1.2023 is not a threshold change. Only a difference of at least 1 EUR counts.
+     */
+    private static boolean isThresholdChange(List<Candidate> members) {
+        BigDecimal min = members.stream().map(Candidate::threshold).min(BigDecimal::compareTo).orElseThrow();
+        BigDecimal max = members.stream().map(Candidate::threshold).max(BigDecimal::compareTo).orElseThrow();
+        return max.subtract(min).compareTo(BigDecimal.ONE) >= 0;
     }
 }

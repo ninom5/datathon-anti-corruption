@@ -25,7 +25,11 @@ final class RuleSupport {
 
     /** "Ugovorena cijena je po jediničnim količinama iz troškovnika" (real note, Općina Mikleuš 2025). */
     private static final Pattern UNIT_PRICE_NOTE = Pattern.compile("jedinič|jedinic", Pattern.CASE_INSENSITIVE);
-    private static final Pattern FRAMEWORK_SUBJECT = Pattern.compile("okvirn", Pattern.CASE_INSENSITIVE);
+    /**
+     * "Tromjesečna evidencija ugovora" is the EOJN quarterly record of contracts signed under a framework agreement
+     * (28 real rows, e.g. Grad Rovinj 2021-2022, electricity), so it is a framework call-off like "okvirni sporazum".
+     */
+    private static final Pattern FRAMEWORK_SUBJECT = Pattern.compile("okvirn|tromjesečn\\S* evidencij", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
     private RuleSupport() {
     }
@@ -36,6 +40,17 @@ final class RuleSupport {
      */
     static DataQuality baseQuality(Contract contract, boolean hasDerivedInput) {
         return contract.getQualityFlags().isEmpty() && !hasDerivedInput ? DataQuality.HIGH : DataQuality.MEDIUM;
+    }
+
+    private static final Pattern CALL_OFF_RECORD = Pattern.compile("tromjesečn\\S* evidencij", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+
+    /**
+     * A quarterly record of a call-off under a framework agreement whose own row is usually in the same register
+     * (Grad Rovinj 2021: framework 490.431 EUR plus call-offs 245.215,50 and 171.957,76 EUR with HEP-Opskrba). Summing
+     * both counts the same money twice, so value-share rules leave the call-off records out.
+     */
+    static boolean isCallOffRecord(Contract contract) {
+        return matches(CALL_OFF_RECORD, contract.getSubject());
     }
 
     /** Framework agreements have indicative quantities, so growth and overpayment say little (ANOMALY_DETECTION.md §D). */

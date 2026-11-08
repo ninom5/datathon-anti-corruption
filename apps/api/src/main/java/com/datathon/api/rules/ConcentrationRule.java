@@ -59,7 +59,8 @@ public class ConcentrationRule implements GroupRule {
     public List<GroupFinding> evaluate(BuyerContracts input) {
         List<Contract> valued = input.contracts().stream()
                 .filter(contract -> contract.getSupplier() != null && contract.getDateSigned() != null
-                        && RuleSupport.cpvPrefix(contract, 2) != null && isPositive(RuleSupport.valueOf(contract)))
+                        && RuleSupport.cpvPrefix(contract, 2) != null && isPositive(RuleSupport.valueOf(contract))
+                        && !RuleSupport.isCallOffRecord(contract))
                 .toList();
         Set<Integer> period = latestYears(valued);
         Map<String, List<Contract>> byCpv2 = valued.stream()
@@ -130,7 +131,13 @@ public class ConcentrationRule implements GroupRule {
                 explanation(input, cell, shares, period, isOwnCompany, isNaturalMonopoly), NOT_MEANING,
                 List.of("broj ponuda", "tržište mogućih dobavljača"),
                 RuleSupport.groupEvidence(contracts, "Ukupni iznos (sa izmjenama) bez PDV-a"));
-        return new GroupFinding(draft, Indicator.SUBJECT_BUYER_CPV, subjectRef(input, cell, shares, period, contracts), contracts);
+        // Only the top supplier's contracts carry the indicator; the other suppliers' contracts stay in the evidence
+        // and in subject_ref, so the shares can be checked, but they are not marked "koncentracija" in the explorer.
+        List<Contract> topSupplierContracts = contracts.stream()
+                .filter(contract -> contract.getSupplier() == shares.top())
+                .toList();
+        return new GroupFinding(draft, Indicator.SUBJECT_BUYER_CPV, subjectRef(input, cell, shares, period, contracts),
+                topSupplierContracts);
     }
 
     private static String explanation(BuyerContracts input, Cell cell, Shares shares, Set<Integer> period,

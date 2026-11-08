@@ -1,6 +1,6 @@
 import {ExternalLink} from "@/components";
 import type {AiAssessment, AiReason, ContractDetail} from "@/types";
-import {aiConfidenceLabels, aiFieldLabel, aiLabelLabels, classNames, formatDate} from "@/utils";
+import {aiConfidenceLabels, aiFieldLabel, aiLabelLabels, classNames, formatDateTime} from "@/utils";
 import styles from "./AiAssessmentBlock.module.css";
 
 const TITLE = "AI procjena – zahtijeva ljudsku provjeru";
@@ -59,9 +59,13 @@ const AssessmentBody = ({assessment, fileUrl}: {assessment: AiAssessment; fileUr
                 </>
             )}
             <h3>Moguća legitimna objašnjenja</h3>
-            <ul className={styles.list}>
-                {assessment.legitExplanations.map((text) => <li key={text}>{text}</li>)}
-            </ul>
+            {assessment.legitExplanations.length > 0
+                ? (
+                    <ul className={styles.list}>
+                        {assessment.legitExplanations.map((text) => <li key={text}>{text}</li>)}
+                    </ul>
+                )
+                : <p className={styles.muted}>Model nije naveo objašnjenja; to ne znači da ih nema.</p>}
             {assessment.missingData.length > 0 && (
                 <>
                     <h3>Što nedostaje za pouzdaniji zaključak</h3>
@@ -93,7 +97,7 @@ export const AiAssessmentBlock = ({contract}: AiAssessmentBlockProps) => {
                 {assessment && (
                     <p className={styles.muted}>
                         {assessment.model} · {assessment.promptVersion} ·{" "}
-                        <span className="tabular-nums">{formatDate(assessment.createdAt)}</span>
+                        <span className="tabular-nums">{formatDateTime(assessment.createdAt)}</span>
                     </p>
                 )}
             </header>

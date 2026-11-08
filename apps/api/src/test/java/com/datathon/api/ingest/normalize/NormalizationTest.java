@@ -34,7 +34,16 @@ class NormalizationTest {
                 .as("the cell marker wins over the header").isEqualByComparingTo("10000.00");
         assertThat(Money.read("nije poznato", LocalDate.of(2025, 1, 1)).status()).isEqualTo(Money.Status.UNREADABLE);
         assertThat(Money.read(" ", LocalDate.of(2025, 1, 1)).status()).isEqualTo(Money.Status.MISSING);
-    }
+        // Shifted columns and unit prices in real registers (Općina Cernik 2022) are not amounts.
+        assertThat(Money.read("3 MJESECA", LocalDate.of(2022, 11, 21)).status()).isEqualTo(Money.Status.UNREADABLE);
+        assertThat(Money.read("30 DANA", LocalDate.of(2022, 11, 21)).status()).isEqualTo(Money.Status.UNREADABLE);
+        assertThat(Money.read("257,50 kn / tona", LocalDate.of(2020, 1, 1)).status()).isEqualTo(Money.Status.UNREADABLE);
+        assertThat(Money.read("30.000,00 kn / 35.000,00 kn", LocalDate.of(2020, 1, 1)).status()).isEqualTo(Money.Status.UNREADABLE);
+        assertThat(Money.read("28.02.2023", LocalDate.of(2022, 11, 21)).status()).isEqualTo(Money.Status.UNREADABLE);
+        assertThat(Money.read("2178-16-02-22-7", LocalDate.of(2022, 11, 21)).status()).isEqualTo(Money.Status.UNREADABLE);
+        assertThat(Money.read("1 500,50 kn", LocalDate.of(2022, 1, 1)).value()).isEqualByComparingTo("199.15");
+        assertThat(Money.read("1.600,00 E", LocalDate.of(2024, 1, 1)).value()).isEqualByComparingTo("1600.00");
+        assertThat(Money.read("€ 2.500,00", LocalDate.of(2024, 1, 1)).value()).isEqualByComparingTo("2500.00");    }
 
     @Test
     void readsDatesInEveryRegisterFormat() {

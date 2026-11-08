@@ -171,11 +171,23 @@ class SyntheticGroundTruthTest {
         return new Outcome(expected, isGroupRight ? "OK TP" : "TP, kriva skupina", actual, detail);
     }
 
-    /** Every synthetic contract of the case, e.g. F01A, F01B and F01C for F01A. */
+    /**
+     * Every synthetic contract of the case, e.g. F01A, F01B and F01C for F01A. Rule C marks only the top supplier's
+     * contracts (the other suppliers of the cell stay in the evidence), so for C the case's own supplier is kept.
+     */
     private Set<Long> caseContractIds(Expected expected) {
         String prefix = URL_PREFIX + expected.ref().substring(0, 3);
-        return contractRepository.findAll().stream()
+        List<Contract> caseContracts = contractRepository.findAll().stream()
                 .filter(contract -> contract.getNaturalKey().startsWith(prefix))
+                .toList();
+        if (!expected.expected().equals(ConcentrationRule.RULE_CODE)) {
+            return caseContracts.stream().map(Contract::getId).collect(Collectors.toSet());
+        }
+        Long topSupplierId = caseContracts.stream()
+                .filter(contract -> contract.getNaturalKey().equals(URL_PREFIX + expected.ref()))
+                .findFirst().orElseThrow().getSupplier().getId();
+        return caseContracts.stream()
+                .filter(contract -> contract.getSupplier().getId().equals(topSupplierId))
                 .map(Contract::getId)
                 .collect(Collectors.toSet());
     }

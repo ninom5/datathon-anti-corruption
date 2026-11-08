@@ -68,15 +68,16 @@ _Ilustrativan tok. Primjer koristi **sintetičke podatke za demonstraciju** (fik
 - **mlada tvrtka i nesklad djelatnosti i predmeta ugovora** (ugovori × Sudski registar);
 - **jedinstven pogled** na 40 različito formatiranih datoteka, s HRK → EUR pretvorbom i provenancijom svakog retka.
 
-**Rezultati na stvarnim podacima** (izvor: `indicator`, `ai_assessment`, 2026-11-08):
-- **306 indikatora** pravila: D izmjena vrijednosti 16, D isplata iznad ugovorenog 88 (od toga 28 informativnih, npr. moguća zamjena kuna i eura u izvoru), F 150, C 17, B 0;
-- **652 od 5.849 prikazanih ugovora** ima barem jedan indikator, 620 s oznakom „vrijedi provjeriti”;
+**Rezultati na stvarnim podacima** (izvor: `indicator`, `ai_assessment`, 2026-11-08, nakon validacije podataka):
+- **262 indikatora** pravila na stvarnim podacima: D izmjena vrijednosti 16, D isplata iznad ugovorenog 86 (od toga 28 informativnih, npr. moguća zamjena kuna i eura u izvoru), F 146, C 14, B 0;
+- **520 od 5.849 prikazanih ugovora** ima barem jedan indikator, 488 s oznakom „vrijedi provjeriti” (pravilo C označava samo ugovore najvećeg dobavljača);
+- **provjera kvalitete podataka**: 19 dvostrukih upisa istog ugovora računa se jednom, a 26 redaka s proturječnim iznosima s PDV-om i bez njega te 9 redaka s pomaknutim stupcima ne ulazi u pravila F i C (oznake su vidljive na stranici ugovora);
 - **AI procjena** na 280 stvarnih ugovora: 104 „vrijedi provjeriti”, 176 bez oznake, 0 prikazanih odgovora bez dokaza (validator).
 
 ## 6. Vrijednost i utjecaj
 
 - **Za zajednicu:** jedan pregled lokalne nabave umjesto desetaka tablica; jezik koji ne optužuje, nego upućuje na provjeru i izvor.
-- **Za javni sektor:** stranica „Izvori” pokazuje koje datoteke nisu strojno čitljive i zašto (od 195 pregledanih datoteka uvezeno je 55; 72 su u formatu koji nije standardni EOJN izvoz, 60 je nedostupno). To je konkretan popis za poboljšanje objave podataka.
+- **Za javni sektor:** stranica „Izvori” pokazuje koje datoteke nisu strojno čitljive i zašto (od 155 pregledanih datoteka uvezeno je 55; 72 su u formatu koji nije standardni EOJN izvoz, 20 je nedostupno). To je konkretan popis za poboljšanje objave podataka.
 - **Za nadzorna tijela:** filtriranje po pravilu i pojasu daje uzorak za reviziju, s dokazima.
 - **Mjerljivo:** pokrivenost (34/556 JLS), broj indikatora, udio ugovora s izvorom (100 % ima provenanciju).
 

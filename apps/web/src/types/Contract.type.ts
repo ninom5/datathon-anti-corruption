@@ -19,6 +19,8 @@ export interface ContractListItem {
     totalValue: number | null;
     paidAmount: number | null;
     indicators: IndicatorBadge[];
+    /** The register's amounts contradict each other (VAT, shifted columns); details on the contract page. */
+    amountDoubtful: boolean;
     synthetic: boolean;
 }
 

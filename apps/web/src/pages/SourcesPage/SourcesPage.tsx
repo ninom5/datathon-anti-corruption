@@ -79,6 +79,30 @@ export const SourcesPage = () => {
                         5.000 € iznad ukupnog iznosa s PDV-om.
                     </li>
                     <li>
+                        <strong>F – moguće cjepkanje nabave:</strong> isti naručitelj i dobavljač, ista CPV skupina, više
+                        ugovora unutar 90 dana, svaki ispod praga jednostavne nabave koji je vrijedio na dan sklapanja, a
+                        zajedno ga dosežu ili prelaze. Ugovori iz postupaka javne nabave i okvirnih sporazuma ne ulaze u skupinu; gorivo, energija i
+                        komunalne usluge su samo informativni.
+                    </li>
+                    <li>
+                        <strong>C – koncentracija dobavljača:</strong> u CPV odjeljku i zadnje tri godine s ugovorima
+                        (najmanje 5 ugovora, 50.000 € i dvije godine) jedan dobavljač ima najmanje 70 % vrijednosti i barem
+                        dva ugovora, a HHI je najmanje 5.000. Broj ponuda nije javno dostupan, pa se ne zna koliko se dobavljača natjecalo.
+                    </li>
+                    <li>
+                        <strong>B – nedavno osnovana tvrtka:</strong> ugovor od najmanje 50.000 € sklopljen najviše 180 dana
+                        nakon upisa dobavljača u sudski registar (Sudski registar, otvoreni API).
+                    </li>
+                    <li>
+                        Pragovi pravila D, F, C i B su heuristike JavniRadara, osim zakonskih pragova izmjena i jednostavne
+                        nabave iz Zakona o javnoj nabavi.
+                    </li>
+                    <li>
+                        <strong>AI procjena – zahtijeva ljudsku provjeru:</strong> jezični model čita samo podatke ugovora i
+                        rezultate pravila, a svaki razlog mora citirati polja i izvore iz tih podataka; inače se odbacuje.
+                        Prikazuje se odvojeno od pravila, s modelom i datumom, i nikad se ne zbraja s njima.
+                    </li>
+                    <li>
                         Svaka oznaka ima tri odvojene dimenzije (kvaliteta podataka, veličina odstupanja, pouzdanost
                         dokaza) i nema zbirne ocjene. Kad brojevi upućuju na grešku pri unosu u registar, oznaka je
                         „informativno – moguća greška u unosu”. Takvi zapisi mogu pomoći i naručiteljima da poprave

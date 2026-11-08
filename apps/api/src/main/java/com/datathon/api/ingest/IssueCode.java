@@ -34,6 +34,22 @@ public final class IssueCode {
     public static final String SUPPLIER_CONSORTIUM = "supplier_consortium";
     /** Amount with VAT below the amount without VAT: one of them is mistyped or in another currency in the source. */
     public static final String GROSS_BELOW_NET = "gross_below_net";
+    /**
+     * Amount with VAT more than 1,40 times the amount without VAT (VAT is at most 25 %; registration tax on cars adds a
+     * little more). Real cases were a dropped decimal comma, e.g. Korčula 2022: 74.672,00 HRK without VAT and
+     * 9.334.000,00 HRK with VAT.
+     */
+    public static final String VAT_RATIO_IMPLAUSIBLE = "vat_ratio_implausible";
+    /**
+     * The register lists the same contract twice under different EOJN links (same buyer, supplier, date, amount,
+     * procurement number and contract number). Only the first row counts in group rules (F, C).
+     */
+    public static final String POSSIBLE_DUPLICATE = "possible_duplicate";
+    /**
+     * A2: the row has values to the right of the last header column, so its cells are shifted against the header
+     * (Općina Cernik 2022: durations in the amount column, dates in the paid column). Its amounts are not trusted.
+     */
+    public static final String COLUMNS_SHIFTED = "columns_shifted";
 
     // --- dedup (severity warning, not attached to a contract) ---
     public static final String SUPERSEDED_BY_NEWER_FILE = "superseded_by_newer_file";

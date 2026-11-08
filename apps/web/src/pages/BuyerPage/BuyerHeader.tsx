@@ -1,7 +1,7 @@
 import {ButtonLink, PageHeader} from "@/components";
 import {comparisonPath, mapPath, routes} from "@/routes";
 import type {BuyerProfile} from "@/types";
-import {formatEurRounded, formatNumber} from "@/utils";
+import {formatEurRounded, formatNumber, plural} from "@/utils";
 import styles from "@/components/DataView/DataView.module.css";
 
 interface BuyerHeaderProps { profile: BuyerProfile }
@@ -34,7 +34,7 @@ export const BuyerHeader = ({profile}: BuyerHeaderProps) => {
             />
             <section className={styles.summaryBlock} aria-label="Sažetak">
                 <p className={styles.summary}>
-                    <strong className="tabular-nums">{formatNumber(profile.contracts)}</strong> ugovora
+                    <strong className="tabular-nums">{formatNumber(profile.contracts)}</strong> {plural(profile.contracts, "ugovor", "ugovora", "ugovora")}
                     <span className={styles.dot}>·</span>
                     <strong className="tabular-nums">{formatEurRounded(profile.totalValue)}</strong> bez PDV-a
                 </p>

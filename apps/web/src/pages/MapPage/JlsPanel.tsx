@@ -62,7 +62,7 @@ export const JlsPanel = ({municipality, isWithoutBoundary}: JlsPanelProps) => {
                             <dd>{municipality.worthCheckingPer100 === null ? "–" : per100Format.format(municipality.worthCheckingPer100)}</dd>
                         </div>
                         <div>
-                            <dt>Informativno (moguće greške u unosu)</dt>
+                            <dt>Informativno (npr. moguće greške u unosu)</dt>
                             <dd>{formatNumber(municipality.informative)}</dd>
                         </div>
                     </dl>
