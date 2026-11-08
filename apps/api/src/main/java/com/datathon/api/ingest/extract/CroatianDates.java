@@ -1,7 +1,5 @@
 package com.datathon.api.ingest.extract;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), ingest/extract/CroatianDates.java.
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;

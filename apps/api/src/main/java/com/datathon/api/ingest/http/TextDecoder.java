@@ -1,7 +1,5 @@
 package com.datathon.api.ingest.http;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), ingest/http/TextDecoder.java.
-
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;

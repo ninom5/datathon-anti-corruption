@@ -2,6 +2,20 @@
   "name": "web",
   "private": true,
   "version": "0.0.0",
+  "description": "JavniRadar web (tim Nazor, Datathon Portala otvorenih podataka 2026, izazov A)",
+  "license": "MIT",
+  "author": "Tim Nazor",
+  "contributors": [
+    "Ivan Mosić",
+    "Šime Jadrijev",
+    "Luka Žuljević",
+    "Nino Milas"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninom5/datathon-anti-corruption.git",
+    "directory": "apps/web"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

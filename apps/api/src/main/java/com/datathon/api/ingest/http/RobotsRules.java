@@ -1,7 +1,5 @@
 package com.datathon.api.ingest.http;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), ingest/http/RobotsRules.java.
-
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

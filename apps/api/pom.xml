@@ -11,20 +11,39 @@
 	<groupId>com.datathon</groupId>
 	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+	<name>JavniRadar API</name>
+	<description>JavniRadar (tim Nazor, Datathon Portala otvorenih podataka 2026, izazov A): ingest općinskih registara ugovora, deterministička pravila, AI procjena i REST API.</description>
+	<url>https://github.com/ninom5/datathon-anti-corruption</url>
 	<licenses>
-		<license/>
+		<license>
+			<name>MIT</name>
+			<url>https://opensource.org/license/mit</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>
+			<name>Ivan Mosić</name>
+			<organization>Tim Nazor</organization>
+		</developer>
+		<developer>
+			<name>Šime Jadrijev</name>
+			<organization>Tim Nazor</organization>
+		</developer>
+		<developer>
+			<name>Luka Žuljević</name>
+			<organization>Tim Nazor</organization>
+		</developer>
+		<developer>
+			<name>Nino Milas</name>
+			<organization>Tim Nazor</organization>
+		</developer>
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection>scm:git:https://github.com/ninom5/datathon-anti-corruption.git</connection>
+		<developerConnection>scm:git:git@github.com:ninom5/datathon-anti-corruption.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/ninom5/datathon-anti-corruption</url>
 	</scm>
 	<properties>
 		<java.version>25</java.version>

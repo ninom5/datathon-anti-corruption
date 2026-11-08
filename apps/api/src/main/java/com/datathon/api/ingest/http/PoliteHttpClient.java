@@ -1,7 +1,5 @@
 package com.datathon.api.ingest.http;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), ingest/http/PoliteHttpClient.java; changed: User-Agent, getBinary() reports the real retrieval time.
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;

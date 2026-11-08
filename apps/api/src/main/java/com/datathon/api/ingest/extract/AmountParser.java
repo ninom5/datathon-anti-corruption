@@ -1,7 +1,5 @@
 package com.datathon.api.ingest.extract;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), ingest/extract/AmountParser.java.
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

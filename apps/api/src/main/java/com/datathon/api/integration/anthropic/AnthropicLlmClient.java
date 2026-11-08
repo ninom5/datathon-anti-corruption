@@ -1,7 +1,6 @@
 package com.datathon.api.integration.anthropic;
 
-// Origin: copied from repo Desktop/datathon, integration/llm/AnthropicLlmClient.java + MessageParamsFactory.java;
-// changed: usage is returned to the caller (budget per run, llm_usage written by the AI run), effort and model per request.
+// Usage is returned to the caller (budget per run, llm_usage written by the AI run); effort and model are set per request.
 
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.core.JsonValue;
