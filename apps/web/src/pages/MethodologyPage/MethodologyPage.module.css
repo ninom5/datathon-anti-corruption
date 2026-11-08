@@ -1,0 +1,161 @@
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    align-items: start;
+    gap: var(--space-6);
+}
+
+.main {
+    min-width: 0;
+    max-width: var(--content-width-narrow);
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-7);
+}
+
+.section > h2 {
+    font-size: var(--font-size-xl);
+}
+
+.facts {
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-left: var(--space-5);
+}
+
+/* One rule = one bordered surface: formula, thresholds with sources, what it does not mean. */
+.rule {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.ruleTitle {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--font-size-lg);
+}
+
+.ruleLetter {
+    min-width: 28px;
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    color: var(--color-text-inverse);
+    background: var(--color-signal);
+}
+
+.formula code {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-sm);
+    background: var(--color-surface-subtle);
+    border-radius: var(--radius-xs);
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.table th,
+.table td {
+    padding: var(--space-2) var(--space-3) var(--space-2) 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table thead th {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+}
+
+.table tbody th {
+    font-weight: var(--font-weight-medium);
+}
+
+.source {
+    color: var(--color-text-muted);
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.details dt {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.details dd {
+    margin-top: 2px;
+    color: var(--color-text-muted);
+}
+
+.aside {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-5));
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.asideTitle {
+    margin-bottom: var(--space-2);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+}
+
+.toc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+    font-size: var(--font-size-sm);
+}
+
+@media (max-width: 960px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .aside {
+        position: static;
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .rule {
+        padding: var(--space-4);
+    }
+}

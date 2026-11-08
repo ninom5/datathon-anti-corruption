@@ -65,7 +65,7 @@ export const HomePage = () => {
                     <p className={styles.disclaimer}>
                         Oznake nisu optužbe. Pokazuju neuobičajene obrasce u objavljenim brojkama i uvijek navode što
                         ne znače.{" "}
-                        <Link href={routes.SOURCES}>Izvori i metodologija</Link>
+                        <Link href={routes.METHODOLOGY}>Kako se računaju oznake</Link>
                     </p>
                 </section>
                 <aside className={styles.aside}>

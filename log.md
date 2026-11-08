@@ -164,6 +164,13 @@
 - Pravilo B na stvarnim podacima: 0 indikatora (31 mlada tvrtka, svi ugovori < 50.000 €); sintetički demo 1.
 - AI stvarni uzorak sa Sudregom: 13/60 oznaka (9 na neskladu NKD-a), kappa prema pravilima 0,057, 0,069 USD. Upisano u `EVALUATION.md`.
 
+## 2026-11-03 – #45 ispravak i Metodologija
+- Ploča: #44 je In progress (Nino), pa je naš sljedeći #45. Grana `45-ispravak-metodologija` od `refactor-ui`.
+- Backend: `V4__feedback.sql` (pri spajanju preimenovana u `V6`), `POST /api/v1/feedback` (validacija, 404 za skrivene ciljeve, 10/min po IP-u), 7 novih testova; `./mvnw test` zeleno. Lokalni API na 8093 ponovno pokrenut s novim jarom (migracija V4 primijenjena).
+- Frontend: `/ispravak` (obrazac), `/metodologija` (pravila D1, D2, F, C s pragovima i izvorima), poveznice s indikatora i ugovora, Metodologija u navigaciji. Build i lint prolaze, provjereno u pregledniku. Testne prijave obrisane iz lokalne baze. Commitano, PR #54 prema `main` (#51 i #53 su u međuvremenu spojeni).
+
+## 2026-11-06 – #45 spojen s `main`
+- `main` (s #44 AI i #46 Sudreg) spojen u `45-ispravak-metodologija`. Konflikti u dokumentaciji riješeni zadržavanjem oba sadržaja. Migracija `V4__feedback.sql` preimenovana u `V6__feedback.sql`, jer je `V4` zauzeo `V4__ai.sql`, a `V5` `V5__company_snapshot.sql`. Lokalna baza koja već ima staru `V4` (feedback) treba se ponovno stvoriti.
 
 ## 2026-11-08 – dokumentacija za predaju (grana `predaja-dokumentacija`, necommitano)
 - Novo u korijenu: `LICENSE` (MIT, 2026, Mosić, Jadrijev, Žuljević, Milas), `THIRD_PARTY_LICENSES.md`, `DATA_SOURCES.md` (samo izvori koje kod koristi), `ARCHITECTURE.md` (implementirano stanje + preduvjeti), `PROJECT.md`. `docs/` nije mijenjan; `docs/DATA_SOURCES.md` §13 i dalje navodi nacionalni izvoz i OCDS koje kod ne koristi.

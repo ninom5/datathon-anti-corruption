@@ -1,3 +1,5 @@
+import {Link} from "wouter";
+import {feedbackPath} from "@/routes";
 import type {ContractDetail} from "@/types";
 import {formatDateTime, formatNumber} from "@/utils";
 import styles from "./ContractPage.module.css";
@@ -52,6 +54,9 @@ export const ProvenanceBlock = ({contract}: ProvenanceBlockProps) => {
                     </>
                 )}
             </dl>
+            <p className={styles.feedbackLink}>
+                <Link href={feedbackPath("ugovor", contract.id)}>Prijavi grešku ili dodaj kontekst</Link>
+            </p>
         </section>
     );
 };

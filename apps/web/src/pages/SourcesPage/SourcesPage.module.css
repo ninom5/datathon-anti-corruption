@@ -5,8 +5,7 @@
 }
 
 .coverage h2,
-.datasets h2,
-.method h2 {
+.datasets h2 {
     font-size: var(--font-size-lg);
 }
 
@@ -147,17 +146,15 @@
     margin-top: var(--space-3);
 }
 
-.method ul {
-    padding-left: var(--space-4);
-    max-width: 80ch;
-}
 
-.method li {
-    margin-bottom: var(--space-2);
-}
 
 @media (max-width: 960px) {
     .coverageGrid {
         grid-template-columns: 1fr;
     }
+}
+
+.methodLink {
+    margin-top: var(--space-6);
+    color: var(--color-text-muted);
 }

@@ -116,7 +116,7 @@ Tablica izvora (izdavatelj, licenca, metoda dohvata, zadnji dohvat, broj zapisa,
 Ljubičasta traka preko cijele širine: **"SINTETIČKI PODACI ZA DEMONSTRACIJU – izmišljene organizacije"**. Takvi zapisi nisu u pretrazi ni u statistikama stvarnih podataka. U istraživaču ugovora prikazuju se samo kad korisnik uključi filter **"Prikaži sintetičke"** (zadano isključen); tada svaki sintetički redak ima oznaku, a detalj ugovora traku. (Promjena 2026-11-02 umjesto zasebne rute `/demo`, vidi `work/decisions.md`.)
 
 ## 4a. Stanje implementacije (POC, 2026-11-02)
-- **Rute:** `/` (naslovnica s tri brojke), `/istrazi` (istraživač), `/ugovor/:id` (detalj), `/izvori` (izvori i metodologija). `/karta` i `/usporedba` dodani su u #43. `/dobavljac` i `/indikator` još nisu napravljeni.
+- **Rute:** `/` (naslovnica s tri brojke), `/istrazi` (istraživač), `/ugovor/:id` (detalj), `/izvori` (izvori i metodologija). `/karta` i `/usporedba` dodani su u #43. `/dobavljac` još nije napravljen. `/ispravak?indikator=` ili `?ugovor=` (obrazac, F12) i `/metodologija` (F14) dodani su u #45; „Izvori” je sada samo popis izvora.
 - **Istraživač:** filtri su u URL-u na hrvatskom (`narucitelj`, `godina`, `dobavljac`, `oznake`, `sinteticki`, `poredak`, `stranica`). Oznake: svi, s bilo kojom oznakom, vrijedi provjeriti, **moguća greška u unosu**, bez oznake.
 - **Sažetak:** "N ugovora · X € · N vrijedi provjeriti · N mogućih grešaka u unosu". Samo stvarni podaci i bez obrta, uz napomenu koliko je ugovora s obrtima izostavljeno.
 - **Detalj indikatora:** blok **"Objašnjenje naručitelja iz izvora"** stoji prije postotka (D2). Moguća greška u unosu nema velik postotak u naslovu, samo sivu iscrtkanu karticu "Informativno – vjerojatna greška u izvoru".
