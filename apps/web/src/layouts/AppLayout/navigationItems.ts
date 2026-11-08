@@ -10,6 +10,7 @@ export const navigationItems: NavigationItem[] = [
     {path: routes.CONTRACTS, label: "Istraži ugovore"},
     {path: routes.MAP, label: "Karta"},
     {path: routes.COMPARISON, label: "Usporedba"},
+    {path: routes.METHODOLOGY, label: "Metodologija"},
     {path: routes.SOURCES, label: "Izvori"},
 ];
 

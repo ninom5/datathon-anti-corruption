@@ -46,7 +46,8 @@ export const AppLayout = ({children}: AppLayoutProps) => {
                         </p>
                     </div>
                     <ul className={styles.footerLinks}>
-                        <li><Link href={routes.SOURCES}>Izvori i metodologija</Link></li>
+                        <li><Link href={routes.METHODOLOGY}>Metodologija</Link></li>
+                        <li><Link href={routes.SOURCES}>Izvori podataka</Link></li>
                         <li>Podaci: registri ugovora naručitelja s data.gov.hr.</li>
                         <li>Datathon Portala otvorenih podataka 2026.</li>
                     </ul>

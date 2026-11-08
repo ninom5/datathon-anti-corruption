@@ -1,5 +1,5 @@
 import {Link} from "wouter";
-import {indicatorPath} from "@/routes";
+import {feedbackPath, indicatorPath} from "@/routes";
 import type {Indicator} from "@/types";
 import {
     classNames,
@@ -100,7 +100,12 @@ export const IndicatorCard = ({indicator, showLink = true, inContract = false, c
                 </>}
             </dl>
             {inContract && indicator.subjectType !== "contract" && <p>Ovaj ugovor je dio skupine od {indicator.contractIds.length} ugovora.</p>}
-            {showLink && <Link href={indicatorPath(indicator.id)} className={styles.link}>Otvori indikator →</Link>}
+            {(showLink || !compact) && (
+                <p className={styles.links}>
+                    {showLink && <Link href={indicatorPath(indicator.id)}>Otvori indikator →</Link>}
+                    {!compact && <Link href={feedbackPath("indikator", indicator.id)}>Prijavi grešku ili dodaj kontekst</Link>}
+                </p>
+            )}
         </article>
     );
 };

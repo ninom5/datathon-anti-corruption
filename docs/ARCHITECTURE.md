@@ -92,7 +92,7 @@ Nakon uvoza ingest pokreće deterministička pravila (`RulesService`). Pravila s
 | GET | `/indicators/{id}` | detalj indikatora (3 dimenzije, dokazi, "što ovo NE znači") |
 | GET | `/sources` | izvori, licence, zadnji uspješni dohvat, broj zapisa |
 | GET | `/methodology` | verzije pravila, pragovi, evaluacija AI-ja |
-| POST | `/feedback` | ispravak ili pravo na odgovor (`target_type`, `target_id`, `role`, `text`, `email`) |
+| POST | `/feedback` | ispravak ili pravo na odgovor. **Napravljeno (#45):** tijelo `{targetType: indicator\|contract, targetId, kind: greska_u_podacima\|kontekst\|pravo_na_odgovor\|uklanjanje_osobnih_podataka, role?, text (10–4.000), contactEmail?}`; `contactEmail` obavezan za pravo na odgovor i uklanjanje. Odgovor 201 `{id, targetType, targetId, kind, moderation, createdAt}` (e-mail se ne vraća). 404 za neaktivan indikator ili skriven ugovor, 429 iznad 10/min po IP-u |
 | POST | `/ask` | (Should) pretraga prirodnim jezikom → strukturirani filter |
 
 **Primjer** `GET /api/v1/contracts/123`:
@@ -152,7 +152,7 @@ JSON polja su camelCase na engleskom, prema rječniku u skillu `spring-boot-api`
 ## 8. Sigurnost
 - Nema korisničkih računa u MVP-u. Admin endpointi traže `X-Admin-Token` iz env varijable.
 - Tajne (`ANTHROPIC_API_KEY`, `SUDREG_CLIENT_ID/SECRET`) samo u env varijablama. `.env` je u `.gitignore`.
-- Rate limit na `/feedback` i `/ask` (npr. Bucket4j; 10/min po IP-u). Captcha se ne koristi.
+- Rate limit na `/feedback` i `/ask` (10/min po IP-u). Captcha se ne koristi. `/feedback` koristi vlastiti `FeedbackRateLimiter` u memoriji, bez Bucket4j (#45, `work/decisions.md`).
 - Escape svog teksta iz izvora u UI-ju (React to radi po zadanim postavkama; bez `dangerouslySetInnerHTML`).
 - Prompt injection: tekst iz registara ide u prompt **samo kao podatak** unutar JSON polja. Validator odbacuje izlaz koji citira polja ili URL-ove izvan konteksta.
 - CORS samo za domenu frontenda.
