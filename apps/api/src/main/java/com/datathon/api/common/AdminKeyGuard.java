@@ -1,7 +1,5 @@
 package com.datathon.api.common;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), common/AdminKeyGuard.java; changed: header is X-Admin-Token (docs/ARCHITECTURE.md §8).
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import lombok.RequiredArgsConstructor;

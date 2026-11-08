@@ -1,7 +1,5 @@
 package com.datathon.api.common;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), common/GlobalExceptionHandler.java.
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

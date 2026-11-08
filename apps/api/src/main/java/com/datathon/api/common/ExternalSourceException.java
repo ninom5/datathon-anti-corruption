@@ -1,7 +1,5 @@
 package com.datathon.api.common;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), common/ExternalSourceException.java.
-
 import lombok.Getter;
 
 /** An external source (Narodne novine, Sudreg, ...) did not give a usable answer. */

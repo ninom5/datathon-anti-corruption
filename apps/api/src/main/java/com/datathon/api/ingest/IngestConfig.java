@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tools.jackson.databind.json.JsonMapper;
 
-// Origin: pattern copied from repo Desktop/datathon, ingest/IngestConfig.java.
 @Configuration
 @EnableConfigurationProperties(IngestProperties.class)
 public class IngestConfig {

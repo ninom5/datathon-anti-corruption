@@ -1,6 +1,6 @@
 # Datathon — tim i asistent
 
-Tim: 3 studenta prema briefu od 1.11. (ranije zapisano 4, potvrditi; vidi `team/team.md`). Cilj: **pobijediti na natjecanju**. Jezik komunikacije: hrvatski.
+Tim **Nazor**: Ivan Mosić, Šime Jadrijev, Luka Žuljević, Nino Milas; mentor Mario Čagalj (potvrđeno 08.11.). Cilj: **pobijediti na natjecanju**. Jezik komunikacije: hrvatski.
 
 ## Pravila za kod i podatke
 Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/` prije implementacije, provenancija za svaki zapis, neutralni jezik (bez "korupcija", "nezakonito" itd.), označeni sintetički podaci, AI procjena uvijek s dokazima i natpisom "AI procjena – zahtijeva ljudsku provjeru", poštivanje robots.txt-a, dokumentacija se ažurira s kodom.
@@ -41,13 +41,14 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 - Otvoreno:
   - stack: Java/Spring Boot POTVRĐEN 2.11.;
   - Sudreg ključ i Claude API ključ (korisnik);
-  - javni GitHub (sigurnosna politika);
+  - javni GitHub: ODOBREN (korisnik, 08.11.);
   - odnos prema drugom projektu (agregator natječaja, izazov C, repo `Desktop/datathon`).
 - #42 spojen u `main` (PR #52). #43 (karta, usporedba) u PR #51 (IvanMosa), spojen s `main` nakon #42.
 - **Grana `refactor-ui` (03.11., PR #53 prema `43-karta-usporedba`):** frontend preuzima dizajn sustav OtvoreniRadara (`FESB/datathon`); vidi `DESIGN_SYSTEM.md` i `work/decisions.md`.
 - **#44 (AI procjena) na grani `44-ai-procjena` (commitano do `wip`, 05.11.):** faze 1–4 gotove; prompt `ai-flag-v3`; rezultati u `docs/EVALUATION.md`. Tim treba ručno označiti `work/eval/real-sample-seed44.csv`. **Sudreg spojen 05.11.** (snimke dobavljača, NKD i datum osnivanja u AI kontekstu), **pravilo B** i GDPR skrivanje naziva tipa `ostalo` (necommitano). Lokalni API s ključevima na portu 8095.
 - **#45 (ispravak, Metodologija) spojen u `main` 06.11. (PR #54);** migracija feedbacka je `V6__feedback.sql`.
-- Zadnje ažurirano: 2026-11-06
+- **Predaja (08.11., grana `predaja-dokumentacija`, necommitano):** u korijenu `LICENSE` (MIT), `THIRD_PARTY_LICENSES.md`, `DATA_SOURCES.md`, `ARCHITECTURE.md`, `PROJECT.md`; README dopunjen. Testovi i build prolaze. Nedostaje: video (≤ 3 min), javni demo ili screenshotovi, javni repo, provjera licenci Bjelovar/Zlatar.
+- Zadnje ažurirano: 2026-11-08
 
 ## Index
 | File | Sadržaj |
@@ -64,6 +65,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 | `work/status-42.md` | stanje #42: gotovo / preostalo, lokalno okruženje (API na 8093) |
 | `work/prompts/` | gotovi promptovi za agente (npr. `poc-implementation.md`) |
 | `log.md` | kronološki dnevnik |
+| `PROJECT.md`, `ARCHITECTURE.md`, `DATA_SOURCES.md`, `THIRD_PARTY_LICENSES.md`, `LICENSE` | dokumenti za predaju (implementirano stanje, provjereno u kodu i bazi 08.11.) |
 | `DESIGN_SYSTEM.md` | dizajn sustav frontenda (isti kao OtvoreniRadar): tokeni, komponente, rasporedi stranica |
 | `AGENTS.md` | tehnička pravila za AI agente (provenancija, neutralni jezik, AI procjena, sintetički podaci) |
 | `docs/PROJECT_OVERVIEW.md` | problem, korisnici, MVP i budućnost, diferencijacija, mapiranje na 9 kriterija |

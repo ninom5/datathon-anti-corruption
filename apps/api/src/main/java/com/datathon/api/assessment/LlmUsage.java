@@ -1,7 +1,5 @@
 package com.datathon.api.assessment;
 
-// Origin: copied from repo Desktop/datathon, ai/LlmUsage.java; changed: cache_hit column, cost scale of DATA_MODEL.md.
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

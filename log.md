@@ -172,3 +172,13 @@
 ## 2026-11-06 – #45 spojen s `main`
 - `main` (s #44 AI i #46 Sudreg) spojen u `45-ispravak-metodologija`. Konflikti u dokumentaciji riješeni zadržavanjem oba sadržaja. Migracija `V4__feedback.sql` preimenovana u `V6__feedback.sql`, jer je `V4` zauzeo `V4__ai.sql`, a `V5` `V5__company_snapshot.sql`. Lokalna baza koja već ima staru `V4` (feedback) treba se ponovno stvoriti.
 
+## 2026-11-08 – dokumentacija za predaju (grana `predaja-dokumentacija`, necommitano)
+- Novo u korijenu: `LICENSE` (MIT, 2026, Mosić, Jadrijev, Žuljević, Milas), `THIRD_PARTY_LICENSES.md`, `DATA_SOURCES.md` (samo izvori koje kod koristi), `ARCHITECTURE.md` (implementirano stanje + preduvjeti), `PROJECT.md`. `docs/` nije mijenjan; `docs/DATA_SOURCES.md` §13 i dalje navodi nacionalni izvoz i OCDS koje kod ne koristi.
+- `pom.xml` (name, description, url, licenca, developers, scm) i `package.json` (license, contributors, repository) dopunjeni. README: tim i autori, dokumentacija, upute za pokretanje, izvori, korišteni alati, licenca.
+- Licence ovisnosti: web 39 paketa (MIT + Unlicense), API 123 artefakta; nema GPL/AGPL-only, nekomercijalnih ni nepoznatih. Dvojne EPL/LGPL i EPL/GPL+CPE (Logback, jakarta.annotation, jakarta.transaction) označene.
+- CKAN licence (08.11.): 38 skupova Otvorena dozvola, BBŽ Public Domain, **Grad Bjelovar bez licence i Grad Zlatar nejasno (500)**, JPT i DZS Otvorena dozvola.
+- Tajne: povijest gita (sve grane) bez ključeva; `.env` nikad commitan i ignoriran; `git stash` prazan; u `application.yaml` i `docker-compose.yml` samo lokalna lozinka razvojne baze.
+- Provjere: `yarn build`, `yarn lint`, `yarn test` 11/11, `./mvnw test` 88/88; API pokrenut na 8096 nad postojećom bazom, javne rute vraćaju 200, admin bez tokena 401. Ingest nije ponovno pokretan.
+- Brojke (lokalna baza): 5.958 ugovora (5.849 prikazanih, 109 s fizičkim osobama skriveno), 38 naručitelja (34 JLS), 40 skupova, 2.068 dobavljača, 306 indikatora, 652 ugovora s indikatorom, AI 280 stvarnih (104 oznake), trošak AI-ja ukupno 0,73 USD.
+- Tim prema korisniku: Nazor; 4 autora; mentor Mario Čagalj.
+- Na zahtjev korisnika maknuti komentari `// Origin: copied from repo Desktop/datathon` iz 26 Java datoteka (vlastiti kod tima iz drugog projekta). Napomene o ponašanju u `AnthropicLlmClient` i `RestSudregClient` ostale kao obični komentari; porijeklo je navedeno samo u `THIRD_PARTY_LICENSES.md` §5. `./mvnw test` 88/88.

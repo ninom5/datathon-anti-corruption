@@ -1,7 +1,5 @@
 package com.datathon.api.integration.sudreg;
 
-// Origin: copied from repo Desktop/datathon, integration/sudreg/SudregProperties.java; prefix javniradar.sudreg.
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** Credentials only from SUDREG_CLIENT_ID / SUDREG_CLIENT_SECRET; never logged. */

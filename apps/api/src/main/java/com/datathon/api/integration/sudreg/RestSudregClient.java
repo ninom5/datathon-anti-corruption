@@ -1,7 +1,6 @@
 package com.datathon.api.integration.sudreg;
 
-// Origin: copied from repo Desktop/datathon, integration/sudreg/RestSudregClient.java; changed: answer parsed into
-// SudregCompany (NKD from pretezita_djelatnost, founding date, procedures), 404/empty answer = Optional.empty().
+// The answer is parsed into SudregCompany (NKD from pretezita_djelatnost, founding date, procedures); a 404 or empty answer is Optional.empty().
 
 import com.datathon.api.common.ExternalSourceException;
 import java.net.http.HttpClient;

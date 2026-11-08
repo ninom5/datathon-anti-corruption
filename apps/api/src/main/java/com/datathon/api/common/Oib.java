@@ -1,7 +1,5 @@
 package com.datathon.api.common;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), common/Oib.java.
-
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Documented;

@@ -1,7 +1,5 @@
 package com.datathon.api.common;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), common/PageResponse.java.
-
 import java.util.List;
 import java.util.function.Function;
 import org.springframework.data.domain.Page;

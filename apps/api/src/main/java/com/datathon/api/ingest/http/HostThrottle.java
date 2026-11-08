@@ -1,7 +1,5 @@
 package com.datathon.api.ingest.http;
 
-// Origin: copied from repo Desktop/datathon (branch sime/ingest-other-sources), ingest/http/HostThrottle.java.
-
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
