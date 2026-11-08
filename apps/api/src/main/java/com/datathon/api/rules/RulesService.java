@@ -2,8 +2,10 @@ package com.datathon.api.rules;
 
 import com.datathon.api.contract.Contract;
 import com.datathon.api.contract.ContractRepository;
+import com.datathon.api.contract.DuplicateMarker;
 import com.datathon.api.indicator.Indicator;
 import com.datathon.api.indicator.IndicatorRepository;
+import com.datathon.api.ingest.IssueCode;
 import com.datathon.api.organization.OrganizationType;
 import com.datathon.api.organization.Organization;
 import com.datathon.api.organization.OrganizationRepository;
@@ -49,12 +51,15 @@ public class RulesService {
         List<String> ruleCodes = Stream.concat(contractRules.stream().map(ContractRule::ruleCode),
                 groupRules.stream().map(GroupRule::ruleCode)).toList();
         indicatorRepository.deleteByRules(ruleCodes, ContractRule.RULE_VERSION);
-        List<Contract> contracts = contractRepository.findAllWithSource().stream()
-                .filter(contract -> !isHiddenForPrivacy(contract))
+        List<Contract> allContracts = contractRepository.findAllWithSource();
+        int duplicates = DuplicateMarker.mark(allContracts);
+        List<Contract> contracts = allContracts.stream()
+                .filter(contract -> !isHiddenForPrivacy(contract) && !DuplicateMarker.isMarked(contract))
                 .toList();
         Map<String, Integer> counts = new TreeMap<>();
         runContractRules(contracts, counts);
-        runGroupRules(contracts, counts);
+        runGroupRules(contracts.stream().filter(contract -> !hasUnreliableValue(contract)).toList(), counts);
+        log.info("Rules: {} contracts marked as possible duplicates", duplicates);
         log.info("Rules {}: {}", ContractRule.RULE_VERSION, counts);
         return counts;
     }
@@ -83,6 +88,17 @@ public class RulesService {
                 }
             }
         });
+    }
+
+    /**
+     * Group rules add up net values, so a row whose net and gross amounts contradict each other (a dropped decimal
+     * comma in one of them, up to 100x) would decide a whole group on its own. Contract rules still see the row and
+     * lower its data quality through the flag.
+     */
+    private static boolean hasUnreliableValue(Contract contract) {
+        List<String> flags = contract.getQualityFlags();
+        return flags.contains(IssueCode.GROSS_BELOW_NET) || flags.contains(IssueCode.VAT_RATIO_IMPLAUSIBLE)
+                || flags.contains(IssueCode.COLUMNS_SHIFTED);
     }
 
     /** Contracts with natural persons are never shown (GDPR, AGENTS.md), so no indicator is computed for them. */

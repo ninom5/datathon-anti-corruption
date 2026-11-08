@@ -196,3 +196,17 @@ _Format: datum, odluka, zašto, alternative koje smo odbacili._
 - Posljedica: preciznost, odziv i stopa lažno pozitivnih **na stvarnim ugovorima ostaju neizmjereni**. U videu, README-u i na stranici Metodologija smiju se navoditi samo izmjerene brojke iz `docs/EVALUATION.md` (sintetika 40 slučajeva, udio oznaka na uzorku, kappa prema pravilima), uz napomenu da ručna validacija stvarnih ugovora nije napravljena.
 - Pun AI run svih 2.212 ugovora i dalje čeka (nakon validacije ili odluke tima).
 
+
+## 2026-11-08: validacija podataka i popravci (grana `validacija-bugovi`)
+- **Proturječni iznosi se ne ispravljaju, samo označavaju.** Novo: `vat_ratio_implausible` (iznos s PDV-om > 1,40 × bez PDV-a) uz postojeći `gross_below_net`, sada u oba formata (A i A2). Iz registra se ne može znati koji je iznos krivo upisan (Bistra 2022: neto 1.783.805 €, bruto 22.297,56 €). Takvi redci (26) ne ulaze u grupna pravila F i C, jer bi 100× pogreška sama odredila skupinu; pravila D ih i dalje vide sa sniženom kvalitetom.
+- **Iznos se čita samo iz ćelije koja sadrži broj i oznaku valute.** Prije je "3 MJESECA" postalo 0,40 €, datum "28.02.2023" iznos, a "1 500,50 kn" 1 kn. Sada je takva ćelija `unreadable_amount`.
+- **`columns_shifted` (A2):** redak s vrijednostima desno od zadnjeg stupca zaglavlja (Cernik 2022, 9 redaka). Iznosi nisu pouzdani, pa redak ne ulazi u F i C.
+- **`possible_duplicate`:** isti naručitelj, dobavljač, datum, početni iznos, evidencijski broj i broj ugovora, a različit EOJN link ili A2 ključ. Predmet se ne uspoređuje (ponovni upis ispravlja tipfeler). Prvi redak (najniži id) ostaje, ostali se ne računaju u pravilima. Ništa se ne briše. Oznaku postavlja `RulesService` pri svakom izračunu, pa je dovoljan `POST /api/admin/rules/run`. Bez broja ugovora redci se nikad ne spajaju (mogu biti grupe iste nabave).
+- **Pravilo C označava samo ugovore najvećeg dobavljača.** Ugovori ostalih dobavljača iz ćelije ostaju u dokazima i `subject_ref`, ali više nemaju značku C (prije je 127 od 182 ugovora s C bilo tuđih). Isto je već radio AI kontekst.
+- **F:** prijelaz 1.1.2023. (200.000 kn = 26.544,56 € → 26.540 €) više se ne opisuje kao promjena praga; promjena je tek razlika ≥ 1 €.
+- **D1** bira prag (10 % / 15 %) po CPV-u kad vrsta predmeta nije objavljena (`RuleSupport.thresholdType`), kao F.
+- **Sortiranje po iznosu** koristi `coalesce(ukupni, početni)`, kao sažetak i profil; prije je 3.626 A2 ugovora bilo na kraju.
+- **Lokalna baza:** ponovni ingest preskače nepromijenjene datoteke, pa su novi ishodi parsera upisani jednokratnim SQL-om (isti uvjeti kao u kodu), a pravila ponovno izračunata. Svježi ingest na praznoj bazi daje isto, osim dva retka (5036, 5048) koje bi novi parser odbacio kao `missing_amount`; u lokalnoj bazi ostali su bez iznosa. Sigurnosna kopija prije promjena: `/tmp/before-validacija.dump` u kontejneru `javniradar-postgres`.
+- **"Tromjesečna evidencija ugovora"** = EOJN tromjesečni zapis ugovora na temelju okvirnog sporazuma: D ga tretira kao okvirni, C ga ne zbraja (matični ugovor je obično u istom registru). F ga je već preskakao.
+- **Izvori:** neuspjelo preuzimanje broji se jednom po URL-u (zadnji pokušaj) i ne prikazuje se ako je URL drugdje uspješno preuzet. Ingest i dalje sprema redak po pokušaju (povijest), samo prikaz je ispravljen.
+- **Lista ugovora** ima `amountDoubtful` (gross_below_net, vat_ratio_implausible, columns_shifted) i tekst "iznosi u registru se ne slažu" uz iznos, da sortiranje po iznosu ne prikazuje izvornu pogrešku bez upozorenja.

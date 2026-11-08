@@ -64,6 +64,9 @@ class RuleDTest {
         Contract framework = contract(SubjectType.GOODS, "60000", "96000");
         framework.setFrameworkBased(true);
         assertThat(valueIncrease.evaluate(framework)).isEmpty();
+        Contract callOff = contract(SubjectType.GOODS, "60000", "96000");
+        callOff.setSubject("Tromjesečna evidencija ugovora: Opskrba električnom energijom");
+        assertThat(valueIncrease.evaluate(callOff)).as("EOJN quarterly record of framework call-offs").isEmpty();
     }
 
     @Test

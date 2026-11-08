@@ -1,6 +1,6 @@
 /**
  * Rule descriptions for the Metodologija page. Values are copied from apps/api/src/main/resources/config/thresholds.yaml
- * and docs/ANOMALY_DETECTION.md (rules-v1, 2026-11-03); the backend computes with the yaml, this page only explains it.
+ * and docs/ANOMALY_DETECTION.md (rules-v1, 2026-11-03; preskakanja usklađena s validacijom podataka 2026-11-08); the backend computes with the yaml, this page only explains it.
  * Change both together.
  */
 export interface RuleThreshold {
@@ -36,7 +36,7 @@ export const methodologyRules: RuleDescription[] = [
             {label: "Pojas „visok”", value: "rast > 50 %", source: "ZJN čl. 317 (nepredviđene okolnosti)"},
             {label: "Najmanji početni iznos", value: "10.000 €", source: HEURISTIC},
         ],
-        skipped: "Ugovori na temelju okvirnog sporazuma (količine su okvirne) i ugovori ispod 10.000 €.",
+        skipped: "Ugovori na temelju okvirnog sporazuma (količine su okvirne, uključujući „tromjesečnu evidenciju ugovora”), ugovori ispod 10.000 € i ponovni upis istog ugovora u registar. Kad vrsta predmeta nije objavljena, prag se bira po CPV-u (45 = radovi).",
         notMeaning: "Povećanje može biti predviđeno ugovorom (čl. 315.) ili uzrokovano okolnostima koje naručitelj nije mogao predvidjeti. Bez dokumentacije o izmjeni ne može se zaključiti je li izmjena bila opravdana.",
     },
     {
@@ -49,7 +49,7 @@ export const methodologyRules: RuleDescription[] = [
             {label: "Oznaka", value: "razlika > 10 % i barem 5.000 €", source: HEURISTIC},
             {label: "Moguća greška u unosu", value: "isplata ≥ 5× ugovorenog bez obrazloženja, ili ≥ 10× s obrazloženjem", source: HEURISTIC},
         ],
-        skipped: "Ugovori bez objavljene isplate. Iznos koji izgleda kao kuna upisana kao euro prikazuje se kao informativan.",
+        skipped: "Ugovori bez objavljene isplate, okvirni sporazumi i ponovni upis istog ugovora. Iznos koji izgleda kao kuna upisana kao euro ili iznos s PDV-om manji od iznosa bez PDV-a prikazuje se kao informativan.",
         notMeaning: "Razlika može nastati zbog indeksacije cijena, ugovora s jediničnim cijenama ili zabune s PDV-om u registru. Ne govori je li isplata bila opravdana.",
     },
     {
@@ -65,7 +65,7 @@ export const methodologyRules: RuleDescription[] = [
             {label: "Oznaka", value: "barem 2 ugovora, zbroj ≥ prag", source: HEURISTIC},
             {label: "Pouzdanost „jaka”", value: "barem 3 ugovora, svaki ≥ 70 % praga", source: HEURISTIC},
         ],
-        skipped: "Ugovori iz postupka javne nabave po ZJN-u (npr. grupe otvorenog postupka) i okvirni sporazumi. Dobavljač u vlasništvu naručitelja i ponavljajuće nabave (CPV 09, 65) prikazuju se kao informativni.",
+        skipped: "Ugovori iz postupka javne nabave po ZJN-u (npr. grupe otvorenog postupka), okvirni sporazumi, ponovni upis istog ugovora u registar te redci čiji se iznosi s PDV-om i bez PDV-a međusobno ne slažu ili čiji su stupci pomaknuti. Dobavljač u vlasništvu naručitelja i ponavljajuće nabave (CPV 09, 65) prikazuju se kao informativni.",
         notMeaning: "Ugovori mogu odgovarati odvojenim, unaprijed nepredvidivim potrebama. Ovaj obrazac sam po sebi ne dokazuje namjerno izbjegavanje postupka javne nabave.",
     },
     {
@@ -79,7 +79,7 @@ export const methodologyRules: RuleDescription[] = [
             {label: "Oznaka", value: "najveći dobavljač ≥ 70 % vrijednosti, HHI ≥ 5.000 i barem 2 njegova ugovora", source: HEURISTIC},
             {label: "Pouzdanost „jaka”", value: "barem 15 ugovora u skupini", source: HEURISTIC},
         ],
-        skipped: "Ništa se ne preskače, ali dobavljač kojem je naručitelj osnivač (registar JPT) prikazuje se kao informativan, a CPV 09, 64 i 65 dobivaju napomenu o mogućem prirodnom monopolu.",
+        skipped: "Ponovni upis istog ugovora, „tromjesečna evidencija ugovora” iz okvirnog sporazuma (isti novac već je u matičnom ugovoru) i redci s proturječnim iznosima ili pomaknutim stupcima. Oznaku dobivaju samo ugovori najvećeg dobavljača; ostali ugovori skupine su u dokazima. Dobavljač kojem je naručitelj osnivač (registar JPT) prikazuje se kao informativan, a CPV 09, 64 i 65 dobivaju napomenu o mogućem prirodnom monopolu.",
         notMeaning: "Na malom tržištu često postoji samo jedan ili dva izvođača. Koncentracija ne govori je li postupak bio pošten.",
     },
 ];

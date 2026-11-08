@@ -113,7 +113,10 @@ const qualityFlagLabels: Record<string, string> = {
     date_in_future: "Datum je u budućnosti",
     hrk_after_euro: "Iznos u kunama nakon uvođenja eura",
     supplier_consortium: "Zajednica ponuditelja (prikazan je prvi navedeni OIB)",
-    gross_below_net: "Iznos s PDV-om manji je od iznosa bez PDV-a",
+    gross_below_net: "Iznos s PDV-om manji je od iznosa bez PDV-a (moguća pogreška pri unosu; ne ulazi u pravila F i C)",
+    vat_ratio_implausible: "Iznos s PDV-om više je od 1,4 puta veći od iznosa bez PDV-a (moguća pogreška pri unosu; ne ulazi u pravila F i C)",
+    possible_duplicate: "Isti ugovor upisan je u registar više puta (isti naručitelj, dobavljač, datum, iznos i broj ugovora); računa se samo jednom",
+    columns_shifted: "Stupci u ovom retku izvorne tablice pomaknuti su u odnosu na zaglavlje, pa iznosi nisu pouzdani",
 };
 
 export const qualityFlagLabel = (code: string) => qualityFlagLabels[code] ?? code;

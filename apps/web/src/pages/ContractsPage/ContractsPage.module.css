@@ -284,3 +284,11 @@
         text-align: left;
     }
 }
+
+.doubtfulAmount {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: 400;
+    color: var(--color-text-muted);
+    white-space: normal;
+}

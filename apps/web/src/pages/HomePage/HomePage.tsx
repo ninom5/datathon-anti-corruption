@@ -13,27 +13,33 @@ export const HomePage = () => {
     const coverage = useSourcesSummary();
 
     const renderFacts = () => {
-        if (summary.error) {
-            return <ErrorState message={summary.error.message} onRetry={() => summary.refetch()}/>;
+        const error = summary.error ?? coverage.error;
+        if (error) {
+            return <ErrorState message={error.message} onRetry={() => {
+                void summary.refetch();
+                void coverage.refetch();
+            }}/>;
         }
-        if (summary.isPending || !coverage.data) {
+        if (!summary.data || !coverage.data) {
             return <LoadingState message="Učitavanje brojki…"/>;
         }
         const jls = coverage.data.buyersByType.jls ?? 0;
         const otherBuyers = Object.values(coverage.data.buyersByType).reduce((sum, count) => sum + count, 0) - jls;
+        // The summary counts the contracts shown in the explorer (crafts included, contracts with natural persons left out).
         return (
             <ol className={styles.facts}>
                 <li>
-                    <strong className="tabular-nums">{formatNumber(coverage.data.contracts)}</strong> ugovora
-                    iz {formatNumber(jls)} {plural(jls, "općine ili grada", "općine ili grada", "općina i gradova")}
-                    {otherBuyers > 0 && <> te {formatNumber(otherBuyers)} {plural(otherBuyers, "drugog naručitelja", "druga naručitelja", "drugih naručitelja")}</>}.
-                    Bez ugovora s obrtima to je ukupno <span className="tabular-nums">{formatEurMillions(summary.data.totalValue)}</span> bez PDV-a.
+                    <strong className="tabular-nums">{formatNumber(summary.data.contracts)}</strong>{" "}
+                    {plural(summary.data.contracts, "ugovor", "ugovora", "ugovora")}
+                    {" "}iz {formatNumber(jls)} {plural(jls, "općine ili grada", "općine ili grada", "općina i gradova")}
+                    {otherBuyers > 0 && <> te {formatNumber(otherBuyers)} {plural(otherBuyers, "drugog naručitelja", "druga naručitelja", "drugih naručitelja")}</>},
+                    ukupno <span className="tabular-nums">{formatEurMillions(summary.data.totalValue)}</span> bez PDV-a.
                     <Link href={routes.CONTRACTS}>Istraži sve ugovore</Link>
                 </li>
                 <li>
                     <strong className={`tabular-nums ${styles.signal}`}>{formatNumber(summary.data.worthChecking)}</strong>{" "}
-                    {plural(summary.data.worthChecking, "ugovor", "ugovora", "ugovora")} s povećanjem vrijednosti ili
-                    isplatom iznad ugovorenog koji vrijedi provjeriti.
+                    {plural(summary.data.worthChecking, "ugovor", "ugovora", "ugovora")} s barem jednom oznakom pravila
+                    (izmjene i isplate, moguće cjepkanje, koncentracija dobavljača) koju vrijedi provjeriti.
                     <Link href={`${routes.CONTRACTS}?oznake=worth`}>Pogledaj</Link>
                 </li>
                 <li>

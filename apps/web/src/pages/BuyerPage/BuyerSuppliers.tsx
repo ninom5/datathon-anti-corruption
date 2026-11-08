@@ -1,6 +1,6 @@
 import {OrganizationName} from "@/components";
 import type {BuyerProfile} from "@/types";
-import {formatEur, formatNumber} from "@/utils";
+import {formatEur, formatNumber, plural} from "@/utils";
 import styles from "@/components/DataView/DataView.module.css";
 
 interface BuyerSuppliersProps { profile: BuyerProfile }
@@ -9,7 +9,7 @@ export const BuyerSuppliers = ({profile}: BuyerSuppliersProps) => (
     <section className={styles.section}>
         <h2>Najveći dobavljači</h2>
         <p className={styles.note}>Najviše 10 dobavljača po vrijednosti u cijelom razdoblju. <a href="#buyer-sources">Izvor: registri ugovora</a>.</p>
-        <p>{formatNumber(profile.craftContracts)} ugovora s obrtima uključeno je u brojke, ali bez naziva. Obrti nisu na ovom popisu.</p>
+        {profile.craftContracts > 0 && <p>{formatNumber(profile.craftContracts)} {plural(profile.craftContracts, "ugovor", "ugovora", "ugovora")} s obrtima {plural(profile.craftContracts, "uključen je", "uključena su", "uključeno je")} u brojke, ali bez naziva. Obrti nisu na ovom popisu.</p>}
         {profile.topSuppliers.length === 0 ? <p>Nema dobavljača za prikaz na ovom popisu.</p> : <div className={styles.tableWrap} tabIndex={0} role="region" aria-label="Najveći dobavljači">
             <table className={styles.table}><caption className="visually-hidden">Najveći dobavljači prema vrijednosti ugovora</caption>
                 <thead><tr><th scope="col">Dobavljač</th><th scope="col" className={styles.numeric}>Ugovori</th><th scope="col" className={styles.numeric}>EUR bez PDV-a</th></tr></thead>

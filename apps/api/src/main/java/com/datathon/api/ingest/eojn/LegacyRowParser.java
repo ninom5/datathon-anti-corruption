@@ -7,6 +7,7 @@ import com.datathon.api.ingest.SheetReader.SheetRow;
 import com.datathon.api.ingest.normalize.Dates;
 import com.datathon.api.ingest.normalize.Money;
 import com.datathon.api.ingest.normalize.Oibs;
+import com.datathon.api.ingest.normalize.VatCheck;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -64,6 +65,9 @@ public final class LegacyRowParser {
 
     private RowOutcome parseValidRow(SheetRow row, LocalDate dateSigned) {
         List<String> flags = new ArrayList<>();
+        if (hasCellsBeyondHeader(row)) {
+            flags.add(IssueCode.COLUMNS_SHIFTED);
+        }
         Money.Result initial = readAmount(row, INITIAL_VALUE, dateSigned, flags);
         Money.Result initialGross = readAmount(row, INITIAL_VALUE_GROSS, dateSigned, flags);
         Money.Result paid = readAmount(row, PAID_AMOUNT, dateSigned, flags);
@@ -77,9 +81,7 @@ public final class LegacyRowParser {
         if (isOutOfRange(initial.value())) {
             flags.add(IssueCode.AMOUNT_OUT_OF_RANGE);
         }
-        if (initial.value() != null && initialGross.value() != null && initialGross.value().compareTo(initial.value()) < 0) {
-            flags.add(IssueCode.GROSS_BELOW_NET);
-        }
+        VatCheck.check(initial.value(), initialGross.value()).ifPresent(flags::add);
         SupplierCell supplier = SupplierCell.split(text(row, SUPPLIER));
         Oibs.Result supplierOib = readSupplierOib(supplier, flags);
         if (supplier.isConsortium()) {
@@ -158,6 +160,21 @@ public final class LegacyRowParser {
             flags.add(IssueCode.UNREADABLE_COMPLETED_ON);
         }
         return date.orElse(null);
+    }
+
+    private boolean hasCellsBeyondHeader(SheetRow row) {
+        int lastHeaderColumn = -1;
+        for (int index = 0; index < headerRow.cells().size(); index++) {
+            if (!headerRow.cell(index).isBlank()) {
+                lastHeaderColumn = index;
+            }
+        }
+        for (int index = lastHeaderColumn + 1; index < row.cells().size(); index++) {
+            if (!row.cell(index).isBlank()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isOutOfRange(BigDecimal value) {

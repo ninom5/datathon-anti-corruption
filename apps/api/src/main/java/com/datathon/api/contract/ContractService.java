@@ -49,8 +49,10 @@ public class ContractService {
 
     @Transactional(readOnly = true)
     public PageResponse<ContractListItem> find(ContractFilter filter) {
-        Page<Contract> page = contractRepository.findAll(visible(filter),
-                PageRequests.of(filter.page(), filter.size(), sortOf(filter.sort())));
+        boolean isByValue = "value".equals(filter.sort());
+        Specification<Contract> specification = isByValue ? visible(filter).and(orderedByValue()) : visible(filter);
+        Page<Contract> page = contractRepository.findAll(specification,
+                PageRequests.of(filter.page(), filter.size(), isByValue ? Sort.unsorted() : sortOf(filter.sort())));
         Map<Long, List<IndicatorBadge>> badges = badgesByContract(page.getContent().stream().map(Contract::getId).toList());
         int incompleteFromYear = dataCoverage.incompleteFromYear();
         return PageResponse.from(page, contract ->
@@ -117,9 +119,23 @@ public class ContractService {
     }
 
     private static Sort sortOf(String sort) {
-        if ("value".equals(sort)) {
-            return Sort.by(Sort.Order.desc("totalValue").nullsLast(), Sort.Order.desc("id"));
-        }
         return Sort.by(Sort.Order.desc("dateSigned").nullsLast(), Sort.Order.desc("id"));
+    }
+
+    /**
+     * Old EOJN reports (A2, 3.626 contracts) publish no total, so sorting by the total alone put all of them, 212 above
+     * 100.000 EUR among them, after every class A contract. The summary and the profile use the same coalesce.
+     * Spring Data keeps a specification's order when the page is unsorted and drops it from the count query.
+     */
+    private static Specification<Contract> orderedByValue() {
+        return (root, query, cb) -> {
+            if (query.getResultType() != Long.class && query.getResultType() != long.class) {
+                // Postgres puts NULL first in a descending order, so contracts without any amount get 0 and go last.
+                var value = cb.<java.math.BigDecimal>coalesce()
+                        .value(root.get("totalValue")).value(root.get("initialValue")).value(java.math.BigDecimal.ZERO);
+                query.orderBy(cb.desc(value), cb.desc(root.get("id")));
+            }
+            return null;
+        };
     }
 }

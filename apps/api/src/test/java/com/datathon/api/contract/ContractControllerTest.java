@@ -39,6 +39,7 @@ class ContractControllerTest {
                 "Rekonstrukcija ceste", "radovi", LocalDate.of(2025, 3, 1), 2025, false,
                 new BigDecimal("200000"), new BigDecimal("350000"), null,
                 List.of(new IndicatorBadge(5L, "D_VALUE_INCREASE", new BigDecimal("0.75"), "+75 %", "visok", "vrijedi_provjeriti", false)),
+                false,
                 true);
         given(contractService.find(any())).willReturn(new PageResponse<>(List.of(item), 1, 0, 20));
 

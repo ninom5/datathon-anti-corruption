@@ -48,6 +48,7 @@ Tehnička pravila za sve agente su u `AGENTS.md` i obvezna su: pročitati `docs/
 - **#44 (AI procjena) na grani `44-ai-procjena` (commitano do `wip`, 05.11.):** faze 1–4 gotove; prompt `ai-flag-v3`; rezultati u `docs/EVALUATION.md`. Tim treba ručno označiti `work/eval/real-sample-seed44.csv`. **Sudreg spojen 05.11.** (snimke dobavljača, NKD i datum osnivanja u AI kontekstu), **pravilo B** i GDPR skrivanje naziva tipa `ostalo` (necommitano). Lokalni API s ključevima na portu 8095.
 - **#45 (ispravak, Metodologija) spojen u `main` 06.11. (PR #54);** migracija feedbacka je `V6__feedback.sql`.
 - **Predaja (08.11., grana `predaja-dokumentacija`, necommitano):** u korijenu `LICENSE` (MIT), `THIRD_PARTY_LICENSES.md`, `DATA_SOURCES.md`, `ARCHITECTURE.md`, `PROJECT.md`; README dopunjen. Testovi i build prolaze. Nedostaje: video (≤ 3 min), javni demo ili screenshotovi, javni repo, provjera licenci Bjelovar/Zlatar.
+- **Validacija podataka (08.11., grana `validacija-bugovi` iz `predaja-dokumentacija`, necommitano):** popravci parsera iznosa, oznake PDV/duplikat/pomaknuti stupci, pravila C/F/D1, sortiranje, 9 frontend popravaka. Testovi i build prolaze. Detalji u `log.md` i `work/decisions.md`.
 - Zadnje ažurirano: 2026-11-08
 
 ## Index

@@ -18,7 +18,7 @@ export const ProvenanceBlock = ({contract}: ProvenanceBlockProps) => {
                 <dt>Skup podataka</dt>
                 <dd>
                     {provenance.datasetUrl
-                        ? <a href={provenance.datasetUrl} target="_blank" rel="noreferrer">{provenance.datasetTitle}</a>
+                        ? <a href={provenance.datasetUrl} target="_blank" rel="noreferrer">{provenance.datasetTitle ?? "skup podataka"}</a>
                         : provenance.datasetTitle ?? "nije poznato"}
                 </dd>
                 <dt>Izdavatelj</dt>

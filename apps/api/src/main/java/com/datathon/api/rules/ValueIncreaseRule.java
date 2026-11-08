@@ -50,7 +50,7 @@ public class ValueIncreaseRule implements ContractRule {
             return Optional.empty();
         }
         BigDecimal growth = RuleSupport.growth(total, initial);
-        if (growth.compareTo(limits.get().deMinimis(contract.getSubjectType())) <= 0) {
+        if (growth.compareTo(limits.get().deMinimis(RuleSupport.thresholdType(contract))) <= 0) {
             return Optional.empty();
         }
         return Optional.of(draft(contract, initial, total, growth, limits.get(), isTotalDerived));
@@ -80,12 +80,12 @@ public class ValueIncreaseRule implements ContractRule {
 
     private String explanation(Contract contract, BigDecimal initial, BigDecimal total, BigDecimal growth,
                                ModificationLimits limits, boolean isImplausible, boolean isUnitPrice) {
-        String kind = contract.getSubjectType() == SubjectType.WORKS ? "za radove" : "za robe i usluge";
+        String kind = RuleSupport.thresholdType(contract) == SubjectType.WORKS ? "za radove" : "za robe i usluge";
         StringBuilder text = new StringBuilder()
                 .append("Ugovor je sklopljen na ").append(eur(initial)).append(" bez PDV-a, a ukupni iznos s izmjenama je ")
                 .append(eur(total)).append(" (+").append(percent(growth)).append(" %). Registar ne navodi razlog izmjene. ")
                 .append("Za izmjene male vrijednosti ZJN predviđa granicu od ")
-                .append(percent(limits.deMinimis(contract.getSubjectType()))).append(" % ").append(kind)
+                .append(percent(limits.deMinimis(RuleSupport.thresholdType(contract)))).append(" % ").append(kind)
                 .append(" (čl. 320.), za dodatne radove, usluge i robe ").append(percent(limits.additionalSupplies()))
                 .append(" % (čl. 316. st. 2), a za nepredviđene okolnosti ").append(percent(limits.unforeseenCircumstances()))
                 .append(" % (čl. 317.). Izmjena predviđena u dokumentaciji (čl. 315.) nema takvo ograničenje.");

@@ -73,7 +73,7 @@ Brojevi su ugovori koji su nakon deduplikacije uvezeni iz tog skupa (upit `contr
 | Općina Štrigova | Registar Ugovora Općine Štrigova | [registar-ugovora-opcine-strigova](https://data.gov.hr/dataset/registar-ugovora-opcine-strigova) | XLSX | A | 14 | Otvorena dozvola (OD) | 2026-11-02 |
 | Općina Sveti Filip i Jakov | Registar Ugovora Općine Sveti Filip i Jakov za 2025. godinu | [registar-ugovora-opcine-sveti-filip-i-jakov-za-2025-godinu](https://data.gov.hr/dataset/registar-ugovora-opcine-sveti-filip-i-jakov-za-2025-godinu) | XLSX | A | 273 | Otvorena dozvola (OD) | 2026-11-02 |
 
-**Ostali skupovi koje je ingest pregledao, a nisu dali ugovore** (prema `GET /api/v1/sources/summary`, 2026-11-08): ukupno 85 skupova i 195 datoteka; uvezeno 55 datoteka, `format_nije_podrzan` 72 (vlastite tablice klasa B i C), `nedostupno` 60 (HTTP 403/404, SSL), `necitljivo` 6, `nestrukturirano` 2. Puni popis s razlogom daje `GET /api/v1/sources` i stranica „Izvori” u aplikaciji.
+**Ostali skupovi koje je ingest pregledao, a nisu dali ugovore** (prema `GET /api/v1/sources/summary`, 2026-11-08): ukupno 85 skupova i 155 datoteka; uvezeno 55 datoteka, `format_nije_podrzan` 72 (vlastite tablice klasa B i C), `nedostupno` 20 (HTTP 403/404, SSL; svaki URL se broji jednom, iako ga svaki ingest ponovno pokuša), `necitljivo` 6, `nestrukturirano` 2. Puni popis s razlogom daje `GET /api/v1/sources` i stranica „Izvori” u aplikaciji.
 
 ## 3. Istraženo, ali kod NE koristi
 

@@ -39,7 +39,14 @@ export const ContractTable = ({contracts}: ContractTableProps) => (
                         <Link href={contractPath(contract.id)} className={styles.subjectLink}>{contract.subject}</Link>
                         {contract.synthetic && <span className={styles.syntheticTag}>sintetički</span>}
                     </td>
-                    <td data-label="Iznos" className={`${styles.numeric} tabular-nums`}>{formatEurRounded(displayedValue(contract))}</td>
+                    <td data-label="Iznos" className={`${styles.numeric} tabular-nums`}>
+                        {formatEurRounded(displayedValue(contract))}
+                        {contract.amountDoubtful && (
+                            <span className={styles.doubtfulAmount} title="Iznosi u registru se međusobno ne slažu (npr. iznos s PDV-om i bez PDV-a). Razlog je na stranici ugovora.">
+                                iznosi u registru se ne slažu
+                            </span>
+                        )}
+                    </td>
                     <td data-label="Oznake">
                         <span className={styles.tags}>
                             {contract.indicators.map((indicator) => <IndicatorTag key={indicator.id} indicator={indicator}/>)}

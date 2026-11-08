@@ -20,18 +20,29 @@ const selectableYears = (years: YearCount[], selected: number | undefined) => {
 
 interface ResultsProps {
     contracts: ContractListItem[] | undefined;
+    totalElements: number;
     isPending: boolean;
     error: Error | null;
     onRetry: () => void;
     onReset: () => void;
+    onFirstPage: () => void;
 }
 
-const Results = ({contracts, isPending, error, onRetry, onReset}: ResultsProps) => {
+const Results = ({contracts, totalElements, isPending, error, onRetry, onReset, onFirstPage}: ResultsProps) => {
     if (error) {
         return <ErrorState message={error.message} onRetry={onRetry}/>;
     }
     if (isPending || !contracts) {
         return <LoadingState message="Učitavanje ugovora…"/>;
+    }
+    if (contracts.length === 0 && totalElements > 0) {
+        return (
+            <EmptyState
+                title="Ova stranica rezultata ne postoji"
+                hint="Poveznica vodi na stranicu iza zadnje. Rezultati za odabrane filtre postoje na ranijim stranicama."
+                actions={<Button variant="secondary" onClick={onFirstPage}>Prva stranica</Button>}
+            />
+        );
     }
     if (contracts.length === 0) {
         return (
@@ -57,6 +68,11 @@ export const ContractsPage = () => {
     const handleChange = (next: Partial<ExplorerState>) =>
         setSearchParams(writeExplorerState({...state, ...next, page: next.page ?? 0}));
     const handleReset = () => setSearchParams({});
+    const handlePageChange = (page: number) => {
+        handleChange({page});
+        // The location path does not change, so the layout does not scroll; the buttons sit under the table.
+        window.scrollTo(0, 0);
+    };
 
     return (
         <>
@@ -80,19 +96,21 @@ export const ContractsPage = () => {
                 <section className={styles.results} aria-label="Rezultati" aria-busy={contracts.isFetching}>
                     <Results
                         contracts={contracts.data?.content}
+                        totalElements={contracts.data?.totalElements ?? 0}
                         isPending={contracts.isPending}
                         error={contracts.error}
                         onRetry={() => contracts.refetch()}
                         onReset={handleReset}
+                        onFirstPage={() => handlePageChange(0)}
                     />
-                    {contracts.data && contracts.data.totalElements > 0 && (
+                    {contracts.data && contracts.data.content.length > 0 && (
                         <>
                             <p className={styles.footnote}>* nepotpuna godina: registri su dohvaćeni prije kraja godine.</p>
                             <Pagination
                                 page={contracts.data.page}
                                 size={PAGE_SIZE}
                                 totalElements={contracts.data.totalElements}
-                                onPageChange={(page) => handleChange({page})}
+                                onPageChange={handlePageChange}
                             />
                         </>
                     )}
