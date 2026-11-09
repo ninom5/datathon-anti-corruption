@@ -49,7 +49,7 @@ curl -s -m 30 -G "$B/datastore_search" --data-urlencode "resource_id=<uuid>" --d
 
 Radi iz **dva smjera** i spoji ih:
 
-1. **Od izazova prema podacima.** Uzmi nabrojane teme izazova (iz `context/competition.md`), pretraži katalog hrvatskim ključnim riječima i sinonimima (npr. otpad/odlagalište/komunalno, zrak/PM10/mjerna postaja, poplave/hidrologija/vodotoci, buka, javni prijevoz/GTFS, škole/vrtići, zdravstvo, proračun/javna nabava). Navedi broj pogodaka i najbolje kandidate.
+1. **Od izazova prema podacima.** Uzmi nabrojane teme izazova, pretraži katalog hrvatskim ključnim riječima i sinonimima (npr. otpad/odlagalište/komunalno, zrak/PM10/mjerna postaja, poplave/hidrologija/vodotoci, buka, javni prijevoz/GTFS, škole/vrtići, zdravstvo, proračun/javna nabava). Navedi broj pogodaka i najbolje kandidate.
 2. **Od podataka prema ideji.** Pregledaj facete: koji izdavači imaju najčišće, najsvježije i najbolje strukturirane skupove? Koji skupovi imaju koordinate, šifre općina/županija, datume ili kategorije koji se mogu spojiti s drugim skupovima?
 3. **Traži ključ za spajanje.** Spoj skupova ima smisla samo ako postoji zajednički ključ: šifra općine/naselja (JLS), koordinate (prostorni spoj), datum/vrijeme, OIB ili MB pravne osobe, šifra djelatnosti (NKD), adresa. Za svaki predloženi spoj imenuj ključ i procijeni pokrivenost (koliko redaka stvarno spaja).
 4. **Provjeri stvarni sadržaj**, ne samo naslov. Povuci uzorak (prvih 5 redaka), provjeri stupce, kodiranje (UTF-8/Windows-1250), prazne vrijednosti, godine pokrivenosti, kad je zadnje ažuriranje (`metadata_modified`, `last_modified`).
@@ -57,7 +57,7 @@ Radi iz **dva smjera** i spoji ih:
 
 ## Izlaz za svaki kandidat-skup
 
-Zapiši u `context/data.md` (jedan blok po skupu, kratko):
+Za svaki skup zapiši (jedan blok, kratko):
 
 - naziv + izdavatelj + poveznica na skup
 - resurs koji koristimo: format, URL, `datastore_active`, veličina

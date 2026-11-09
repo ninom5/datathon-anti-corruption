@@ -11,10 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Refreshes reference data before contracts are imported: JPT first (A2 buyers are matched to it by name), then the
- * DZS census (matched to JPT). One failing source does not stop the run; it is logged as an ingest issue.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +28,6 @@ public class ReferenceDataService {
         return stats;
     }
 
-    /** Copies JPT context to organizations; run after contracts are imported so new buyers get it too. */
     @Transactional
     public int enrichOrganizations() {
         return jptBodyRepository.enrichOrganizations();

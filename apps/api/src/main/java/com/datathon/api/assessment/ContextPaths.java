@@ -6,10 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** Citable field paths and source URLs of a context (docs/ANOMALY_DETECTION.md §4.4: the validator uses both). */
 final class ContextPaths {
 
-    /** Keys whose values are source links; elements of {@code izvori} lists are links as well. */
     private static final Set<String> URL_KEYS = Set.of("izvor_url", "eojn_url", "izvori");
 
     private ContextPaths() {
@@ -27,11 +25,6 @@ final class ContextPaths {
         return urls;
     }
 
-    /**
-     * Every key is citable, also when its value is null: a reason may say that something is not published
-     * (§4.4: the field must exist in the context). List elements are citable with an index ({@code pravila[0].x}) and
-     * without one ({@code pravila.x}).
-     */
     private static void collectPaths(Object node, String path, Set<String> paths) {
         if (!path.isEmpty()) {
             paths.add(path);

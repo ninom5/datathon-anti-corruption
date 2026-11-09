@@ -22,11 +22,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * The AI run end to end with {@link FixtureLlmClient} instead of the Claude API, on the synthetic register: accepted
- * and rejected answers, cache hits, the budget stop, API errors and what GET /contracts/{id} then shows. One call
- * costs 1.000 input + 200 output tokens = 0,0002 USD with the Haiku price, so a 0,0005 USD budget allows three calls.
- */
 @SpringBootTest(properties = {"javniradar.ai.concurrency=1", "javniradar.ai.max-usd-per-run=0.0005"})
 @AutoConfigureMockMvc
 @Import({TestcontainersConfiguration.class, AiRunServiceTest.FixtureConfig.class})

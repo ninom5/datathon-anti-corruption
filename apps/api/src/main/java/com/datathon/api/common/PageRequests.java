@@ -12,7 +12,6 @@ public final class PageRequests {
     private PageRequests() {
     }
 
-    /** A size above {@link #MAX_SIZE} is cut to it, not rejected, so a client asking for too much still gets an answer. */
     public static Pageable of(Integer page, Integer size, Sort sort) {
         int pageNumber = page == null ? 0 : page;
         int pageSize = size == null ? DEFAULT_SIZE : size;

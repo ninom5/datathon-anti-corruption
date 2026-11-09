@@ -4,7 +4,6 @@ import com.datathon.api.common.persistence.DatabaseCode;
 import com.datathon.api.common.persistence.DatabaseCodeConverter;
 import jakarta.persistence.Converter;
 
-/** Feedback is shown next to an indicator only after manual moderation (docs/FEATURES.md F12). */
 public enum ModerationStatus implements DatabaseCode {
     NEW("novo"),
     PUBLISHED("objavljeno"),

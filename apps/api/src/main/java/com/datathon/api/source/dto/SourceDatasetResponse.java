@@ -4,7 +4,6 @@ import com.datathon.api.source.SourceDataset;
 import java.time.Instant;
 import java.util.List;
 
-/** A dataset from the open data portal with its files. */
 public record SourceDatasetResponse(Long id, String title, String publisher, String portal, String landingUrl,
                                     String licenseId, Instant metadataModified, long contracts,
                                     List<SourceFileResponse> files, boolean synthetic) {

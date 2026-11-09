@@ -35,7 +35,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Read side of contracts for the explorer and the detail page. */
 @Service
 @RequiredArgsConstructor
 public class ContractService {
@@ -70,10 +69,6 @@ public class ContractService {
                 dataCoverage.incompleteFromYear());
     }
 
-    /**
-     * Real data only. Crafts are counted in the numbers, because a count does not reveal a person; they are left out
-     * only of lists with names (decision 2026-11-03, #41). See {@link ContractSummary}.
-     */
     @Transactional(readOnly = true)
     public ContractSummary summarize(ContractFilter filter) {
         Specification<Contract> counted = visible(filter).and(realOnly());
@@ -88,7 +83,6 @@ public class ContractService {
                 filter.includesSynthetic() ? contractRepository.count(visible(filter).and(syntheticOnly())) : 0);
     }
 
-    /** Counts next to each rule option: the filter without its own rule choice, so every option shows its number. */
     private Map<String, Long> contractsByRule(ContractFilter filter) {
         Specification<Contract> base = visible(filter.withoutRuleCodes()).and(realOnly());
         Map<String, Long> counts = new LinkedHashMap<>();
@@ -98,13 +92,11 @@ public class ContractService {
         return counts;
     }
 
-    /** Whether the contract exists and may be shown, so other features (feedback) apply the same GDPR rule. */
     @Transactional(readOnly = true)
     public boolean isPublic(Long id) {
         return contractRepository.findById(id).filter(ContractService::isShowable).isPresent();
     }
 
-    /** Contracts with natural persons are not exposed (GDPR); a 404 does not reveal that they exist. */
     private static boolean isShowable(Contract contract) {
         return contract.getSupplier() == null || contract.getSupplier().getOrgType() != OrganizationType.NATURAL_PERSON;
     }
@@ -122,15 +114,9 @@ public class ContractService {
         return Sort.by(Sort.Order.desc("dateSigned").nullsLast(), Sort.Order.desc("id"));
     }
 
-    /**
-     * Old EOJN reports (A2, 3.626 contracts) publish no total, so sorting by the total alone put all of them, 212 above
-     * 100.000 EUR among them, after every class A contract. The summary and the profile use the same coalesce.
-     * Spring Data keeps a specification's order when the page is unsorted and drops it from the count query.
-     */
     private static Specification<Contract> orderedByValue() {
         return (root, query, cb) -> {
             if (query.getResultType() != Long.class && query.getResultType() != long.class) {
-                // Postgres puts NULL first in a descending order, so contracts without any amount get 0 and go last.
                 var value = cb.<java.math.BigDecimal>coalesce()
                         .value(root.get("totalValue")).value(root.get("initialValue")).value(java.math.BigDecimal.ZERO);
                 query.orderBy(cb.desc(value), cb.desc(root.get("id")));

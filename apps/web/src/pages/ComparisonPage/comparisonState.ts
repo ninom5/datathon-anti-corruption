@@ -3,7 +3,6 @@ import type {PeerComparisonFilter} from "@/types";
 const OIB = /^\d{11}$/;
 const CPV2 = /^\d{2}$/;
 
-/** Comparison state kept in the URL (Croatian parameters, as in the explorer). */
 export interface ComparisonState extends PeerComparisonFilter {
     oib?: string;
 }

@@ -5,7 +5,6 @@ import styles from "./AiAssessmentBlock.module.css";
 
 const TITLE = "AI procjena – zahtijeva ljudsku provjeru";
 
-/** "…xlsx#sheet=1;row=41" → "registar ugovora, redak 41"; EOJN links by name; anything else as "izvor". */
 const sourceLabel = (url: string, fileUrl: string | null) => {
     if (fileUrl && url.startsWith(fileUrl)) {
         const row = /row=(\d+)/.exec(url);
@@ -87,7 +86,6 @@ interface AiAssessmentBlockProps {
     contract: ContractDetail;
 }
 
-/** Separate from the rule indicators and never merged with them (AGENTS.md, docs/UI_UX.md §3.4). */
 export const AiAssessmentBlock = ({contract}: AiAssessmentBlockProps) => {
     const assessment = contract.aiAssessment;
     return (

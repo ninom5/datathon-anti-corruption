@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-/** Re-entries of one contract (Grad Lepoglava, J-107/25: two EOJN links, every other field equal). */
 class DuplicateMarkerTest {
 
     private static final Organization BUYER = organization(1L);

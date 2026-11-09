@@ -25,12 +25,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * C (docs/ANOMALY_DETECTION.md §C): in one buyer's CPV division over its latest 3 years with contracts, one supplier
- * holds at least 70 % of the value and HHI is at least 5.000. Only cells with enough contracts, value and years are
- * eligible, because tiny cells are concentrated by construction. The top supplier needs at least two contracts in the
- * cell: one large contract alone is not a repeated award (work/decisions.md, #41). The buyer's own company (JPT founders) is informative.
- */
 @Component
 @RequiredArgsConstructor
 public class ConcentrationRule implements GroupRule {
@@ -76,7 +70,6 @@ public class ConcentrationRule implements GroupRule {
         return value != null && value.signum() > 0;
     }
 
-    /** docs §C "zadnje 3 godine ili sve dostupne": the buyer's latest calendar years that have contracts. */
     private Set<Integer> latestYears(List<Contract> contracts) {
         return contracts.stream().map(contract -> contract.getDateSigned().getYear())
                 .collect(Collectors.toCollection(TreeSet::new)).descendingSet().stream()
@@ -93,7 +86,6 @@ public class ConcentrationRule implements GroupRule {
         return isEligible ? Optional.of(new Cell(cpv2, contracts, total)) : Optional.empty();
     }
 
-    /** s_i = V_i / ΣV, HHI = Σ (100 · s_i)², top1 = max s_i (docs §C). */
     private Optional<Shares> flagged(Cell cell) {
         Map<Organization, List<Contract>> bySupplier = cell.contracts().stream()
                 .collect(Collectors.groupingBy(Contract::getSupplier, LinkedHashMap::new, Collectors.toList()));
@@ -131,8 +123,6 @@ public class ConcentrationRule implements GroupRule {
                 explanation(input, cell, shares, period, isOwnCompany, isNaturalMonopoly), NOT_MEANING,
                 List.of("broj ponuda", "tržište mogućih dobavljača"),
                 RuleSupport.groupEvidence(contracts, "Ukupni iznos (sa izmjenama) bez PDV-a"));
-        // Only the top supplier's contracts carry the indicator; the other suppliers' contracts stay in the evidence
-        // and in subject_ref, so the shares can be checked, but they are not marked "koncentracija" in the explorer.
         List<Contract> topSupplierContracts = contracts.stream()
                 .filter(contract -> contract.getSupplier() == shares.top())
                 .toList();
@@ -161,7 +151,6 @@ public class ConcentrationRule implements GroupRule {
         return text.toString();
     }
 
-    /** "2023.–2025." for consecutive years; "2021., 2024. i 2025." when the buyer has years without contracts. */
     private static String periodLabel(Set<Integer> period) {
         TreeSet<Integer> years = new TreeSet<>(period);
         if (years.size() == 1) {

@@ -2,7 +2,6 @@ package com.datathon.api.common;
 
 import lombok.Getter;
 
-/** An external source (Narodne novine, Sudreg, ...) did not give a usable answer. */
 @Getter
 public class ExternalSourceException extends RuntimeException {
 

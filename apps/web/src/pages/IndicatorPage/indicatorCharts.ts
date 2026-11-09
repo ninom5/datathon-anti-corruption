@@ -7,7 +7,6 @@ export interface TimelinePoint {
     cumulative: number;
 }
 
-/** Never draw missing amounts/dates as zero. Sum integer cents, preserving same-day contracts. */
 export const buildTimeline = (contracts: IndicatorContract[]): TimelinePoint[] | undefined => {
     const points: TimelinePoint[] = [];
     for (const contract of contracts) {
@@ -31,7 +30,6 @@ export interface SupplierShare {
     share: number;
 }
 
-/** C uses totalValue ?? initialValue. Group by organization identity, never by a masked craft name. */
 export const buildSupplierShares = (contracts: IndicatorContract[]): SupplierShare[] | undefined => {
     const groups = new Map<number | null, SupplierShare>();
     let totalCents = 0;
@@ -57,7 +55,6 @@ export const supplierChartLabel = (supplier: OrganizationRef | null) => {
     return supplier.name;
 };
 
-/** The backend supplies context in prose. Keep its exact sentence and do not infer ownership from CPV. */
 export const indicatorContext = (explanation: string) => {
     const starts = [...explanation.matchAll(/(?:CPV skupina \d+ obuhvaća|Prema registru javnopravnih tijela)/g)]
         .map((match) => match.index);

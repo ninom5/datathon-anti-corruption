@@ -15,11 +15,6 @@ public interface CompanySnapshotRepository extends JpaRepository<CompanySnapshot
             limit 1""")
     Optional<CompanySnapshot> findLatest(@Param("organizationId") Long organizationId);
 
-    /**
-     * {@code [organizationId, oib]} of real suppliers that may be looked up and have no snapshot yet: companies (d.o.o.,
-     * j.d.o.o., d.d.) and public bodies. Crafts, natural persons and "ostalo" (it holds crafts with personal names)
-     * are never sent to the register (GDPR).
-     */
     @Query(nativeQuery = true, value = """
             select distinct s.id, s.oib from organization s
             join contract c on c.supplier_id = s.id and not c.is_synthetic

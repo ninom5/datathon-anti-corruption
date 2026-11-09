@@ -26,14 +26,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * A2 import against a real class A register (Grad Osijek, 2024-2026): an A2 row for a year Osijek already has in
- * class A is kept as a raw record but not imported; a row of another year is imported once even when it appears in
- * two sheets; the buyer is the existing Osijek organization (matched by name, JPT is empty in this test).
- */
 @SpringBootTest
 @Import(TestcontainersConfiguration.class)
-@Transactional // rolled back after the test, so other tests sharing the container never see these rows
+@Transactional
 class LegacyImportTest {
 
     private static final String OSIJEK_OIB = "30050049642";
@@ -67,7 +62,7 @@ class LegacyImportTest {
                 .filter(contract -> contract.getNaturalKey().startsWith("eojn-a2:")).findFirst().orElseThrow();
         assertThat(imported.getEojnContractUrl()).isNull();
         assertThat(imported.getBuyer().getOib()).isEqualTo(OSIJEK_OIB);
-        assertThat(imported.getInitialValue()).isEqualByComparingTo("10000.00"); // 75.345,00 kn
+        assertThat(imported.getInitialValue()).isEqualByComparingTo("10000.00");
         assertThat(imported.getCurrencyOriginal()).isEqualTo("HRK");
         assertThat(imported.getSupplier().getOib()).isEqualTo("87311810356");
     }
@@ -79,7 +74,6 @@ class LegacyImportTest {
         }
     }
 
-    /** Two yearly sheets in the EOJN report layout; the 2021 contract is repeated in the 2022 file, as in real data. */
     private static byte[] legacyWorkbook() throws IOException {
         try (XSSFWorkbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet first = sheetWithHeader(workbook, "2021");

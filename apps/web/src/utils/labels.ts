@@ -1,6 +1,5 @@
 import type {AiConfidence, AiLabel, DataQuality, EvidenceStrength, FileStatus, MagnitudeBand, OrganizationType, RuleCode, SubjectType} from "@/types";
 
-/** Keyed by the API code; counties and other public bodies are not JLS. */
 export const buyerTypeLabels: Record<string, string | undefined> = {
     jls: "općina ili grad",
     zupanija: "županija",
@@ -59,7 +58,6 @@ const contractEvidenceHints: Record<EvidenceStrength, string> = {
     slaba: "Moguća greška u izvoru smanjuje pouzdanost izračunate razlike.",
 };
 
-/** Descriptions of rules-v1; thresholds are evaluated only on the backend. */
 export const evidenceStrengthHints: Record<RuleCode, Record<EvidenceStrength, string>> = {
     D_VALUE_INCREASE: contractEvidenceHints,
     D_OVERPAYMENT: contractEvidenceHints,
@@ -140,7 +138,6 @@ const issueCodeLabels: Record<string, string> = {
 
 export const issueCodeLabel = (code: string) => issueCodeLabels[code] ?? qualityFlagLabel(code);
 
-/** The one mapping between shareable Croatian URL codes and API rule codes. */
 export const ruleOptions: {short: string; code: RuleCode; label: string}[] = [
     {short: "D1", code: "D_VALUE_INCREASE", label: "Povećanje vrijednosti"},
     {short: "D2", code: "D_OVERPAYMENT", label: "Isplata iznad ugovorenog"},
@@ -174,7 +171,6 @@ export const aiConfidenceLabels: Record<AiConfidence, string> = {
     visoka: "visoka",
 };
 
-/** Context paths the AI cites, in words; unknown paths are shown as they are. */
 const aiFieldLabels: Record<string, string> = {
     "ugovor.predmet": "predmet",
     "ugovor.cpv": "CPV",

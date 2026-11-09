@@ -1,6 +1,5 @@
 import styles from "./AppLayout.module.css";
 
-// Radar rings with one amber point: something in the data worth checking. Same drawing as public/favicon.svg.
 export const BrandMark = () => {
     return (
         <span className={styles.brandMark} aria-hidden="true">

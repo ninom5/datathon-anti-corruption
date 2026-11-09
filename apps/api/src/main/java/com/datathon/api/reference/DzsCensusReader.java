@@ -20,17 +20,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-/**
- * Reads table "1." of the DZS census workbook "Popis 2021 – stanovništvo po gradovima/općinama" (18 MB, 30+ sheets).
- * Streams only that sheet with POI's SAX reader, because loading the whole workbook needs several hundred MB.
- * Layout verified 2026-11-03: header in row 8 (Županija, Jedinica lokalne samouprave, County of, Local self-government
- * unit, Grad/općina, Ukupno, ...), one row per county total, JLS and Zagreb district.
- */
 public final class DzsCensusReader {
 
     public static final String SHEET_NAME = "1.";
 
-    /** One data row: {@code unitKind} is "Grad", "Općina", "Gradska četvrt" or null for a county total. */
     public record CensusRow(int rowNumber, String county, String unitKind, String unitName, Integer population) {
     }
 
@@ -65,7 +58,6 @@ public final class DzsCensusReader {
         return collector.rows;
     }
 
-    /** Keeps rows below the header that name a county and have a population in column F ("Ukupno"). */
     private static final class RowCollector implements XSSFSheetXMLHandler.SheetContentsHandler {
 
         private static final int HEADER_ROW = 8;

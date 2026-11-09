@@ -4,7 +4,6 @@ import {formatEur} from "@/utils";
 import styles from "./ComparisonPage.module.css";
 
 const WIDTH = 800;
-// The top margin holds two text rows: the median label, and under it the name of the selected JLS.
 const MARGIN = {left: 16, right: 24, top: 56, bottom: 36};
 const RADIUS = 6;
 const LANE = 16;
@@ -22,7 +21,6 @@ const niceStep = (max: number) => {
     return step ?? raw;
 };
 
-/** Dots that would overlap move to the next lane up, so every JLS stays visible and hoverable. */
 const placeDots = (members: PeerMember[], toX: (value: number) => number): PlacedDot[] => {
     const laneEnds: number[] = [];
     return [...members]
@@ -40,7 +38,6 @@ const placeDots = (members: PeerMember[], toX: (value: number) => number): Place
         });
 };
 
-/** Near the edges the name is anchored inwards so it is not cut off. */
 const labelAnchor = (x: number) => {
     if (x < WIDTH * 0.15) return "start";
     if (x > WIDTH * 0.85) return "end";
@@ -53,7 +50,6 @@ interface DotPlotProps {
     summary: string;
 }
 
-/** Strip plot of EUR per inhabitant in the peer group, with the median and the selected JLS (docs/UI_UX.md §3.5). */
 export const DotPlot = ({members, median, summary}: DotPlotProps) => {
     const [hovered, setHovered] = useState<PlacedDot | undefined>();
     const plotted = members.filter((member) => member.valuePerCapita !== null);

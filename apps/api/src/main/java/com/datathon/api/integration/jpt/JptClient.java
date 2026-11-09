@@ -15,10 +15,6 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * JPT register of public bodies (MPUDT). Verified 2026-11-03: {@code GET .../PopisOznakaNaDanasnjiDan} returns HTTP 200,
- * a JSON array of 4.678 bodies (4,53 MB), no key needed (docs/DATA_SOURCES.md §5).
- */
 @Component
 @RequiredArgsConstructor
 public class JptClient {
@@ -29,7 +25,6 @@ public class JptClient {
     private final PoliteHttpClient httpClient;
     private final JsonMapper jsonMapper;
 
-    /** The downloaded list with its bytes (for sha256 and provenance) and the real retrieval time. */
     public record Fetched(byte[] body, Instant retrievedAt, List<JptEntry> entries) {
     }
 
@@ -69,7 +64,6 @@ public class JptClient {
                 founders, jsonMapper.writeValueAsString(node));
     }
 
-    /** "2003-02-11 00:00:00.000" */
     private static LocalDate parseDate(String text) {
         if (text == null || text.length() < 10) {
             return null;
@@ -81,7 +75,6 @@ public class JptClient {
         }
     }
 
-    /** The register writes e.g. "PRIMORSKO-GORANSKA  ŽUPANIJA" with two spaces. */
     private static String collapseSpaces(String text) {
         return text == null || text.isBlank() ? null : text.strip().replaceAll("\\s+", " ");
     }

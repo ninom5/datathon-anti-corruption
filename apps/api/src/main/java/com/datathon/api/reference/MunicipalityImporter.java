@@ -31,11 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Builds {@code municipality} from the DZS census 2021 and JPT. DZS has no OIB or code, so a row is matched to a JPT
- * body by (county, kind, name), all normalised (docs/DATA_MODEL.md §3). Unmatched rows become ingest issues and are
- * never guessed. Needs the JPT register to be loaded first. Safe to repeat: rows and municipalities are upserted.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -61,7 +56,6 @@ public class MunicipalityImporter {
         PoliteHttpClient.Fetched fetched = httpClient.getBinary(ReferenceSources.DZS_URL);
         String sha256 = FileStager.sha256(fetched.body());
         Map<String, Object> stats = new LinkedHashMap<>();
-        // Re-matching an unchanged file is cheap (555 rows) and picks up fixes in the matching; raw rows are reused.
         Optional<SourceFile> known = fileRepository.findFirstByUrlAndSha256(ReferenceSources.DZS_URL, sha256);
         stats.put("unchangedFile", known.isPresent());
         List<CensusRow> rows = readRows(fetched.body());
@@ -117,7 +111,6 @@ public class MunicipalityImporter {
         municipalityRepository.save(municipality);
     }
 
-    /** County totals and Zagreb districts are skipped; the City of Zagreb is its own county row. */
     static Optional<String> kindOf(CensusRow row) {
         if ("Grad Zagreb".equalsIgnoreCase(row.county())) {
             return row.unitKind() == null ? Optional.of("grad_zagreb") : Optional.empty();
@@ -148,7 +141,6 @@ public class MunicipalityImporter {
         return byKey;
     }
 
-    /** "ZAGREBAČKA ŽUPANIJA" (JPT) and "Zagrebačka" (DZS) give the same key. */
     static String key(String county, String kind, String name) {
         String countyNorm = NameNormalizer.normalize(county).replace("zupanija", "").strip();
         return countyNorm + "|" + kind + "|" + NameNormalizer.normalize(name);

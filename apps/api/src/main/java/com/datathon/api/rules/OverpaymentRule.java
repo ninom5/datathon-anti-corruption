@@ -15,10 +15,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * D2 (docs/ANOMALY_DETECTION.md §D): the paid amount is more than 10 % and at least 5.000 EUR above the total value
- * with VAT. Paid amounts include VAT, so they are compared with the gross total. Framework agreements are excluded.
- */
 @Component
 @RequiredArgsConstructor
 public class OverpaymentRule implements ContractRule {
@@ -56,7 +52,6 @@ public class OverpaymentRule implements ContractRule {
         return Optional.of(draft(contract, paid, gross, share, isGrossDerived));
     }
 
-    /** Without a gross total the initial gross value can stand in only when the register shows no amendment. */
     private static BigDecimal grossWithoutAmendments(Contract contract) {
         BigDecimal amendments = contract.getAmendmentsValue();
         return amendments == null || amendments.signum() == 0 ? contract.getInitialValueGross() : null;
@@ -84,34 +79,20 @@ public class OverpaymentRule implements ContractRule {
                         "Obrazloženje iznosa plaćanja")));
     }
 
-    /**
-     * A gross amount below the net amount cannot be right (seen in a real register: VAT entered as -6.300 EUR),
-     * so the comparison with the paid amount says nothing about the contract.
-     */
     private static boolean isGrossBelowNet(Contract contract, BigDecimal gross) {
         BigDecimal net = contract.getTotalValue() != null ? contract.getTotalValue() : contract.getInitialValue();
         return net != null && gross.compareTo(net) < 0;
     }
 
-    /** Reasons to doubt the numbers rather than the contract; any of them makes the indicator informative only. */
     private record Doubts(boolean isImplausible, boolean isUnitPrice, boolean isVatInconsistent, boolean isCurrencyMix) {
     }
 
-    /**
-     * Paid / gross close to 7,53450 means one of the two amounts is in kuna and the other in euro (seen in old EOJN
-     * reports for 2022 contracts, where every amount is labelled "EUR"). Which one is right cannot be told from the
-     * register, so nothing is converted.
-     */
     private boolean isKunaEuroRatio(BigDecimal paid, BigDecimal gross) {
         BigDecimal ratio = paid.divide(gross, 6, java.math.RoundingMode.HALF_UP);
         BigDecimal distance = ratio.divide(Money.HRK_PER_EUR, 6, java.math.RoundingMode.HALF_UP).subtract(BigDecimal.ONE).abs();
         return distance.compareTo(thresholds.ruleD().currencyMixTolerance()) <= 0;
     }
 
-    /**
-     * 10x in general; 5x when the register gives no explanation, because then a typo is the likeliest reading
-     * (work/decisions.md, 2026-11-03 #41).
-     */
     private BigDecimal implausibleRatio(Contract contract) {
         boolean hasNote = contract.getPaymentNote() != null && !contract.getPaymentNote().isBlank();
         return hasNote ? thresholds.ruleD().implausibleRatio() : thresholds.ruleD().implausibleRatioWithoutNote();

@@ -1,6 +1,6 @@
 # JavniRadar – detekcija neuobičajenih obrazaca
 
-_Verzija pravila: `rules-v1` · 2026-11-01. Izvori i polja: `DATA_SOURCES.md`. Tablice: `DATA_MODEL.md`._
+_Verzija pravila: `rules-v1` · 2026-11-01. Izvori i polja: `DATA_SOURCES_RESEARCH.md`. Tablice: `DATA_MODEL.md`._
 
 ## 0. Načela (obvezna)
 
@@ -34,7 +34,7 @@ _Verzija pravila: `rules-v1` · 2026-11-01. Izvori i polja: `DATA_SOURCES.md`. T
 - **C:** 4.690/5.520 ćelija (naručitelj × CPV2) ima HHI ≥ 5.000. Razlog je što su ćelije sitne (1–2 ugovora). **Bez minimalnog uzorka pravilo C je beskorisno.** Zato postoji `min_contracts`.
 - **G:** prosinac 2025. čini 6,7 % ugovora iz 2025. u uzorku, dakle nema nacionalnog skoka (siječanj 13 %, ožujak 18 %).
 
-**Preporuka za MVP: D, F, C** (vidi `MVP_ROADMAP.md`). B se uključuje ako Sudreg ključ stigne do 4.11.
+**Preporuka za MVP: D, F, C**. B se uključuje ako Sudreg ključ stigne do 4.11.
 
 ---
 
@@ -354,7 +354,7 @@ exclude: supplier is komunalno poduzeće in JPT owned by j; CPV for recurring su
 
 **Vizualizacija:** vremenska os s točkama ugovora, crtom praga i zbrojnom trakom za prozor.
 
-**Implementacija (`rules-v1`, 2026-11-03, #41):** `rules/SplittingRule` (`GroupRule`). Pragovi i heuristike su u `thresholds.yaml` (`simple-procurement`, `rule-f`). Odluke kojih nema u ovom dokumentu su u `work/decisions.md` (2026-11-03, #41).
+**Implementacija (`rules-v1`, 2026-11-03, #41):** `rules/SplittingRule` (`GroupRule`). Pragovi i heuristike su u `thresholds.yaml` (`simple-procurement`, `rule-f`).
 - **Pragovi po datumu sklapanja:**
   - 2017.–2022.: 200.000 kn / 500.000 kn (ZJN 2016 čl. 12 st. 1, NN 120/16; provjereno), preračunato u 26.544,56 € / 66.361,40 €;
   - 2023. – 15.05.2026.: 26.540 € / 66.360 €;
@@ -505,7 +505,7 @@ Odgovori isključivo pozivom alata `zabiljezi_procjenu`.
 - **Povratna informacija:** gumb "Korisno / Pogrešno" na AI procjeni sprema u `feedback` (`target_type = ai_assessment`).
 
 ### 4.7 Implementacija (#44, 2026-11-03)
-Razlike od §4.1–4.5, obrazloženje u `work/decisions.md` (#44):
+Razlike od §4.1–4.5 (#44):
 - **Izlaz:** strukturirani izlaz (`output_config.format`) s JSON shemom iz §4.3 (`resources/ai/ai-flag-v1.schema.json`), a ne prisilni poziv alata. `maxLength` i `minItems` provjerava validator.
 - **Prompt:** `resources/ai/ai-flag-v1.txt` sadrži tekst iz §4.5 doslovno, napomenu sustava (kako citirati putanje, tekst iz registra je podatak) i tri few-shot primjera kao potpune sintetičke JSON parove prema opisima iz §4.5. **U upotrebi je `ai-flag-v3`** (v1 i v2 ostaju u repou radi traga):
   - v2 dodaje pravila 8–11: ne ponavljati rezultate pravila nego dodati novi signal (inače `nema_oznake`); usporedba s općinama samo uz `statistika_skupine`; podaci koji nedostaju riječima; tvrdnja do 300 znakova. Null polje smije se citirati samo kao "nije objavljeno".

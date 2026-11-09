@@ -8,7 +8,6 @@ interface ProvenanceBlockProps {
     contract: ContractDetail;
 }
 
-/** Every number on the page can be checked against this exact file and row (AGENTS.md: provenance). */
 export const ProvenanceBlock = ({contract}: ProvenanceBlockProps) => {
     const {provenance} = contract;
     return (

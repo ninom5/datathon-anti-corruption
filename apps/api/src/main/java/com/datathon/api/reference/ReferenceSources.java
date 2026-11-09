@@ -1,6 +1,5 @@
 package com.datathon.api.reference;
 
-/** Reference sources verified with real requests on 2026-11-03 (docs/DATA_SOURCES.md §5, §6). */
 public final class ReferenceSources {
 
     public static final String PORTAL_JPT = "jpt";

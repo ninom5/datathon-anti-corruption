@@ -61,7 +61,6 @@ public class PoliteHttpClient {
         return fetch(url, "bin", null, false);
     }
 
-    /** Body plus the time it was really downloaded: provenance must not claim "now" for a cached copy. */
     public record Fetched(byte[] body, Instant retrievedAt) {
     }
 

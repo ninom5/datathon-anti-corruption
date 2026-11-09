@@ -6,7 +6,6 @@ import jakarta.persistence.Converter;
 import java.util.Arrays;
 import java.util.Optional;
 
-/** Oznaka AI procjene (docs/ANOMALY_DETECTION.md §4.3); the code is the value the model returns. */
 public enum AiLabel implements DatabaseCode {
     NO_FLAG("nema_oznake"),
     WORTH_CHECKING("vrijedi_provjeriti"),

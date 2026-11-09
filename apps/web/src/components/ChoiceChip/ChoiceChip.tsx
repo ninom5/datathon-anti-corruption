@@ -13,7 +13,6 @@ interface ChoiceChipProps {
     count?: number;
 }
 
-// Toggle chip over a visually hidden native input, so it stays focusable and is announced as a checkbox or radio.
 export const ChoiceChip = ({type, name, value, isChecked, onChange, children, count}: ChoiceChipProps) => {
     return (
         <label className={classNames(styles.chip, isChecked && styles.chipSelected)}>

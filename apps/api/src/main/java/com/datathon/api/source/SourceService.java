@@ -19,7 +19,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Sources page (docs/UI_UX.md §3.7): datasets, files, retrieval times and what was imported from each. */
 @Service
 @RequiredArgsConstructor
 public class SourceService {
@@ -67,11 +66,6 @@ public class SourceService {
         return byDataset;
     }
 
-    /**
-     * Every ingest run stores a new row for a download that failed again, so the same 20 unavailable URLs were counted
-     * once per run (60, then 80 "nedostupno"). A failed download is shown once per URL, the latest attempt, and not at
-     * all when the same URL was downloaded successfully in another run.
-     */
     static List<SourceFile> withoutRepeatedFailures(List<SourceFile> files) {
         Set<String> downloaded = files.stream().filter(file -> file.getSha256() != null).map(SourceFile::getUrl)
                 .collect(Collectors.toSet());

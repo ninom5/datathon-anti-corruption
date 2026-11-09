@@ -1,7 +1,5 @@
 package com.datathon.api.integration.anthropic;
 
-// Usage is returned to the caller (budget per run, llm_usage written by the AI run); effort and model are set per request.
-
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.core.JsonValue;
 import com.anthropic.errors.AnthropicException;
@@ -18,11 +16,6 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Claude Messages API with structured output: the answer must follow the JSON schema of the request
- * (docs/ANOMALY_DETECTION.md §4.3; why not forced tool use: work/decisions.md, #44). The SDK handles auth, timeouts
- * and the retry for 429/5xx. No SDK type leaves this class.
- */
 @RequiredArgsConstructor
 public class AnthropicLlmClient implements LlmClient {
 
@@ -72,7 +65,6 @@ public class AnthropicLlmClient implements LlmClient {
         }
     }
 
-    /** A cut-off or refused answer must not be saved as "the model found nothing". */
     private static void assertComplete(Message message, LlmResult usage) {
         StopReason.Known stopReason = message.stopReason().map(StopReason::known).orElse(null);
         if (stopReason == StopReason.Known.MAX_TOKENS || stopReason == StopReason.Known.REFUSAL) {

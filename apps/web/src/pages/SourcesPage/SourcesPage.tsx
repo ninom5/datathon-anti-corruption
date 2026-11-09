@@ -9,7 +9,6 @@ import {CoverageSummary} from "./CoverageSummary.tsx";
 import {DatasetTable} from "./DatasetTable.tsx";
 import styles from "./SourcesPage.module.css";
 
-/** All datasets fit on one page (the API caps a page at 100). */
 const PAGE_SIZE = 100;
 
 const hasImportedFile = (dataset: SourceDataset) => dataset.files.some((file) => file.status === "uvezeno");

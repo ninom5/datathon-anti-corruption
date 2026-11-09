@@ -27,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Loads everything the context of one contract needs (docs/ANOMALY_DETECTION.md §4.2) and builds it. */
 @Service
 @RequiredArgsConstructor
 public class AiContextLoader {
@@ -40,7 +39,6 @@ public class AiContextLoader {
     private final RuleThresholds thresholds;
     private final CompanySnapshotRepository snapshotRepository;
 
-    /** Data shared by all contracts of one run, loaded once; the peer cache is used by parallel workers. */
     public record Lookups(Set<String> supplierFounderPairs, Map<String, Optional<Map<String, Object>>> peerStatistics) {
     }
 
@@ -72,7 +70,6 @@ public class AiContextLoader {
                 .orElse(null);
     }
 
-    /** Same thresholds as rule F; without a subject type goods/services and works cannot be told apart. */
     private Threshold simpleProcurementThreshold(Contract contract) {
         if (contract.getDateSigned() == null || contract.getSubjectType() == null
                 || contract.getSubjectType() == SubjectType.OTHER) {
@@ -83,7 +80,6 @@ public class AiContextLoader {
                 .orElse(null);
     }
 
-    /** True only when JPT lists the buyer as founder; unknown (null) otherwise, never "false" without data. */
     private static Boolean ownedByBuyer(Contract contract, Lookups lookups) {
         String pair = contract.getSupplier().getOib() + "|" + contract.getBuyer().getOib();
         return lookups.supplierFounderPairs().contains(pair) ? Boolean.TRUE : null;
@@ -102,7 +98,6 @@ public class AiContextLoader {
                 .orElse(null);
     }
 
-    /** Same comparison as the /usporedba page (#43); without n >= 8 it is not given to the model at all. */
     private Optional<Map<String, Object>> comparePeers(String oib, int year, String cpv2) {
         PeerComparison comparison = municipalityService.comparePeers(oib, year, cpv2);
         if (!comparison.sufficient()) {

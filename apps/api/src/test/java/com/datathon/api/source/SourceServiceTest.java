@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-/** Repeated ingest runs store a new row for each failed download of the same URL. */
 class SourceServiceTest {
 
     @Test

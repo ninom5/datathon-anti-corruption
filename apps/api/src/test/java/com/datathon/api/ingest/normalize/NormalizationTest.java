@@ -25,7 +25,6 @@ class NormalizationTest {
         assertThat(Money.read("1.500,50", LocalDate.of(2025, 1, 1)).value()).isEqualByComparingTo("1500.50");
         assertThat(Money.read("7534,50", LocalDate.of(2022, 12, 31)).value()).isEqualByComparingTo("1000.00");
         assertThat(Money.read("1.500,00 kn mjesečno", LocalDate.of(2022, 1, 1)).status()).isEqualTo(Money.Status.PERIODIC);
-        // A2 reports: an explicit "EUR" wins over the signing date, a "(kn)" header over a plain number after 2022.
         assertThat(Money.read("1.098,28 EUR", LocalDate.of(2022, 8, 17)).value()).isEqualByComparingTo("1098.28");
         assertThat(Money.read("1.098,28 EUR", LocalDate.of(2022, 8, 17)).hrk()).isFalse();
         assertThat(Money.read("75345", LocalDate.of(2023, 2, 1), Money.HeaderCurrency.HRK).value()).isEqualByComparingTo("10000.00");
@@ -34,7 +33,6 @@ class NormalizationTest {
                 .as("the cell marker wins over the header").isEqualByComparingTo("10000.00");
         assertThat(Money.read("nije poznato", LocalDate.of(2025, 1, 1)).status()).isEqualTo(Money.Status.UNREADABLE);
         assertThat(Money.read(" ", LocalDate.of(2025, 1, 1)).status()).isEqualTo(Money.Status.MISSING);
-        // Shifted columns and unit prices in real registers (Općina Cernik 2022) are not amounts.
         assertThat(Money.read("3 MJESECA", LocalDate.of(2022, 11, 21)).status()).isEqualTo(Money.Status.UNREADABLE);
         assertThat(Money.read("30 DANA", LocalDate.of(2022, 11, 21)).status()).isEqualTo(Money.Status.UNREADABLE);
         assertThat(Money.read("257,50 kn / tona", LocalDate.of(2020, 1, 1)).status()).isEqualTo(Money.Status.UNREADABLE);
@@ -70,7 +68,6 @@ class NormalizationTest {
         assertThat(OrganizationClassifier.classifySupplier("Obrt Primjer, vl. Ivo Ivić")).isEqualTo(OrganizationType.CRAFT);
         assertThat(OrganizationClassifier.classifySupplier("Ivo Ivić")).isEqualTo(OrganizationType.NATURAL_PERSON);
         assertThat(OrganizationClassifier.classifySupplier("ZAGREBAČKI HOLDING")).isEqualTo(OrganizationType.OTHER);
-        // Cases seen in the 2026-11-02 ingest (names here are invented, shapes are real).
         assertThat(OrganizationClassifier.classifySupplier("IVO IVIĆ")).isEqualTo(OrganizationType.NATURAL_PERSON);
         assertThat(OrganizationClassifier.classifySupplier("Ana  Anić-Horvat")).isEqualTo(OrganizationType.NATURAL_PERSON);
         assertThat(OrganizationClassifier.classifySupplier("OPG Ivo Ivić")).isEqualTo(OrganizationType.CRAFT);

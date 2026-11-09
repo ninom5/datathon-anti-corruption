@@ -10,7 +10,6 @@ import org.springframework.core.io.ClassPathResource;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Parsing of a real (trimmed) answer of /api/javni/detalji_subjekta, saved 2026-11-04. */
 class SudregCompanyTest {
 
     private static JsonNode fixture() throws IOException {
@@ -35,7 +34,6 @@ class SudregCompanyTest {
                 .doesNotContainKeys("email_adrese", "sjediste");
     }
 
-    /** Older entries (2026-11-05 check): no pretezita_djelatnost, only the number glavna_djelatnost. */
     @Test
     void olderEntryKeepsOnlyTheMainActivityCodeWithoutGuessingNameOrVersion() {
         JsonNode answer = JsonMapper.shared().readTree("{\"oib\": 12345678901, \"glavna_djelatnost\": 6312,"

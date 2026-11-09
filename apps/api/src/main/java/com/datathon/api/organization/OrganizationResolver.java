@@ -8,10 +8,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Finds or creates the organization behind a register row (docs/DATA_MODEL.md §3): same OIB = same entity;
- * without an OIB only an exact {@code name_norm} match is merged (fuzzy matches are never merged automatically).
- */
 @Service
 @RequiredArgsConstructor
 public class OrganizationResolver {
@@ -25,7 +21,6 @@ public class OrganizationResolver {
         return resolve(displayName, oib, isSynthetic, provenance, OrganizationClassifier.classifyBuyer(displayName));
     }
 
-    /** Empty when the row names no supplier at all. */
     public Optional<Organization> resolveSupplier(String name, Oibs.Result oib, boolean isSynthetic, Provenance provenance) {
         if ((name == null || name.isBlank()) && !oib.isUsable()) {
             return Optional.empty();

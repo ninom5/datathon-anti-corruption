@@ -14,11 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- * Writes the synthetic register (kept as CSV so it can be reviewed in a diff) as an XLSX file shaped like a real
- * EOJN export: numbers as numeric cells, ISO dates as date cells, everything else as text. The result then goes
- * through exactly the same reader and parser as a downloaded file.
- */
 final class CsvWorkbookWriter {
 
     private static final Pattern NUMBER = Pattern.compile("-?\\d+(\\.\\d+)?");
@@ -44,7 +39,6 @@ final class CsvWorkbookWriter {
         }
     }
 
-    /** OIBs are 11 digits and must stay text (a numeric cell would drop leading zeros), as in the real exports. */
     private static void writeCell(Cell cell, String text, CellStyles styles) {
         if (NUMBER.matcher(text).matches() && !looksLikeIdentifier(text)) {
             cell.setCellValue(Double.parseDouble(text));
@@ -61,7 +55,6 @@ final class CsvWorkbookWriter {
         return text.startsWith("0") && text.length() > 1 && !text.startsWith("0.");
     }
 
-    /** Same number formats as the real Osijek export ("#,##0.00" for amounts, a date format for dates). */
     private record CellStyles(CellStyle amount, CellStyle date) {
 
         static CellStyles of(Workbook workbook) {

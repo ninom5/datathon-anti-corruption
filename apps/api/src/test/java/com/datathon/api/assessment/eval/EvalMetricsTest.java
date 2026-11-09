@@ -44,7 +44,6 @@ class EvalMetricsTest {
         assertThat(metrics.falsePositiveRate()).isEqualByComparingTo("0");
     }
 
-    /** Textbook example: 20 yes/yes, 5, 10, 15 no/no -> p_o 0.7, p_e 0.5, kappa 0.4. */
     @Test
     void cohensKappaMatchesTextbookExample() {
         assertThat(EvalMetrics.cohensKappa(pairs(20, 5, 10, 15))).isEqualByComparingTo("0.400");

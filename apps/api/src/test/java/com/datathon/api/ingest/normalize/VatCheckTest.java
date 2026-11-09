@@ -6,7 +6,6 @@ import com.datathon.api.ingest.IssueCode;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
-/** Net and gross amounts from real registers (docs/DATA_SOURCES.md §1). */
 class VatCheckTest {
 
     @Test

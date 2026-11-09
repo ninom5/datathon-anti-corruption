@@ -1,17 +1,17 @@
 ---
 name: react-web
-description: MUST be loaded before writing or changing any frontend code in apps/web of JavniRadar (React 19, TypeScript, Vite, wouter, TanStack Query, axios). Trigger on any implementation request that touches the UI, including Croatian ones such as "implementiraj", "napravi stranicu / ekran", "dodaj komponentu / graf / kartu", "popravi UI", or any frontend task from docs/MVP_ROADMAP.md or docs/UI_UX.md (istraživač ugovora, profil općine, detalj indikatora, AI procjena, karta, izvori). Covers pages, components, hooks, API calls, types, routes, charts, the map, styles and UI/UX polish.
+description: MUST be loaded before writing or changing any frontend code in apps/web of JavniRadar (React 19, TypeScript, Vite, wouter, TanStack Query, axios). Trigger on any implementation request that touches the UI, including Croatian ones such as "implementiraj", "napravi stranicu / ekran", "dodaj komponentu / graf / kartu", "popravi UI", or any frontend task (istraživač ugovora, profil općine, detalj indikatora, AI procjena, karta, izvori). Covers pages, components, hooks, API calls, types, routes, charts, the map, styles and UI/UX polish.
 ---
 
 # React web (`apps/web`)
 
-Read first: `docs/UI_UX.md` (design direction, screens, tokens), `docs/FEATURES.md` and `AGENTS.md`.
+Read first: `docs/DESIGN_SYSTEM.md` (design direction, tokens, components), `docs/PROJECT.md` and `AGENTS.md`.
 
 UI/UX is worth **10 of 60 points**, and the video (10 pts) is recorded from this very interface. So every screen is: fast, clear at first glance, with loading, error and empty states handled. Code must stay consistent with the existing skeleton.
 
 ## Stack (verified in `package.json`)
 - React 19, TypeScript (strict), Vite, **wouter** (NOT React Router), **TanStack Query v5**, axios, `react-error-boundary`.
-- No UI library or CSS framework. **Don't add dependencies (Tailwind, MUI, shadcn, zustand, date-fns...) without asking the user.** It's a team decision and goes into `work/decisions.md`. `docs/UI_UX.md` §6 proposes Observable Plot (charts) and `d3-geo` or MapLibre (map); these are proposals, so ask before adding them.
+- No UI library or CSS framework. **Don't add dependencies (Tailwind, MUI, shadcn, zustand, date-fns...) without asking the user.** It's a team decision and goes into the PR description.
 - Package manager is **yarn** (`yarn.lock`). Don't use npm/pnpm.
 
 ## Structure (existing, respect it)
@@ -120,10 +120,10 @@ src/
 - **Charts:** every chart has an "Prikaži kao tablicu" alternative and an `aria-label` summary. Load the `dataviz` skill before building charts.
 - Accessibility: semantic HTML (`button` for actions, `a`/`Link` for navigation, `label` for every form field), visible focus, contrast, `alt` on images. Accessibility is explicitly part of challenge A and the jury values it everywhere.
 - Responsive: must look good at 1280 px (video) and be usable on mobile.
-- Styles: until the team decides otherwise, use CSS Modules (`Component.module.css` next to the component) and the CSS variables from `docs/UI_UX.md` §1 (colours, typography) in one global file. No inline `style={{...}}` except for dynamic values.
+- Styles: until the team decides otherwise, use CSS Modules (`Component.module.css` next to the component) and the CSS variables from `docs/DESIGN_SYSTEM.md` (colours, typography) in one global file. No inline `style={{...}}` except for dynamic values.
 
 ## Before saying it's done
-1. In `apps/web`: `yarn lint` and `yarn build` pass (rule from CLAUDE.md, mandatory before submission).
+1. In `apps/web`: `yarn lint` and `yarn build` pass (mandatory before submission).
 2. Check any UI-visible change in the browser (`yarn dev`): happy path + empty state + error (e.g. API stopped).
 3. If you added a type for a new endpoint, verify it matches the real JSON from the backend, not an assumed one.
-4. Check the screen against `docs/UI_UX.md` and the acceptance criteria in `docs/MVP_ROADMAP.md` §5.
+4. Check the screen against `docs/DESIGN_SYSTEM.md`.

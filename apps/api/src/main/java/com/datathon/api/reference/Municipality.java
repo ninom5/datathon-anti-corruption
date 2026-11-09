@@ -15,7 +15,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** A JLS (OIB from JPT) with its DZS 2021 population and peer group. Provenance points at the DZS row. */
 @Entity
 @Table(name = "municipality")
 @Getter
@@ -29,7 +28,6 @@ public class Municipality {
     private String oib;
 
     private String name;
-    /** 'grad', 'opcina' or 'grad_zagreb', as in docs/DATA_MODEL.md §2. */
     private String kind;
     private String county;
     @Column(name = "population_2021")

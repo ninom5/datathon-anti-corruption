@@ -19,7 +19,6 @@ import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.io.ClassPathResource;
 
-/** Rule D on hand-built contracts, with the real config/thresholds.yaml (positive, negative and edge cases). */
 class RuleDTest {
 
     private static RuleThresholds thresholds;
@@ -114,10 +113,6 @@ class RuleDTest {
         assertThat(draft.explanationHr()).contains("manji od iznosa bez PDV-a");
     }
 
-    /**
-     * Real A2 case (Općina Bistra, 2022): contract "82.375,00 HRK" (10.933,04 EUR), paid "82.375,00 EUR". The ratio
-     * equals the kuna/euro rate, so the record is shown as a probable currency mix-up, not as an overpayment.
-     */
     @Test
     void kunaEuroRatioIsInformative() {
         Contract contract = contract(SubjectType.SERVICES, "8746.43", "8746.43");
@@ -130,7 +125,6 @@ class RuleDTest {
         assertThat(draft.explanationHr()).contains("tečaju kune i eura");
         assertNoForbiddenWords(draft);
 
-        // With an explanation in the register the 10x bound applies, so only the currency check could flag 7,0x.
         Contract explained = paid("10000", "70000");
         explained.setPaymentNote("Dodatne isporuke po narudžbenicama");
         var nearRate = overpayment.evaluate(explained).orElseThrow();
@@ -138,7 +132,6 @@ class RuleDTest {
         assertThat(nearRate.explanationHr()).doesNotContain("tečaju kune i eura");
     }
 
-    /** Without an explanation 5x already reads as an entry error (work/decisions.md, 2026-11-03 #41). */
     @Test
     void largeOverpaymentWithoutNoteIsInformative() {
         var draft = overpayment.evaluate(paid("10000", "60000")).orElseThrow();

@@ -3,7 +3,6 @@ package com.datathon.api.ingest;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Minimal RFC 4180 reader: quoted fields may hold separators and line breaks (seen in Grad Dugo Selo's CSV). */
 final class CsvSplitter {
 
     private CsvSplitter() {

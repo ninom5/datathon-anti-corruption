@@ -6,7 +6,6 @@ import jakarta.persistence.Converter;
 import java.util.Arrays;
 import java.util.Optional;
 
-/** ACCEPTED is the only status ever shown; REJECTED answers are kept for evaluation (§4.4); SUPERSEDED = replaced by a recheck. */
 public enum AiAssessmentStatus implements DatabaseCode {
     ACCEPTED("prihvaceno"),
     REJECTED("odbaceno_validacijom"),

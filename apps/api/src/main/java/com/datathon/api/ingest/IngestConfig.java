@@ -13,7 +13,6 @@ import tools.jackson.databind.json.JsonMapper;
 @EnableConfigurationProperties(IngestProperties.class)
 public class IngestConfig {
 
-    /** At most one request per second per host, three attempts with growing pauses on 429/5xx. */
     @Bean
     public PoliteHttpClient politeHttpClient(IngestProperties properties, JsonMapper jsonMapper) {
         DiskCache cache = new DiskCache(Path.of(properties.cacheDir()));

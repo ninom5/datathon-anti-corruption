@@ -9,13 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * A contract with its values, rule indicators, the AI assessment (shown apart from the rules, never merged with them)
- * and the exact source row it was read from.
- *
- * @param aiAssessment                  null when there is no accepted assessment
- * @param aiAssessmentUnavailableReason why {@code aiAssessment} is null (e.g. crafts never get one); null otherwise
- */
 public record ContractDetail(
         Long id,
         OrganizationRef buyer,
@@ -48,9 +41,6 @@ public record ContractDetail(
     public record Cpv(String code, String label) {
     }
 
-    /**
-     * EUR; "Gross" includes VAT. {@code convertedFromHrk} marks amounts the register gave in kuna (7,53450 HRK/EUR).
-     */
     public record Values(BigDecimal initialValue, BigDecimal initialValueGross, BigDecimal amendmentsValue,
                          BigDecimal totalValue, BigDecimal totalValueGross, BigDecimal paidAmount, String currency,
                          boolean convertedFromHrk) {

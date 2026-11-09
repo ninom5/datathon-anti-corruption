@@ -4,7 +4,6 @@ import com.datathon.api.common.persistence.DatabaseCode;
 import com.datathon.api.common.persistence.DatabaseCodeConverter;
 import jakarta.persistence.Converter;
 
-/** Whether an indicator is worth checking or shown for information only (e.g. a likely data entry error). */
 public enum SeverityNote implements DatabaseCode {
     INFORMATIVE("informativno"),
     WORTH_CHECKING("vrijedi_provjeriti");
@@ -20,7 +19,6 @@ public enum SeverityNote implements DatabaseCode {
         return code;
     }
 
-    /** Unknown codes are rejected earlier by request validation. */
     public static SeverityNote fromCode(String code) {
         return INFORMATIVE.code.equals(code) ? INFORMATIVE : WORTH_CHECKING;
     }

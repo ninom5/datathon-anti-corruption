@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Stores assessments and usage, each in its own short transaction (the model call runs outside any transaction). */
 @Component
 @RequiredArgsConstructor
 public class AiAssessmentWriter {

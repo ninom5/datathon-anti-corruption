@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
-/**
- * 10 submissions per minute per client address (docs/ARCHITECTURE.md §8), in memory. Enough for one instance and
- * the demo, so no Bucket4j dependency; addresses are kept only for the window and never logged.
- */
 @Component
 public class FeedbackRateLimiter {
 

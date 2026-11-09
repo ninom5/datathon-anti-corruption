@@ -21,11 +21,6 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * B (docs/ANOMALY_DETECTION.md §B): the supplier was entered in the company register at most {@code max-age-days}
- * before a contract worth at least {@code min-value-eur}. Needs a Sudreg snapshot (#46); without one nothing is
- * computed, never guessed. Crafts, natural persons and foreign companies are not in the register.
- */
 @Component
 @RequiredArgsConstructor
 public class YoungCompanyRule implements ContractRule {
@@ -63,7 +58,6 @@ public class YoungCompanyRule implements ContractRule {
 
     private Optional<IndicatorDraft> evaluate(Contract contract, BigDecimal value, CompanySnapshot snapshot) {
         long ageDays = ChronoUnit.DAYS.between(snapshot.getFoundedOn(), contract.getDateSigned());
-        // A contract signed before the founding date is a data problem, not a young company.
         if (ageDays < 0 || ageDays > thresholds.ruleB().maxAgeDays()) {
             return Optional.empty();
         }
@@ -88,7 +82,6 @@ public class YoungCompanyRule implements ContractRule {
                 + "sposobnost (reference, osoblje).";
     }
 
-    /** Croatian plural of "dan": 1 dan, 2-4 dana, 5+ dana (11-14 dana). */
     private static String days(long count) {
         long lastTwo = count % 100;
         return count % 10 == 1 && lastTwo != 11 ? "dan" : "dana";

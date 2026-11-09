@@ -21,12 +21,10 @@ export interface PeerMember {
     contractsInYear: number;
     contracts: number;
     totalValue: number;
-    /** EUR per inhabitant, null when the population is unknown. */
     valuePerCapita: number | null;
     selected: boolean;
 }
 
-/** GET /v1/municipalities/{oib}/peers: spending per inhabitant next to the peer group (ANOMALY_DETECTION §3A). */
 export interface PeerComparison {
     municipality: {
         oib: string;

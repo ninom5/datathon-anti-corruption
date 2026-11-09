@@ -19,7 +19,6 @@ interface NoticeProps {
     className?: string;
 }
 
-// Inline message inside a page or form. Full-screen states use EmptyState and ErrorState instead.
 export const Notice = ({children, tone = "info", title, className}: NoticeProps) => {
     return (
         <div className={classNames(styles.notice, styles[tone], className)} role="note">

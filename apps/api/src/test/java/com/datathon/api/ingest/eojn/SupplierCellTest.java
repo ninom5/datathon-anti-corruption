@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-/** Real cell texts from A2 registers (2026-11-03 survey of 4.477 rows). */
 class SupplierCellTest {
 
     @Test

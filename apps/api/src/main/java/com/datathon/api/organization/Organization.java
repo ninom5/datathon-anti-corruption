@@ -17,7 +17,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** Buyer or supplier. Same OIB means same organization (docs/DATA_MODEL.md §3). */
 @Entity
 @Table(name = "organization")
 @Getter
@@ -37,7 +36,6 @@ public class Organization {
     private String nameNorm;
     private OrganizationType orgType;
     private String county;
-    /** From the JPT register (#40); null for organizations that are not public bodies. */
     private String jptCode;
     private String jptType;
     private boolean isSynthetic;

@@ -27,11 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Recomputes all rules from scratch: contract rules (D1, D2) per contract, group rules (F, C) per buyer.
- * Deterministic: the same contracts always give the same indicators. Started after an ingest run, after loading the
- * synthetic set, or by hand from the admin endpoint.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -45,7 +40,6 @@ public class RulesService {
     private final MagnitudeBands magnitudeBands;
     private final JsonMapper jsonMapper;
 
-    /** @return number of indicators per rule code, real and synthetic together */
     @Transactional
     public Map<String, Integer> runRules() {
         List<String> ruleCodes = Stream.concat(contractRules.stream().map(ContractRule::ruleCode),
@@ -90,18 +84,12 @@ public class RulesService {
         });
     }
 
-    /**
-     * Group rules add up net values, so a row whose net and gross amounts contradict each other (a dropped decimal
-     * comma in one of them, up to 100x) would decide a whole group on its own. Contract rules still see the row and
-     * lower its data quality through the flag.
-     */
     private static boolean hasUnreliableValue(Contract contract) {
         List<String> flags = contract.getQualityFlags();
         return flags.contains(IssueCode.GROSS_BELOW_NET) || flags.contains(IssueCode.VAT_RATIO_IMPLAUSIBLE)
                 || flags.contains(IssueCode.COLUMNS_SHIFTED);
     }
 
-    /** Contracts with natural persons are never shown (GDPR, AGENTS.md), so no indicator is computed for them. */
     private static boolean isHiddenForPrivacy(Contract contract) {
         return contract.getSupplier() != null && contract.getSupplier().getOrgType() == OrganizationType.NATURAL_PERSON;
     }

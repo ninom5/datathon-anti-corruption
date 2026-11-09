@@ -7,18 +7,18 @@ Civic-tech alat koji lokalnu javnu nabavu u Hrvatskoj čini razumljivom, pretra�
 > Indikatori nisu optužbe. Pokazuju što vrijedi provjeriti.
 
 ## Dokumentacija
-- **[Projektna dokumentacija (PROJECT.md)](PROJECT.md)**: problem, korisnici, funkcije, podaci, utjecaj, ograničenja, daljnji razvoj, tim
-- **[Tehnička arhitektura (ARCHITECTURE.md)](ARCHITECTURE.md)**: dijagram, moduli, tok podataka, AI obrada, API rute, standardi, testovi, tehnički, organizacijski i pravni preduvjeti
-- **[Popis skupova podataka (DATA_SOURCES.md)](DATA_SOURCES.md)** · [Licence treće strane (THIRD_PARTY_LICENSES.md)](THIRD_PARTY_LICENSES.md)
-- Detaljni radni dokumenti:
-  - [Pregled projekta](docs/PROJECT_OVERVIEW.md) · [Istraživanje izvora](docs/DATA_SOURCES.md) · [Funkcionalnosti](docs/FEATURES.md)
-  - [Detekcija obrazaca i AI procjena](docs/ANOMALY_DETECTION.md) · [Evaluacija AI-ja](docs/EVALUATION.md) · [Podatkovni model](docs/DATA_MODEL.md) · [Plan arhitekture](docs/ARCHITECTURE.md)
-  - [UI/UX](docs/UI_UX.md) · [Dizajn sustav](DESIGN_SYSTEM.md) · [Plan MVP-a](docs/MVP_ROADMAP.md) · [Demo scenariji](docs/DEMO_SCENARIOS.md)
+- **[Projektna dokumentacija (PROJECT.md)](docs/PROJECT.md)**: problem, korisnici, funkcije, podaci, utjecaj, ograničenja, daljnji razvoj, tim
+- **[Tehnička arhitektura (ARCHITECTURE.md)](docs/ARCHITECTURE.md)**: dijagram, moduli, tok podataka, AI obrada, API rute, standardi, testovi, tehnički, organizacijski i pravni preduvjeti
+- **[Popis skupova podataka (DATA_SOURCES.md)](docs/DATA_SOURCES.md)** · [Licence treće strane (THIRD_PARTY_LICENSES.md)](docs/THIRD_PARTY_LICENSES.md)
+- Detaljni dokumenti:
+  - [Detekcija obrazaca i AI procjena](docs/ANOMALY_DETECTION.md) · [Evaluacija AI-ja](docs/EVALUATION.md) · [Podatkovni model](docs/DATA_MODEL.md)
+  - [Istraživanje izvora](docs/DATA_SOURCES_RESEARCH.md) · [Dizajn sustav](docs/DESIGN_SYSTEM.md) · [Demo scenariji](docs/DEMO_SCENARIOS.md)
 - Pravila za AI agente: [AGENTS.md](AGENTS.md)
 
 ## Struktura
 - `apps/api`: Spring Boot 4 (Java 25), PostgreSQL 17 (`docker-compose.yml`)
 - `apps/web`: React 19 + TypeScript + Vite
+- `docs/`: projektna i tehnička dokumentacija, evaluacijski skup AI-ja (`docs/eval/`)
 
 ## Pokretanje
 
@@ -60,7 +60,7 @@ cd apps/api && ./mvnw test          # treba Docker (Testcontainers, PostgreSQL 1
 
 ## Izvori podataka
 
-Svi podaci su otvoreni podaci javnog sektora. Puni popis s izdavateljima, poveznicama, licencama i datumima preuzimanja: **[DATA_SOURCES.md](DATA_SOURCES.md)**.
+Svi podaci su otvoreni podaci javnog sektora. Puni popis s izdavateljima, poveznicama, licencama i datumima preuzimanja: **[DATA_SOURCES.md](docs/DATA_SOURCES.md)**.
 
 | Izvor | Izdavatelj | Pristup |
 |---|---|---|
@@ -81,12 +81,12 @@ Svi podaci su otvoreni podaci javnog sektora. Puni popis s izdavateljima, povezn
 | Spring Boot, PostgreSQL, Flyway, Apache POI | backend, baza, migracije, čitanje XLSX registara |
 | React, TypeScript, Vite, TanStack Query, wouter, axios | web sučelje |
 | Docker, Testcontainers, JUnit, ESLint | lokalna baza, testovi, provjera koda |
-| Python (`apps/web/scripts/build_jls_geojson.py`, `work/eval/`) | jednokratna priprema granica za kartu i AI evaluacijskog skupa |
+| Python (`apps/web/scripts/build_jls_geojson.py`, `docs/eval/`) | jednokratna priprema granica za kartu i AI evaluacijskog skupa |
 
-Sav kod koji su predložili AI alati tim je pregledao i preuzeo. Licence ovisnosti, fontova, ikona i kartografske podloge su u [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
+Sav kod koji su predložili AI alati tim je pregledao i preuzeo. Licence ovisnosti, fontova, ikona i kartografske podloge su u [THIRD_PARTY_LICENSES.md](docs/THIRD_PARTY_LICENSES.md).
 
 ## Licenca
 
 [MIT](LICENSE) © 2026 Ivan Mosić, Šime Jadrijev, Luka Žuljević, Nino Milas.
 
-Podaci ostaju pod licencama izvora (pretežno Otvorena dozvola RH, uz obvezno navođenje izvora; granice JLS pod CC BY-SA 2.0 / ODbL), vidi [DATA_SOURCES.md](DATA_SOURCES.md).
+Podaci ostaju pod licencama izvora (pretežno Otvorena dozvola RH, uz obvezno navođenje izvora; granice JLS pod CC BY-SA 2.0 / ODbL), vidi [DATA_SOURCES.md](docs/DATA_SOURCES.md).

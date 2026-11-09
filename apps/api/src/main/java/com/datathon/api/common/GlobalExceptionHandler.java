@@ -19,10 +19,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-/**
- * Exceptions carry English messages for logs, but the text the user sees is Croatian.
- * Rejected values are never logged or returned: a bad OIB or a search text can be personal data.
- */
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -45,13 +41,11 @@ public class GlobalExceptionHandler {
         return badRequest(e.getMessage());
     }
 
-    /** Covers {@code @Valid} on a body and on a {@code @ModelAttribute}; the former extends this exception. */
     @ExceptionHandler(BindException.class)
     ResponseEntity<ErrorResponse> handleBind(BindException e) {
         return badRequest(firstBindingMessage(e.getBindingResult()));
     }
 
-    /** Constraints placed directly on a controller parameter, for example {@code @RequestParam @Min(1)}. */
     @ExceptionHandler(HandlerMethodValidationException.class)
     ResponseEntity<ErrorResponse> handleParameterValidation(HandlerMethodValidationException e) {
         String message = e.getParameterValidationResults().stream()
@@ -71,7 +65,6 @@ public class GlobalExceptionHandler {
         return badRequest(e.getParameterName() + ": obavezan parametar");
     }
 
-    /** The exception text quotes the offending JSON value, so only the type is logged. */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<ErrorResponse> handleUnreadableBody(HttpMessageNotReadableException e) {
         log.info("Rejected request: unreadable body ({})", e.getClass().getSimpleName());
@@ -101,7 +94,6 @@ public class GlobalExceptionHandler {
         return respond(HttpStatus.TOO_MANY_REQUESTS, "Previše zahtjeva. Pokušajte ponovno za minutu.");
     }
 
-    /** Admin routes are not for end users, so the reason is passed through. */
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ErrorResponse> handleStatus(ResponseStatusException e) {
         HttpStatus status = HttpStatus.valueOf(e.getStatusCode().value());
@@ -117,7 +109,6 @@ public class GlobalExceptionHandler {
     private static String firstBindingMessage(BindingResult result) {
         FieldError fieldError = result.getFieldError();
         if (fieldError != null) {
-            // A binding failure (for example text in a date) has a default message that quotes the value.
             String reason = fieldError.isBindingFailure() ? INVALID_VALUE : fieldError.getDefaultMessage();
             return fieldError.getField() + ": " + reason;
         }

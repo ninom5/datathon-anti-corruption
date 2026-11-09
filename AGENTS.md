@@ -1,14 +1,14 @@
 # Upute za AI agente (JavniRadar)
 
-Vrijede za sve AI agente koji pišu kod ili dokumentaciju u ovom repou (Claude Code, Codex, Copilot …). `CLAUDE.md` sadrži i upute o radu s timom i vođenju memorije. Ovaj file sadrži tehnička pravila.
+Vrijede za sve AI agente koji pišu kod ili dokumentaciju u ovom repou (Claude Code, Codex, Copilot …). Ovaj file sadrži tehnička pravila.
 
 ## Prije rada
-1. Pročitaj `docs/PROJECT_OVERVIEW.md` i dokument koji se tiče zadatka: `DATA_SOURCES`, `DATA_MODEL`, `ARCHITECTURE`, `ANOMALY_DETECTION`, `FEATURES`, `UI_UX`, `MVP_ROADMAP`, `DEMO_SCENARIOS`.
-2. Slijedi arhitekturu (`docs/ARCHITECTURE.md`) i podatkovni model (`docs/DATA_MODEL.md`). Odstupanje prvo zapiši u `work/decisions.md`, s obrazloženjem.
+1. Pročitaj `docs/PROJECT.md` i dokument u `docs/` koji se tiče zadatka: `ARCHITECTURE`, `DATA_MODEL`, `DATA_SOURCES`, `DATA_SOURCES_RESEARCH`, `ANOMALY_DETECTION`, `EVALUATION`, `DESIGN_SYSTEM`, `DEMO_SCENARIOS`.
+2. Slijedi arhitekturu (`docs/ARCHITECTURE.md`) i podatkovni model (`docs/DATA_MODEL.md`). Odstupanje obrazloži u opisu PR-a.
 3. **Prije pisanja koda obavezno učitaj skill:** `spring-boot-api` za `apps/api` i `react-web` za `apps/web` (oba su u `.claude/skills/`). Ako zadatak dira i backend i frontend, učitaj oba. Svaki novi zadatak "implementiraj X" počinje time.
 
 ## Podaci i integracije
-- **Provjeri izvor prije integracije.** Napravi stvarni zahtjev, a datum, URL, HTTP status i uzorak zapiši u `docs/DATA_SOURCES.md`. Ne izmišljaj endpointe, skupove, nazive polja ni dozvole.
+- **Provjeri izvor prije integracije.** Napravi stvarni zahtjev, a datum, URL, HTTP status i uzorak zapiši u `docs/DATA_SOURCES_RESEARCH.md`. Ne izmišljaj endpointe, skupove, nazive polja ni dozvole.
 - **Svaki uvezeni zapis mora imati provenanciju:** izvorna datoteka/URL, lokator (redak, stranica), vrijeme dohvata, metoda (parser/LLM/API) i pouzdanost. Nijedan broj u UI-ju bez izvora.
 - Poštuj robots.txt i uvjete korištenja. Ograniči broj zahtjeva (`PoliteHttpClient`). **Nikad ne zaobilazi prijavu, CAPTCHU ni zaštitu.** eojn.hr se ne struže (robots.txt `Disallow: /`).
 - Pragovi i datumi izbora su u konfiguraciji, s datumom važenja. Nikad ih ne upisuj u kod iz sjećanja.
@@ -33,5 +33,4 @@ Vrijede za sve AI agente koji pišu kod ili dokumentaciju u ovom repou (Claude C
 - Pravila rade bez `ANTHROPIC_API_KEY`. LLM pozivi idu kroz cache i budžet (`llm_usage`).
 - Tajne su samo u env varijablama. Ne commitaj `.env`.
 - Kad mijenjaš kod, **ažuriraj dokumentaciju** u istom commitu (API, model, pravila, izvori).
-- Rok je **09.11.2026.** Smanjen opseg je bolji od nedovršene funkcionalnosti. Poštuj Must/Should iz `docs/MVP_ROADMAP.md` i feature freeze 07.11.
-- Ne commitaj i ne pushaj bez izričitog zahtjeva korisnika. Ništa ne objavljuj javno bez provjere sigurnosne politike (`work/decisions.md`).
+- Ne commitaj i ne pushaj bez izričitog zahtjeva korisnika.

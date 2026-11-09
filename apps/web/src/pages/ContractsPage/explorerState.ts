@@ -4,7 +4,6 @@ import type {ContractFilter, MagnitudeBand, RuleCode} from "@/types";
 export type IndicatorChoice = "all" | "any" | "worth" | "error" | "none";
 export type SortChoice = "dateSigned" | "value";
 
-/** Explorer state kept in the URL, so a filtered view can be shared or reopened. */
 export interface ExplorerState {
     buyerOib?: string;
     supplierOib?: string;
@@ -42,7 +41,6 @@ export const readExplorerState = (params: URLSearchParams): ExplorerState => {
     };
 };
 
-/** URL parameters are Croatian because users see and share them. Defaults are left out to keep links short. */
 export const writeExplorerState = (state: ExplorerState): Record<string, string> => {
     const params: Record<string, string> = {};
     if (state.buyerOib) params.narucitelj = state.buyerOib;

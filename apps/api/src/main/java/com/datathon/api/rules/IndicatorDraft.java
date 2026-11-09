@@ -6,7 +6,6 @@ import com.datathon.api.indicator.SeverityNote;
 import java.math.BigDecimal;
 import java.util.List;
 
-/** What a rule found for one contract, before it is stored. The three dimensions stay separate. */
 public record IndicatorDraft(
         String ruleCode,
         BigDecimal magnitudeValue,

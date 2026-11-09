@@ -25,10 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Loads the JPT register into {@code jpt_body}: one raw record and provenance per body, so every OIB, type and
- * founder list can be traced to the API response. An unchanged response (same sha256) is not imported again.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j

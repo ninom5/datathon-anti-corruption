@@ -10,15 +10,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Locates the header of an old EOJN register report (A2). The EOJN export puts it in row 13-14 under the title
- * "REGISTAR UGOVORA" and a line "Naručitelj: GRAD X"; publishers that retyped the table have it in row 1-4.
- * {@code buyerName} is the name from that title line, empty when the sheet has none.
- */
 public record LegacyHeader(int rowIndex, Map<LegacyColumn, Integer> columns, Optional<String> buyerName) {
 
     public static final int SEARCH_ROWS = 25;
-    /** The real headers have 16-20 columns; 10 recognised columns separate them from look-alike own tables. */
     public static final int MIN_MATCHED_COLUMNS = 10;
     public static final Set<LegacyColumn> REQUIRED = Set.of(
             LegacyColumn.SUPPLIER, LegacyColumn.DATE_SIGNED, LegacyColumn.INITIAL_VALUE, LegacyColumn.SUBJECT);
@@ -39,7 +33,6 @@ public record LegacyHeader(int rowIndex, Map<LegacyColumn, Integer> columns, Opt
         return columns.getOrDefault(column, -1);
     }
 
-    /** Text of the column header, used to read a currency marker such as "(kn)" or "(EUR)". */
     public String headerText(SheetRow headerRow, LegacyColumn column) {
         return headerRow.cell(column(column)).toLowerCase(Locale.ROOT);
     }

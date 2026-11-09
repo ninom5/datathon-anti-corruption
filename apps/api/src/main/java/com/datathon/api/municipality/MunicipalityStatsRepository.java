@@ -6,18 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
-/**
- * Aggregates over all 556 JLS for the map and the peer comparison. Native SQL because most JLS have no buyer row
- * (municipality is keyed by OIB, not by organization). Synthetic data and contracts with natural persons never count;
- * crafts do (numbers only), as in the buyer profile. The value is the total with amendments, or the initial value
- * when no total is published (old EOJN report).
- */
 public interface MunicipalityStatsRepository extends Repository<Municipality, String> {
 
-    /**
-     * {@code [oib, name, kind, county, population, peerGroup, contracts, firstYear, lastYear, worthChecking,
-     * informative]} for every JLS, with zero contracts when it publishes no machine-readable register.
-     */
     @Query(nativeQuery = true, value = """
             select m.oib, m.name, m.kind, m.county, m.population_2021, m.peer_group,
                    coalesce(cs.contracts, 0), cs.first_year, cs.last_year,
@@ -39,10 +29,6 @@ public interface MunicipalityStatsRepository extends Repository<Municipality, St
             order by m.name""")
     List<Object[]> overviewOfAll();
 
-    /**
-     * {@code [oib, name, population, contractsInYear, contracts, value]} for JLS of the peer group that have at least
-     * one contract signed in the year; {@code contracts} and {@code value} only count the CPV division when given.
-     */
     @Query(nativeQuery = true, value = """
             select m.oib, m.name, m.population_2021, count(c.id),
                    count(c.id) filter (where cast(:cpv2 as text) is null or substr(c.cpv, 1, 2) = :cpv2),
@@ -57,7 +43,6 @@ public interface MunicipalityStatsRepository extends Repository<Municipality, St
             group by m.oib, m.name, m.population_2021""")
     List<Object[]> peerTotals(@Param("peerGroup") String peerGroup, @Param("year") int year, @Param("cpv2") String cpv2);
 
-    /** {@code [year, municipalitiesWithData]} for the peer group, newest first. */
     @Query(nativeQuery = true, value = """
             select extract(year from c.date_signed)::int as year, count(distinct m.oib)
             from municipality m
@@ -67,7 +52,6 @@ public interface MunicipalityStatsRepository extends Repository<Municipality, St
             group by 1 order by 1 desc""")
     List<Object[]> yearsWithData(@Param("peerGroup") String peerGroup);
 
-    /** {@code [cpv2, municipalities, contracts, value]} spent by the peer group in the year, largest value first. */
     @Query(nativeQuery = true, value = """
             select substr(c.cpv, 1, 2), count(distinct m.oib), count(c.id), sum(coalesce(c.total_value_eur, c.initial_value_eur))
             from municipality m

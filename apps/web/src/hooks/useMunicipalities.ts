@@ -16,7 +16,6 @@ export const useMunicipalities = () =>
         staleTime: 5 * 60 * 1000,
     });
 
-/** Boundaries never change while the app runs. */
 export const useJlsShapes = () =>
     useQuery({
         queryKey: municipalityKeys.shapes(),

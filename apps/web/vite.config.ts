@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react'
 import path from 'node:path'
 import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -11,7 +10,6 @@ export default defineConfig({
     },
   },
   server: {
-    // The API runs on :8080 locally; the axios baseURL is "/api". API_URL overrides it when 8080 is taken.
     proxy: {
       '/api': process.env.API_URL ?? 'http://localhost:8080',
     },

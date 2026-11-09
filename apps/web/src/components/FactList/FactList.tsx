@@ -13,7 +13,6 @@ interface FactListProps {
     className?: string;
 }
 
-// Label column + value column. An AI-read value gets the dashed AI underline, never the look of an official fact.
 export const FactList = ({facts, className}: FactListProps) => {
     return (
         <dl className={classNames(styles.list, className)}>
@@ -33,7 +32,6 @@ interface UnknownValueProps {
     children?: ReactNode;
 }
 
-// Muted stand-in for a missing value: we never guess.
 export const UnknownValue = ({children = "nije objavljeno"}: UnknownValueProps) => (
     <span className={styles.unknown}>{children}</span>
 );

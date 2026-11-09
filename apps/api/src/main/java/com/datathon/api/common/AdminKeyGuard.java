@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-/** Checks the {@code X-Admin-Token} header of /api/admin routes. With no key configured every call is refused. */
 @Component
 @EnableConfigurationProperties(AdminProperties.class)
 @RequiredArgsConstructor

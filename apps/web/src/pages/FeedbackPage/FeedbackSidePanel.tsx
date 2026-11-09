@@ -2,7 +2,6 @@ import {Link} from "wouter";
 import {routes} from "@/routes";
 import styles from "./FeedbackPage.module.css";
 
-// What happens after sending: moderation first, then the reply next to the indicator.
 export const FeedbackSidePanel = () => (
     <section className={styles.panel} aria-labelledby="feedback-steps-title">
         <h2 id="feedback-steps-title" className={styles.panelHeading}>Što se događa s prijavom</h2>

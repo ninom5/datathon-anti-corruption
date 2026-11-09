@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.core.io.ClassPathResource;
 
-/**
- * Generic contract subjects from {@code wording/generic_subjects_hr.txt} ("nejasan predmet",
- * docs/ANOMALY_DETECTION.md §4.1). Used only to choose which contracts get an AI assessment.
- */
 public final class GenericSubjects {
 
     public static final String RESOURCE = "wording/generic_subjects_hr.txt";
@@ -22,7 +18,6 @@ public final class GenericSubjects {
     private GenericSubjects() {
     }
 
-    /** A subject is vague when it has fewer than {@code minWords} words or contains a generic phrase. */
     public static boolean isVague(String subject, int minWords) {
         if (subject == null || subject.isBlank()) {
             return true;

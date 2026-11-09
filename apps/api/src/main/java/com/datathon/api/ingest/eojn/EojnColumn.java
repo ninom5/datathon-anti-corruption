@@ -4,10 +4,6 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 
-/**
- * Columns of the standard EOJN contract register export (format class A). Header texts are copied from the real
- * file "Grad Osijek / registar-ugovora.xlsx" downloaded 2026-11-02 (docs/DATA_SOURCES.md §1.2).
- */
 public enum EojnColumn {
     CONTRACT_URL("Ugovor"),
     TENDER_URL("Postupak"),
@@ -58,7 +54,6 @@ public enum EojnColumn {
         return Arrays.stream(values()).filter(column -> normalizeHeader(column.header).equals(normalized)).findFirst();
     }
 
-    /** The real file has e.g. "Iznos s PDV-om " with a trailing space, so whitespace and case are ignored. */
     static String normalizeHeader(String text) {
         return text == null ? "" : text.strip().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
     }

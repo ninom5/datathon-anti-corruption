@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Rule indicators across contracts and buyers (D1, D2, F, C), with their three separate dimensions. */
 @RestController
 @RequestMapping("/api/v1/indicators")
 @RequiredArgsConstructor

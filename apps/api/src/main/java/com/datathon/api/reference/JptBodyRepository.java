@@ -12,7 +12,6 @@ public interface JptBodyRepository extends JpaRepository<JptBody, String> {
 
     List<JptBody> findByJptTypeIn(List<String> jptTypes);
 
-    /** True when the JPT register lists {@code founderOib} among the founders of {@code bodyOib}. */
     @Query(value = """
             select exists (select 1 from jpt_body b
                            where b.oib = :bodyOib
@@ -20,10 +19,6 @@ public interface JptBodyRepository extends JpaRepository<JptBody, String> {
             nativeQuery = true)
     boolean isFoundedBy(@Param("bodyOib") String bodyOib, @Param("founderOib") String founderOib);
 
-    /**
-     * Copies JPT code, type, founders and county to every organization with the same OIB, and marks JLS and
-     * counties as such (the name classifier only guesses them from "Grad"/"Općina" in the name).
-     */
     @Modifying
     @Query(value = """
             update organization o

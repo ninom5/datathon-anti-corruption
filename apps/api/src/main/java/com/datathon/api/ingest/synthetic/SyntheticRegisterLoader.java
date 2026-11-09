@@ -34,33 +34,18 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Loads the synthetic demo register (two fictional municipalities) through the same XLSX reader, class A parser and
- * rules as real data, marked {@code is_synthetic} everywhere (AGENTS.md). The expected outcome of every row lives
- * only in the test fixtures, never in production tables.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class SyntheticRegisterLoader {
 
     public static final String RESOURCE = "synthetic/registar-ugovora-primjerovo.csv";
-    /** Reserved .invalid domain (RFC 2606), so a synthetic link can never open a real contract. */
     public static final String FILE_URL = "https://primjerovo.invalid/registar-ugovora-primjerovo.xlsx";
     private static final String DATASET_ID = "javniradar-sinteticki-registar";
-    /**
-     * Synthetic stand-in for JPT founders: the fictional municipal companies of the demo are "founded" by their
-     * fictional municipality, so rules C and F can show the informative case. Real organizations get founders only
-     * from the JPT register.
-     */
     private static final Map<String, String> SYNTHETIC_FOUNDERS = Map.of(
             "00000000033", "[{\"oib\": \"00000000003\", \"naziv\": \"Općina Uzorkovo\"}]",
             "00000000043", "[{\"oib\": \"00000000004\", \"naziv\": \"Općina Probnik\"}]");
 
-    /**
-     * Synthetic stand-in for a Sudreg snapshot (docs/ANOMALY_DETECTION.md §B): a fictional company "founded" 51 days
-     * before its 200.000 EUR contract, so rule B has a demo case. Source "fixture", never mixed with real snapshots.
-     */
     static final String SYNTHETIC_YOUNG_COMPANY_OIB = "00000000054";
     private static final LocalDate SYNTHETIC_YOUNG_COMPANY_FOUNDED = LocalDate.of(2024, 3, 15);
 
@@ -74,7 +59,6 @@ public class SyntheticRegisterLoader {
     private final OrganizationRepository organizationRepository;
     private final JsonMapper jsonMapper;
 
-    /** Idempotent: an unchanged synthetic file is not imported twice; rules are always recomputed. */
     public Map<String, Object> load() {
         byte[] xlsx = CsvWorkbookWriter.toXlsx(SheetReader.readCsv(readResource()).getFirst());
         String sha256 = sha256(xlsx);

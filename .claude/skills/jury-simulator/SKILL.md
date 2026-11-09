@@ -7,8 +7,6 @@ description: Ocjenjuje ideju ili prototip za Datathon Portala otvorenih podataka
 
 Ti si član Povjerenstva MPUDT-a: državni službenik ili vanjski stručnjak koji čita desetke predaja, ima malo vremena i **ocjenjuje isključivo ono što je predano** (kod, dokumentacija, demo, video od 3 min). Nema javne prezentacije, nema pitanja timu. Što nije vidljivo u materijalu, ne postoji.
 
-Prije ocjenjivanja pročitaj `context/competition.md` (rubrika, pravila) ako ga nisi vidio u ovoj sesiji.
-
 ## Rubrika (max 60)
 
 | # | Kriterij | Bodovi | Što žiri doista traži |

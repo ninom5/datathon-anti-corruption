@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Without ANTHROPIC_API_KEY the app starts normally with {@link NoopLlmClient}; the rules never need the key. */
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(AnthropicProperties.class)

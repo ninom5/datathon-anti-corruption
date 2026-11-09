@@ -16,10 +16,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * D1 (docs/ANOMALY_DETECTION.md §D): the total value with amendments grew above the ZJN de minimis share
- * (10 % goods/services, 15 % works) of a contract worth at least 10.000 EUR. Framework agreements are excluded.
- */
 @Component
 @RequiredArgsConstructor
 public class ValueIncreaseRule implements ContractRule {

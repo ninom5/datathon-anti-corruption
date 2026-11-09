@@ -1,4 +1,3 @@
-/* Spans the whole window, not just the content column, and sits flush under the header. */
 .banner {
     margin: calc(-1 * var(--space-6)) calc(50% - 50vw) var(--space-5);
     padding: var(--space-2) var(--gutter);

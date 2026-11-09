@@ -2,10 +2,6 @@ package com.datathon.api.municipality;
 
 import java.util.Map;
 
-/**
- * Croatian names of CPV 2008 divisions (first two digits, Regulation (EC) No 213/2008), shortened where the official
- * title is very long. The registers only publish the full CPV code, so the comparison filter needs these names.
- */
 public final class CpvDivisions {
 
     private static final Map<String, String> NAMES = Map.ofEntries(

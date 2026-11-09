@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Read side: the assessment shown on the contract detail page (docs/UI_UX.md §3.4). */
 @Service
 @RequiredArgsConstructor
 public class AiAssessmentQueryService {
@@ -22,14 +21,9 @@ public class AiAssessmentQueryService {
     private final AiAssessmentRepository assessmentRepository;
     private final JsonMapper jsonMapper;
 
-    /** The assessment, or why there is none (shown instead of it). */
     public record ContractAssessment(AiAssessmentResponse assessment, String unavailableReason) {
     }
 
-    /**
-     * Newest non-superseded assessment if it was accepted. A recheck (Sonnet) marks the first pass superseded, so it
-     * wins automatically. Crafts and natural persons never get one (GDPR), whatever the table holds.
-     */
     @Transactional(readOnly = true)
     public ContractAssessment forContract(Contract contract) {
         if (isPerson(contract)) {

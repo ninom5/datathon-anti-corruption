@@ -25,7 +25,6 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Rule B on hand-built contracts and snapshots, with the real config/thresholds.yaml. */
 class RuleBTest {
 
     private static RuleThresholds thresholds;

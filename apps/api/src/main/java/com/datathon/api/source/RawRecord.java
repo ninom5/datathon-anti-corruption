@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** The source row exactly as read (header -> cell text). Never deleted, also kept for rejected rows. */
 @Entity
 @Getter
 @Table(name = "raw_record")

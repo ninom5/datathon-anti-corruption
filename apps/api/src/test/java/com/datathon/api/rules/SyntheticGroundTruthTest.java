@@ -38,12 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-/**
- * Ground truth for rules D, F and C: the synthetic register goes through the real XLSX reader, parser and rules, and every row
- * is compared with {@code fixtures/synthetic/expected.csv}. Prints a TP/FP/TN/FN matrix. Fails on any miss among
- * clear and data-quality cases; edge cases are only reported. Also checks that synthetic rows never change the
- * statistics of real data (a real register, Grad Osijek, is imported first).
- */
 @SpringBootTest
 @Import(TestcontainersConfiguration.class)
 class SyntheticGroundTruthTest {
@@ -74,7 +68,6 @@ class SyntheticGroundTruthTest {
     record Expected(String ref, String category, String expected, String dataQuality, String severity, String evidence,
                     String reason) {
 
-        /** Contracts of one F or C case share the first three characters of their reference (F01A, F01B, ...). */
         boolean isGroupCase() {
             return ref.startsWith("F") || ref.startsWith("C");
         }
@@ -83,11 +76,6 @@ class SyntheticGroundTruthTest {
             return ref.substring(0, 1);
         }
 
-        /**
-         * A row is judged only by the rule it was written for (S = D1/D2, F, C). Other rules may also fire on the
-         * same contracts (e.g. the D rows of Općina Primjerovo form a concentrated CPV cell); they are reported, not
-         * counted as false positives.
-         */
         boolean isJudged(String ruleCode) {
             if (!isGroupCase()) {
                 return ruleCode.startsWith("D_");
@@ -171,10 +159,6 @@ class SyntheticGroundTruthTest {
         return new Outcome(expected, isGroupRight ? "OK TP" : "TP, kriva skupina", actual, detail);
     }
 
-    /**
-     * Every synthetic contract of the case, e.g. F01A, F01B and F01C for F01A. Rule C marks only the top supplier's
-     * contracts (the other suppliers of the cell stay in the evidence), so for C the case's own supplier is kept.
-     */
     private Set<Long> caseContractIds(Expected expected) {
         String prefix = URL_PREFIX + expected.ref().substring(0, 3);
         List<Contract> caseContracts = contractRepository.findAll().stream()

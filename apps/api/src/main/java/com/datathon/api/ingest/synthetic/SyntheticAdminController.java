@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Loads the synthetic demo register; the UI hides it unless the "prikaži sintetičke" filter is on. */
 @RestController
 @RequestMapping("/api/admin/synthetic")
 @RequiredArgsConstructor

@@ -19,12 +19,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** All JLS for the map, and one JLS compared with its peer group (docs/ANOMALY_DETECTION.md §3A). */
 @Service
 @RequiredArgsConstructor
 public class MunicipalityService {
 
-    /** n_peer_min from docs/ANOMALY_DETECTION.md §3A. */
     static final int MINIMUM_FOR_COMPARISON = 8;
 
     private final MunicipalityStatsRepository statsRepository;
@@ -36,10 +34,6 @@ public class MunicipalityService {
         return statsRepository.overviewOfAll().stream().map(MunicipalityService::toOverview).toList();
     }
 
-    /**
-     * @param year null = the newest complete year with data in the group
-     * @param cpv2 null = all categories
-     */
     @Transactional(readOnly = true)
     public PeerComparison comparePeers(String oib, Integer year, String cpv2) {
         Municipality municipality = municipalityRepository.findById(oib)
@@ -76,10 +70,6 @@ public class MunicipalityService {
                 worthChecking, number(row[10]).longValue(), per100);
     }
 
-    /**
-     * A year that was not over at retrieval has partial totals, so it is not the default (DataCoverage). A group
-     * without any contract gets the last complete year and an empty comparison, which the UI shows as such.
-     */
     private static int defaultYear(List<YearOption> years, int incompleteFromYear) {
         if (years.isEmpty()) {
             return incompleteFromYear - 1;

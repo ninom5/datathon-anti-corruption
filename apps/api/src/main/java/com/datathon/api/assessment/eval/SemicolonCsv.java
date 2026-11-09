@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Minimal reader for the semicolon CSV of the evaluation sample (quoted cells, "" for a quote, header row). */
 final class SemicolonCsv {
 
     private SemicolonCsv() {

@@ -4,7 +4,6 @@ import com.datathon.api.common.persistence.DatabaseCode;
 import com.datathon.api.common.persistence.DatabaseCodeConverter;
 import jakarta.persistence.Converter;
 
-/** Pouzdanost dokaza: how directly the data support the observation (docs/ANOMALY_DETECTION.md §2). */
 public enum EvidenceStrength implements DatabaseCode {
     WEAK("slaba"),
     MEDIUM("srednja"),

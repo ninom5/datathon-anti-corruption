@@ -9,13 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Parses every sheet of a class A register that carries the EOJN header. Pure function of the sheet contents, so
- * real files and the synthetic demo set go through exactly the same code.
- */
 public final class EojnRegisterParser {
 
-    /** One source row with its locator and the original cells (stored unchanged in raw_record.payload). */
     public record ParsedRow(String locator, Map<String, String> payload, RowOutcome outcome) {
     }
 

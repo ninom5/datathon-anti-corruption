@@ -27,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Buyer profile: contracts per year and CPV division, suppliers, indicators, sources and JPT/DZS context. */
 @Service
 @RequiredArgsConstructor
 public class BuyerProfileService {
@@ -73,7 +72,6 @@ public class BuyerProfileService {
                 .orElse(null);
     }
 
-    /** "2018.–2026., 2026. nepotpuna": the range of signing years, and which of them were not over at retrieval. */
     private static Coverage coverage(List<YearTotal> byYear) {
         List<Integer> years = byYear.stream().map(YearTotal::year).toList();
         List<Integer> incomplete = byYear.stream().filter(YearTotal::incomplete).map(YearTotal::year).toList();

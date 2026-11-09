@@ -48,7 +48,6 @@
     background: var(--color-info-soft);
 }
 
-/* Dashed border marks machine-generated content, so it never looks like an official fact. */
 .ai {
     color: var(--color-ai);
     background: var(--color-ai-soft);

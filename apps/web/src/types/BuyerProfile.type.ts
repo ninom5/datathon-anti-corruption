@@ -20,7 +20,6 @@ export interface BuyerCoverage {
     toYear: number;
     years: number[];
     incompleteYears: number[];
-    /** e.g. "2018.–2026., 2026. nepotpuna" */
     label: string;
 }
 
@@ -59,7 +58,6 @@ export interface BuyerSource {
     contracts: number;
 }
 
-/** GET /v1/buyers/{oib}. Numbers include crafts; topSuppliers leaves them out (craftContracts says how many). */
 export interface BuyerProfile {
     buyer: OrganizationRef;
     jpt: BuyerJpt | null;

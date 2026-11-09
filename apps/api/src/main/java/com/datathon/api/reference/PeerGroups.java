@@ -1,6 +1,5 @@
 package com.datathon.api.reference;
 
-/** Peer groups P1-P7 from docs/ANOMALY_DETECTION.md §3A (population from DZS Popis 2021). */
 public final class PeerGroups {
 
     private PeerGroups() {
@@ -15,7 +14,6 @@ public final class PeerGroups {
         };
     }
 
-    /** Text for the UI, e.g. "općine od 2.000 do 4.999 stanovnika". */
     public static String labelOf(String peerGroup) {
         return switch (peerGroup) {
             case "P1" -> "općine do 1.999 stanovnika";

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Starts an ingest run by hand. Synchronous: a full run takes a few minutes (1 request/s per host). */
 @RestController
 @RequestMapping("/api/admin/ingest")
 @RequiredArgsConstructor

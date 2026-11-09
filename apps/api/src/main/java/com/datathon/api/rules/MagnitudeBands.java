@@ -7,7 +7,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/** Band of a magnitude within its rule, from thresholds.yaml "bands" (a heuristic for filters, not a score). */
 @Component
 @RequiredArgsConstructor
 public class MagnitudeBands {

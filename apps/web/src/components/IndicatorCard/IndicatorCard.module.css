@@ -1,4 +1,3 @@
-/* Signal = amber left rule; informative = neutral. Borders, no shadow, radius-md like every card. */
 .indicator {
     margin-bottom: var(--space-4);
     padding: var(--space-4) var(--space-5);
@@ -97,7 +96,6 @@
     font-variant-numeric: tabular-nums;
 }
 
-/* Three equal, separate dimensions. Never a combined score (docs/UI_UX.md §3.4). */
 .dimensions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

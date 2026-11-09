@@ -7,14 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Locates the EOJN header row. About half of the class A publishers put a title above the table, so the header is
- * searched for in the first rows instead of assumed in row 1 (docs/DATA_SOURCES.md §1.1).
- */
 public record EojnHeader(int rowIndex, Map<EojnColumn, Integer> columns) {
 
     public static final int SEARCH_ROWS = 15;
-    /** A row is the EOJN header when most of its 33 columns are recognised; a few renamed ones are tolerated. */
     public static final int MIN_MATCHED_COLUMNS = 25;
     public static final Set<EojnColumn> REQUIRED = Set.of(
             EojnColumn.CONTRACT_URL, EojnColumn.BUYER_NAME, EojnColumn.DATE_SIGNED, EojnColumn.INITIAL_VALUE);

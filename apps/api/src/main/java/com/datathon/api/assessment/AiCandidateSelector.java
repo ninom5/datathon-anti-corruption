@@ -8,12 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Which contracts get an AI assessment (docs/ANOMALY_DETECTION.md §4.1, cost control): at least one active rule
- * indicator, or a value of at least {@code min-value-eur}, or a vague subject. Crafts, natural persons and suppliers
- * without an OIB are never sent to the model (GDPR, AGENTS.md). Order is deterministic: contracts with indicators
- * first, then by value, then by id.
- */
 @Component
 @RequiredArgsConstructor
 public class AiCandidateSelector {
@@ -21,14 +15,9 @@ public class AiCandidateSelector {
     private final AiAssessmentRepository assessmentRepository;
     private final AiProperties properties;
 
-    /** Why a contract was chosen; shown in the dry run. */
     public record Candidate(Long contractId, boolean hasIndicator, BigDecimal value, boolean vagueSubject) {
     }
 
-    /**
-     * @param synthetic true = only synthetic contracts (evaluation), false = only real ones
-     * @param limit     null = {@code max-contracts-per-run}; never more than that
-     */
     @Transactional(readOnly = true)
     public List<Candidate> select(boolean synthetic, Integer limit) {
         AiProperties.Selection selection = properties.selection();
@@ -36,7 +25,6 @@ public class AiCandidateSelector {
         return allEligible(synthetic).stream().limit(Math.max(0, max)).toList();
     }
 
-    /** Every contract that meets the criteria, before the per-run cap (shown in the dry run). */
     @Transactional(readOnly = true)
     public List<Candidate> allEligible(boolean synthetic) {
         AiProperties.Selection selection = properties.selection();
@@ -49,10 +37,6 @@ public class AiCandidateSelector {
                 .toList();
     }
 
-    /**
-     * Exactly these real contracts (evaluation sample), in the given order, without the selection criteria. Crafts,
-     * natural persons and suppliers without an OIB are still left out.
-     */
     @Transactional(readOnly = true)
     public List<Candidate> selectByIds(List<Long> contractIds) {
         AiProperties.Selection selection = properties.selection();

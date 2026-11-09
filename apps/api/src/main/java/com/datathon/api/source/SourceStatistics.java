@@ -9,10 +9,6 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * Counts for the sources page. They span several entities (files, raw records, contracts, ingest issues), so they
- * are plain JPQL here rather than spread over repositories of other features. Real data only.
- */
 @Component
 @RequiredArgsConstructor
 class SourceStatistics {
@@ -33,7 +29,6 @@ class SourceStatistics {
         return single("select count(r) from RawRecord r where r.file.dataset.isSynthetic = false");
     }
 
-    /** Contracts with natural persons stay in the database but are never exposed (GDPR). */
     long hiddenContracts() {
         return single("""
                 select count(c) from Contract c join c.supplier s
@@ -71,7 +66,6 @@ class SourceStatistics {
         return counts;
     }
 
-    /** Keys are database codes ({@code jls}) or plain strings. */
     private Map<String, Long> countsByKey(String jpql) {
         Map<String, Long> counts = new LinkedHashMap<>();
         for (Object[] row : entityManager.createQuery(jpql, Object[].class).getResultList()) {

@@ -4,7 +4,6 @@ import {Router} from "@/Router.tsx";
 import {ErrorPage} from "@/pages";
 import {isClientError} from "@/api";
 
-/** A 4xx (bad filter, unknown contract) will not change on retry; server and network errors get two more tries. */
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {

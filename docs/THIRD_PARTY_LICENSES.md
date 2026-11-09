@@ -76,8 +76,8 @@ Karta se crta kao SVG iz tog GeoJSON-a. Nema rasterskih pločica (tile servera) 
 | Što | Odakle | Licenca / status | Kako je označeno |
 |---|---|---|---|
 | HTTP sloj (`PoliteHttpClient`, `RobotsRules`, `HostThrottle`, `DiskCache`, `TextDecoder`, iznimke), zajednički kod (`common/*`: `ErrorResponse`, `GlobalExceptionHandler`, `Oib`, `OibValidator`, `PageRequests`, `PageResponse`, `AdminKeyGuard`…), `AmountParser`, `CroatianDates`, `LlmUsage`, `AnthropicLlmClient`, `RestSudregClient`, `SudregProperties` | drugi projekt istog tima za Datathon 2026 (druga tema) | vlastiti kod autora, nije kod treće strane; preuzeta je samo infrastruktura (HTTP sloj, obrada grešaka, klijenti API-ja), ne logika rješenja | ovaj odjeljak |
-| Dizajn sustav frontenda (tokeni, komponente) | OtvoreniRadar (`FESB/datathon`), isti tim | vlastiti rad tima | `DESIGN_SYSTEM.md`, `work/decisions.md` |
+| Dizajn sustav frontenda (tokeni, komponente) | OtvoreniRadar (`FESB/datathon`), isti tim | vlastiti rad tima | `DESIGN_SYSTEM.md` |
 | SVG putanje ikona | Lucide | ISC | vidi §4 |
-| Skillovi za AI agente (`.claude/skills/`) | `Desktop/datathon`, prilagođeni | vlastiti rad tima | `CLAUDE.md` |
+| Skillovi za AI agente (`.claude/skills/`) | `Desktop/datathon`, prilagođeni | vlastiti rad tima | `.claude/skills/` |
 
 Kod koji je generirao AI (Claude Code, Codex) pregledao je i preuzeo tim; vidi „Korišteni alati” u `README.md`.

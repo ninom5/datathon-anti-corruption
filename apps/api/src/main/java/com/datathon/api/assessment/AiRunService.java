@@ -14,20 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/**
- * Step 9 of the pipeline (docs/ARCHITECTURE.md §4): context, cache, budget, model call, validator, storage
- * (docs/ANOMALY_DETECTION.md §4.1). A failed call means "no assessment" for that contract and the run goes on; the
- * rules never depend on it.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AiRunService {
 
     static final String NOT_CONFIGURED = "AI nije konfiguriran (ANTHROPIC_API_KEY nije postavljen).";
-    /** So many failed calls in a row mean the API is down; the rest of the run is skipped. */
     static final int MAX_CONSECUTIVE_ERRORS = 5;
-    /** Dry-run estimate only: rough characters per token for Croatian JSON, and output tokens incl. thinking. */
     private static final int CHARS_PER_TOKEN = 3;
     private static final int ESTIMATED_OUTPUT_TOKENS = 1500;
     private static final int SAMPLE_SIZE = 10;
@@ -46,7 +39,6 @@ public class AiRunService {
         return run(synthetic, limit, dryRun, List.of());
     }
 
-    /** @param contractIds when not empty: exactly these real contracts (evaluation sample), not the selection */
     public AiRunResult run(boolean synthetic, Integer limit, boolean dryRun, List<Long> contractIds) {
         if (!running.compareAndSet(false, true)) {
             throw new TooManyRequestsException("AI run je već u tijeku.");
@@ -105,7 +97,6 @@ public class AiRunService {
         return result(model, synthetic, false, candidates, state, state.cacheHits(), 0, null, null);
     }
 
-    /** One contract: everything that can fail is caught here, so one contract never stops the others. */
     private void process(Long contractId, String model, AiContextLoader.Lookups lookups, AiRunState state) {
         if (state.isStopped()) {
             state.skip();

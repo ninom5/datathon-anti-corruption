@@ -8,7 +8,6 @@ import com.datathon.api.source.SourceFile;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/** Where a contract row came from: dataset, publisher, file, row, retrieval time, extraction method and confidence. */
 public record ProvenanceResponse(
         String datasetTitle,
         String publisher,

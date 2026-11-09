@@ -10,7 +10,6 @@ interface FeedbackTargetProps {
     contract: ContractDetail | undefined;
 }
 
-/** What the correction is about, so the sender and the moderator look at the same record. */
 export const FeedbackTarget = ({targetType, indicator, contract}: FeedbackTargetProps) => {
     if (targetType === "indicator" && indicator) {
         return (

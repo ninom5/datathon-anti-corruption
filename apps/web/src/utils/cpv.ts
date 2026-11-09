@@ -1,4 +1,3 @@
-/** Short display names for CPV 2008 divisions; not a reclassification of source contracts. */
 export const CPV_SOURCE = "https://eur-lex.europa.eu/eli/reg/2008/213/oj/?locale=hr";
 
 const divisionNames: Record<string, string | undefined> = {

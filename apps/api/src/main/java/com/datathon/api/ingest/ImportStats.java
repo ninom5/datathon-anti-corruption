@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import lombok.Getter;
 
-/** Counters of one import, summed over files into {@code ingest_run.stats}. */
 @Getter
 public class ImportStats {
 

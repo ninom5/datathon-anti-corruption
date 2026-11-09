@@ -53,10 +53,10 @@ javniradar:
       overpayment-min-eur: 5000           # D2: and at least 5.000 EUR above it (ANOMALY_DETECTION.md §D)
       # Paid or total more than 10x the contracted value: in the 2026-11-02 parser check every such case was a typo in
       # the published register (missing decimal comma) or a unit-price contract, so data quality drops to "niska" and
-      # the indicator is informative only (work/decisions.md, 2026-11-02).
+      # the indicator is informative only.
       implausible-ratio: 10
       # Same, but at 5x when the register gives no explanation for the payment (Ivanec 2021-2022: 9-10x without any
-      # note, e.g. 11.010,44 -> 110.101,44 EUR). With an explanation the 10x bound stays (work/decisions.md, #41).
+      # note, e.g. 11.010,44 -> 110.101,44 EUR). With an explanation the 10x bound stays.
       implausible-ratio-without-note: 5
       # Paid amount / contracted gross amount within this relative distance of 7,53450 (HRK per EUR): the old EOJN
       # report (A2) labels every amount "EUR", but for 2022 contracts publishers entered the paid amount in kuna
@@ -72,7 +72,7 @@ javniradar:
       strong-min-contracts: 3             # evidence "jaka" with >= 3 contracts, each >= near-band * threshold
       recurring-cpv2: ["09", "65"]        # fuel/energy, utilities: recurring supplies, shown as "informativno"
       # Contracts from a ZJN procedure (open, restricted, negotiated...) went through public procurement, so they cannot
-      # be a way around it; lots of one open procedure were 16 of 164 real F indicators (work/decisions.md, #41).
+      # be a way around it; lots of one open procedure were 16 of 164 real F indicators.
       public-procedure-markers: ["postupak"]
       source: "docs/ANOMALY_DETECTION.md §F (heuristika JavniRadara, nije zakonski prag)"
 
@@ -96,7 +96,7 @@ javniradar:
       source: "docs/ANOMALY_DETECTION.md §B (heuristika JavniRadara, nije zakonski prag)"
 
     # Magnitude band (nizak / srednji / visok) for filters and reports. JavniRadar heuristic, never a combined score
-    # (work/decisions.md, 2026-11-03 #41). strict: true means "above" the bound, false means "at or above".
+    # strict: true means "above" the bound, false means "at or above".
     bands:
       value-increase: {medium-from: 0.30, high-from: 0.50, strict: true}    # ZJN čl. 316 st. 2 (30 %), čl. 317 (50 %)
       overpayment: {medium-from: 0.30, high-from: 1.00, strict: true}

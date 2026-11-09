@@ -4,9 +4,7 @@ export type DataQuality = "niska" | "srednja" | "visoka";
 export type EvidenceStrength = "slaba" | "srednja" | "jaka";
 export type SeverityNote = "informativno" | "vrijedi_provjeriti";
 export type RuleCode = "D_VALUE_INCREASE" | "D_OVERPAYMENT" | "F_SPLITTING" | "C_CONCENTRATION" | "B_YOUNG_COMPANY";
-/** Band of the magnitude within its rule (thresholds.yaml "bands"); a filter aid, never a combined score. */
 export type MagnitudeBand = "nizak" | "srednji" | "visok";
-/** contract = D1/D2; group = F (buyer, supplier, CPV, time window); buyer_cpv = C (buyer, CPV division, period). */
 export type IndicatorSubjectType = "contract" | "group" | "buyer_cpv";
 
 export interface EvidenceLink {
@@ -29,7 +27,6 @@ export interface Indicator {
     title: string;
     subjectType: IndicatorSubjectType;
     buyer: OrganizationRef | null;
-    /** Every contract the indicator is about: one for D1/D2, the whole group for F and C. */
     contractIds: number[];
     magnitude: Magnitude;
     dataQuality: DataQuality;
@@ -55,7 +52,6 @@ export interface IndicatorBadge {
     possibleEntryError: boolean;
 }
 
-/** Query parameters of GET /v1/indicators. */
 export interface IndicatorFilter {
     ruleCode?: RuleCode[];
     buyerOib?: string;
@@ -66,7 +62,6 @@ export interface IndicatorFilter {
     size?: number;
 }
 
-/** Only fields of the indicator's rule are sent; D1/D2 have a null subject. */
 export interface IndicatorSubject {
     cpv?: string;
     cpvLevel?: number;

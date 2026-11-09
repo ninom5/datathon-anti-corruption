@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Contract explorer (docs/UI_UX.md §3.2) and contract detail. */
 @RestController
 @RequestMapping("/api/v1/contracts")
 @RequiredArgsConstructor

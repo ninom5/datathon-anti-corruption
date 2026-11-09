@@ -14,7 +14,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/** How a domain row was obtained: which raw record, which method and version, how confident. */
 @Entity
 @Getter
 @Table(name = "provenance")

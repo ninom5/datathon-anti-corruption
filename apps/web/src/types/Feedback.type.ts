@@ -1,4 +1,3 @@
-/** Codes as the backend sends them (docs/DATA_MODEL.md, table feedback). */
 export type FeedbackTargetType = "indicator" | "contract";
 
 export type FeedbackKind = "greska_u_podacima" | "kontekst" | "pravo_na_odgovor" | "uklanjanje_osobnih_podataka";

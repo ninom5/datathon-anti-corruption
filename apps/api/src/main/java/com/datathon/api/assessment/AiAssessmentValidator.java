@@ -8,22 +8,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-/**
- * Deterministic check after every model call (docs/ANOMALY_DETECTION.md §4.4). Additions to §4.4, all stricter
- * (work/decisions.md, #44): a claim over 300 characters is dropped (§4.3 maxLength); a forbidden term in an
- * explanation or in missing data rejects the whole answer, because those texts are shown too; "visoka_pozornost" with
- * fewer than two accepted reasons becomes "vrijedi_provjeriti" (prompt rule 7: two independent signals); a claim
- * about peer municipalities is dropped when the context has no peer statistics (prompt rule 9 of ai-flag-v2).
- */
 public final class AiAssessmentValidator {
 
     static final int MAX_CLAIM_LENGTH = 300;
     private static final int MIN_REASONS_FOR_HIGH_ATTENTION = 2;
-    /** Words of a peer comparison (usporedne općine, usporedba, medijan); allowed only with peer statistics. */
     private static final List<String> PEER_COMPARISON_STEMS = List.of("usporedn", "usporedb", "medijan");
     private static final String PEER_STATISTICS_PATH = "statistika_skupine";
 
-    /** Words of a craft name that are not part of a person's name (compared without diacritics). */
     private static final List<String> CRAFT_WORDS = List.of("obrt", "usluge", "usluga", "trgovina", "vlasnik",
             "vlasnica", "gradevinski", "prijevoz", "servis", "ugostiteljski", "zanatski", "proizvodnju", "proizvodnja");
 
@@ -126,10 +117,6 @@ public final class AiAssessmentValidator {
                 && PEER_COMPARISON_STEMS.stream().anyMatch(lower::contains);
     }
 
-    /**
-     * A craft's name usually is the owner's name (docs/DATA_MODEL.md §8). Checked on the whole name and on each word of
-     * it longer than three letters, ignoring case and diacritics, so a surname alone is caught too.
-     */
     private static boolean namesPerson(String claim, AiContext context) {
         boolean isPerson = context.supplierType() == OrganizationType.CRAFT
                 || context.supplierType() == OrganizationType.NATURAL_PERSON;

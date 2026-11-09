@@ -51,7 +51,6 @@
     border-radius: var(--radius-sm);
 }
 
-/* Active item: a 2 px bar on the header's bottom border. */
 .linkActive,
 .linkActive:hover {
     color: var(--color-text);

@@ -12,14 +12,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-/**
- * Parses every sheet of an old EOJN register report (A2). The report has no buyer column: the buyer is the
- * "Naručitelj:" title line of the sheet, else the publisher of the dataset. Its OIB is looked up by the caller
- * (JPT register) because the report never prints it.
- */
 public final class LegacyRegisterParser {
 
-    /** {@code buyerName} is the name the rows were attributed to, for the import report. */
     public record SheetResult(String sheetName, String buyerName, Oibs.Result buyerOib, List<ParsedRow> rows) {
     }
 
@@ -61,7 +55,6 @@ public final class LegacyRegisterParser {
         return parsed;
     }
 
-    /** Some publishers repeat the "1. 2. 3. ..." column numbering under the header. */
     private static boolean isColumnNumberRow(SheetRow row) {
         long numbered = row.cells().stream().filter(cell -> cell.matches("\\d{1,2}\\.?")).count();
         long filled = row.cells().stream().filter(cell -> !cell.isBlank()).count();
