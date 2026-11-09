@@ -8,7 +8,6 @@ interface PageHeaderProps {
     actions?: ReactNode;
 }
 
-// meta is a short line of facts under the description (counts, last update), not marketing copy.
 export const PageHeader = ({title, description, meta, actions}: PageHeaderProps) => {
     return (
         <header className={styles.header}>

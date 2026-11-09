@@ -7,11 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-/**
- * Body of {@code POST /api/v1/feedback}. Codes are the Croatian ones from docs/DATA_MODEL.md, like the rest of the JSON.
- *
- * @param contactEmail optional, except for a right of reply and a removal request, where the moderator must answer
- */
 public record FeedbackRequest(
         @NotNull(message = "obavezno polje")
         @Pattern(regexp = "indicator|contract", message = "dopuštene vrijednosti su indicator i contract")

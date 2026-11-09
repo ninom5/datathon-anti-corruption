@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** JLS (all 556, with or without data) for the map, and the peer comparison of one JLS. */
 @RestController
 @RequestMapping("/api/v1/municipalities")
 @RequiredArgsConstructor
@@ -21,7 +20,6 @@ public class MunicipalityController {
 
     private final MunicipalityService municipalityService;
 
-    /** Not paginated: a fixed reference list of 556 rows that the map needs at once. */
     @GetMapping
     public List<MunicipalityOverview> list() {
         return municipalityService.listAll();

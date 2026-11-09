@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Recomputes the contract rules without a new ingest, e.g. after changing thresholds.yaml. */
 @RestController
 @RequestMapping("/api/admin/rules")
 @RequiredArgsConstructor

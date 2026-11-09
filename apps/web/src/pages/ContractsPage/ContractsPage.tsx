@@ -9,7 +9,6 @@ import {Pagination} from "./Pagination.tsx";
 import {SummaryBar} from "./SummaryBar.tsx";
 import styles from "./ContractsPage.module.css";
 
-/** Synthetic rows carry 2022 (a kuna contract) and 2026, so selectable years are the real ones plus those. */
 const selectableYears = (years: YearCount[], selected: number | undefined) => {
     const options = years.map(({year, incomplete}) => ({year, incomplete}));
     if (selected && !options.some((option) => option.year === selected)) {
@@ -70,7 +69,6 @@ export const ContractsPage = () => {
     const handleReset = () => setSearchParams({});
     const handlePageChange = (page: number) => {
         handleChange({page});
-        // The location path does not change, so the layout does not scroll; the buttons sit under the table.
         window.scrollTo(0, 0);
     };
 

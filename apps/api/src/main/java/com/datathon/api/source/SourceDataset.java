@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** A dataset on an open data portal (CKAN package); synthetic demo data has its own dataset. */
 @Entity
 @Table(name = "source_dataset")
 @Getter

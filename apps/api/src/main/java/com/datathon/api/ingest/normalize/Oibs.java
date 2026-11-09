@@ -2,13 +2,8 @@ package com.datathon.api.ingest.normalize;
 
 import com.datathon.api.common.OibValidator;
 
-/**
- * Reads an OIB cell. A wrong check digit keeps the value (it is what the source says) but lowers data quality;
- * a value that is not 11 digits is not an OIB at all and is dropped.
- */
 public final class Oibs {
 
-    /** docs/DATA_MODEL.md §7: synthetic organizations use 000000000xx, which deliberately fails the checksum. */
     private static final String SYNTHETIC_PREFIX = "000000000";
 
     public enum Status { VALID, SYNTHETIC_RESERVED, INVALID_CHECKSUM, MALFORMED, MISSING }
@@ -28,7 +23,6 @@ public final class Oibs {
             return new Result(null, Status.MISSING);
         }
         String digits = raw.replaceAll("\\s", "");
-        // An OIB typed into a numeric Excel cell loses its leading zero; restore it only if the checksum then holds.
         if (digits.matches("\\d{10}") && OibValidator.isValidOib("0" + digits)) {
             digits = "0" + digits;
         }

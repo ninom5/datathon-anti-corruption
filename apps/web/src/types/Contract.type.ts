@@ -5,7 +5,6 @@ import type {Provenance} from "./Source.type.ts";
 
 export type SubjectType = "robe" | "usluge" | "radovi" | "ostalo";
 
-/** Amounts are EUR without VAT; null means "not published". */
 export interface ContractListItem {
     id: number;
     buyer: OrganizationRef;
@@ -19,7 +18,6 @@ export interface ContractListItem {
     totalValue: number | null;
     paidAmount: number | null;
     indicators: IndicatorBadge[];
-    /** The register's amounts contradict each other (VAT, shifted columns); details on the contract page. */
     amountDoubtful: boolean;
     synthetic: boolean;
 }
@@ -59,7 +57,6 @@ export interface ContractDetail {
     eojnTenderUrl: string | null;
     frameworkAgreementUrl: string | null;
     indicators: Indicator[];
-    /** Null when there is no accepted AI assessment; then aiAssessmentUnavailableReason says why. */
     aiAssessment: AiAssessment | null;
     aiAssessmentUnavailableReason: string | null;
     provenance: Provenance;
@@ -68,14 +65,12 @@ export interface ContractDetail {
 
 export type Severity = "vrijedi_provjeriti" | "informativno";
 
-/** Query parameters of GET /v1/contracts and /v1/contracts/summary. */
 export interface ContractFilter {
     buyerOib?: string;
     supplierOib?: string;
     year?: number;
     hasIndicator?: boolean;
     severity?: Severity;
-    /** Contracts with an active indicator of one of these rules; combined with severity and band in one indicator. */
     ruleCode?: RuleCode[];
     band?: MagnitudeBand;
     synthetic?: boolean;
@@ -91,9 +86,7 @@ export interface ContractSummary {
     withIndicator: number;
     worthChecking: number;
     possibleEntryErrors: number;
-    /** Contracts with crafts are counted in the numbers above; only lists with names leave them out. */
     craftContracts: number;
-    /** Contracts with an indicator of each rule, under the filter without its own rule choice. */
     contractsByRule: Record<RuleCode, number>;
     incompleteYears: number[];
     syntheticContracts: number;

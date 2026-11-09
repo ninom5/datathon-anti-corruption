@@ -4,7 +4,6 @@ import com.datathon.api.common.persistence.DatabaseCode;
 import com.datathon.api.common.persistence.DatabaseCodeConverter;
 import jakarta.persistence.Converter;
 
-/** Lifecycle of an indicator after feedback (docs/DATA_MODEL.md). */
 public enum IndicatorStatus implements DatabaseCode {
     ACTIVE("aktivan"),
     DISPUTED("osporen"),

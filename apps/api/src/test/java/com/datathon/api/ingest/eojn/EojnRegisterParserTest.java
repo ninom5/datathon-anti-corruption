@@ -111,7 +111,6 @@ class EojnRegisterParserTest {
         return java.util.Arrays.stream(EojnColumn.values()).map(EojnColumn::header).toArray(String[]::new);
     }
 
-    /** A synthetic row in column order of {@link EojnColumn}. */
     private static String[] dataCells(String url, String dateSigned, String initialValue) {
         String[] cells = new String[EojnColumn.values().length];
         java.util.Arrays.fill(cells, "");

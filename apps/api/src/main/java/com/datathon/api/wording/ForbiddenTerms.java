@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.core.io.ClassPathResource;
 
-/**
- * The forbidden wording list from {@code wording/forbidden_terms_hr.txt}. Used by the wording test on all templates
- * and, later, by the AI assessment validator (docs/ANOMALY_DETECTION.md §4.4). No exception for negations.
- */
 public final class ForbiddenTerms {
 
     public static final String RESOURCE = "wording/forbidden_terms_hr.txt";
@@ -25,7 +21,6 @@ public final class ForbiddenTerms {
         return TERMS;
     }
 
-    /** @return the forbidden stems found in {@code text}, empty when the text is clean */
     public static List<String> findIn(String text) {
         if (text == null) {
             return List.of();

@@ -1,8 +1,3 @@
-/**
- * Rule descriptions for the Metodologija page. Values are copied from apps/api/src/main/resources/config/thresholds.yaml
- * and docs/ANOMALY_DETECTION.md (rules-v1, 2026-11-03; preskakanja usklađena s validacijom podataka 2026-11-08); the backend computes with the yaml, this page only explains it.
- * Change both together.
- */
 export interface RuleThreshold {
     label: string;
     value: string;

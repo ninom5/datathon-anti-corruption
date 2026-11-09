@@ -1,6 +1,5 @@
 package com.datathon.api.integration.anthropic;
 
-/** Used when ANTHROPIC_API_KEY is not set. */
 public class NoopLlmClient implements LlmClient {
 
     @Override

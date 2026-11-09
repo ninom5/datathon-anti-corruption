@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class FeedbackService {
 
-    /** The moderator has to answer these, so they need a contact address. */
     private static final Set<FeedbackKind> KINDS_NEEDING_CONTACT = Set.of(FeedbackKind.RIGHT_OF_REPLY,
             FeedbackKind.PERSONAL_DATA_REMOVAL);
 
@@ -44,7 +43,6 @@ public class FeedbackService {
         return FeedbackResponse.from(saved);
     }
 
-    /** Same visibility as the public pages: an inactive indicator or a hidden contract gets the same 404. */
     private void requireTargetExists(FeedbackTargetType targetType, Long targetId) {
         boolean exists = switch (targetType) {
             case INDICATOR -> indicatorService.isActive(targetId);

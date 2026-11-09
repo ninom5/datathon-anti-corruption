@@ -14,10 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-/**
- * Turns XLSX/XLS/CSV bytes into rows of cell text, the same way for every format, so parsers and the classifier
- * never touch POI. Numbers keep full precision ("198400.5"), date-formatted cells become ISO dates.
- */
 public final class SheetReader {
 
     public record SheetRow(int rowNumber, List<String> cells) {
@@ -31,7 +27,6 @@ public final class SheetReader {
         }
     }
 
-    /** {@code index} is 1-based, as used in the provenance locator. */
     public record SheetData(int index, String name, List<SheetRow> rows) {
     }
 

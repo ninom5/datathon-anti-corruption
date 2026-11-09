@@ -5,7 +5,6 @@ import com.datathon.api.organization.dto.OrganizationRef;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/** One contract of an indicator's group, as listed on the indicator detail. Amounts are EUR without VAT; null = not published. */
 public record IndicatorContract(
         Long id,
         LocalDate dateSigned,

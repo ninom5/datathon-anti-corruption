@@ -17,12 +17,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Normalises one data row of an old EOJN register report (A2). Same rules as {@link EojnRowParser}, with three
- * differences forced by the format: the buyer comes from the file (title line or publisher), the supplier name and
- * OIB share one cell, and there is no amendment column, so only the initial value is filled (total stays null and
- * rule D1 skips the row; D2 compares the paid amount with the initial gross value).
- */
 public final class LegacyRowParser {
 
     public static final String EXTRACTOR_VERSION = "eojn-legacy-xlsx-v1";
@@ -51,7 +45,6 @@ public final class LegacyRowParser {
         }
         String dateText = text(row, DATE_SIGNED);
         if (dateText.isBlank()) {
-            // Sub-total and footer lines of the EOJN report have no date and no supplier.
             return text(row, SUPPLIER).isBlank() && text(row, SUBJECT).isBlank()
                     ? new RowOutcome.Blank()
                     : new RowOutcome.Rejected(IssueCode.MISSING_DATE_SIGNED, "Redak nema datum sklapanja.");
@@ -111,10 +104,6 @@ public final class LegacyRowParser {
                 List.copyOf(flags)));
     }
 
-    /**
-     * Yearly sheets put the currency in the header ("Iznos bez PDV-a (kn)") and leave plain numbers in the cells;
-     * the marker is carried over so that Money converts correctly also for contracts signed after 2022.
-     */
     private Money.Result readAmount(SheetRow row, LegacyColumn column, LocalDate dateSigned, List<String> flags) {
         Money.Result amount = Money.read(text(row, column), dateSigned, headerCurrency(column));
         String flag = switch (amount.status()) {

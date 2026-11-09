@@ -13,10 +13,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * JPT and DZS readers on excerpts of the real responses downloaded 2026-11-03 (fixtures/reference/): four JPT bodies
- * and the header plus a few rows of DZS table "1.".
- */
 class ReferenceSourcesTest {
 
     @Test

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
-/** Filters of the indicator list as JPA criteria. Only active indicators; synthetic ones only when asked for. */
 public final class IndicatorSpecifications {
 
     private IndicatorSpecifications() {

@@ -11,7 +11,6 @@ import {MapLegend} from "./MapLegend.tsx";
 import {classOf} from "./mapClasses.ts";
 import styles from "./MapPage.module.css";
 
-/** Width of the SVG coordinate system; the SVG itself scales with the page. */
 const MAP_WIDTH = 800;
 
 const countByClass = (municipalities: MunicipalityOverview[]) => {

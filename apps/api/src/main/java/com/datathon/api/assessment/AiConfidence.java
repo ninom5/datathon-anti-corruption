@@ -6,7 +6,6 @@ import jakarta.persistence.Converter;
 import java.util.Arrays;
 import java.util.Optional;
 
-/** Pouzdanost the model states for its own assessment (docs/ANOMALY_DETECTION.md §4.3). */
 public enum AiConfidence implements DatabaseCode {
     LOW("niska"),
     MEDIUM("srednja"),

@@ -20,7 +20,6 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** The context of §4.2: only database fields, stable hash, no invented company register data. */
 class AiContextBuilderTest {
 
     private static final String FILE_URL = "https://primjer.invalid/registar.xlsx";

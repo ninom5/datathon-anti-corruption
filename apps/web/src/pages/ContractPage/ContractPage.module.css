@@ -108,7 +108,6 @@
     }
 }
 
-/* Aside panels (amounts, source): bordered surfaces like the OtvoreniRadar detail aside. */
 .sideColumn .block {
     padding: var(--space-4) var(--space-5);
     background: var(--color-surface);

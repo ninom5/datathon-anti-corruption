@@ -10,10 +10,6 @@ import org.springframework.stereotype.Component;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * One model call for one context: prompt, structured output, usage and cost in {@code llm_usage}, and the validator.
- * Used by the AI run (contracts) and by the evaluation (fixed synthetic contexts).
- */
 @Component
 @RequiredArgsConstructor
 public class AiModelCall {
@@ -23,14 +19,9 @@ public class AiModelCall {
     private final AiAssessmentWriter writer;
     private final JsonMapper jsonMapper;
 
-    /** @param costUsd billed cost of the call, also when the answer turned out unusable */
     public record Outcome(AiValidation validation, BigDecimal costUsd) {
     }
 
-    /**
-     * @throws com.datathon.api.integration.anthropic.LlmUnavailableException the API cannot be reached
-     * @throws CallFailedException the model answered but not usably; carries the billed cost
-     */
     public Outcome assess(AiContext context, String model, String purpose) {
         LlmResult result;
         try {
@@ -57,7 +48,6 @@ public class AiModelCall {
         return cost;
     }
 
-    /** The model answered, but the answer cannot be used; the call was still billed. */
     public static class CallFailedException extends RuntimeException {
 
         private final transient BigDecimal costUsd;

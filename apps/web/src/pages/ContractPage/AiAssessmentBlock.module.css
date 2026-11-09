@@ -1,4 +1,3 @@
-/* AI block: bordered surface with the AI hue as the left rule, so it never reads as a rule indicator (amber). */
 .block {
     padding: var(--space-4) var(--space-5);
     background: var(--color-surface);

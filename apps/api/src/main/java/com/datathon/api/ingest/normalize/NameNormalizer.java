@@ -3,11 +3,9 @@ package com.datathon.api.ingest.normalize;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-/** {@code name_norm} from docs/DATA_MODEL.md §3, used to match organizations that have no OIB. */
 public final class NameNormalizer {
 
     private static final Pattern SIMPLE_LLC = Pattern.compile("\\bj\\.\\s*d\\.\\s*o\\.\\s*o\\.?");
-    /** Also matches a cut-off "d.o" at the end of the name, seen in real registers. */
     private static final Pattern LLC = Pattern.compile("\\bd\\.\\s*o\\.\\s*o\\.?|\\bd\\.\\s*o\\.?$|drustvo s ogranicenom odgovornoscu");
     private static final Pattern JOINT_STOCK = Pattern.compile("\\bd\\.\\s*d\\.?(?=[\\s,;]|$)");
     private static final Pattern PUNCTUATION = Pattern.compile("[^\\p{L}\\p{N}\\s]");

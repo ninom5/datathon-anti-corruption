@@ -9,12 +9,6 @@ import org.springframework.core.io.ClassPathResource;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Prompt {@code ai-flag-v1} (docs/ANOMALY_DETECTION.md §4.5) and its output schema (§4.3), both kept as resources so
- * anyone can read them. Any change of the text is a new version: new file, new {@link #VERSION}. v1 is kept for
- * the record; v2 adds rules 8-11 (no restating of rule results, peer comparison only with data, missing data in words,
- * claim length), v3 rules 12-14 (procedure below the threshold, missing data is not a reason, weak single signals).
- */
 public final class AiPrompt {
 
     public static final String VERSION = "ai-flag-v3";
@@ -36,7 +30,6 @@ public final class AiPrompt {
         return SCHEMA;
     }
 
-    /** The context is data, never instructions (docs/ARCHITECTURE.md §8, prompt injection). */
     public static String userText(String canonicalContext) {
         return "Kontekst ugovora (JSON, samo podaci):\n" + canonicalContext;
     }

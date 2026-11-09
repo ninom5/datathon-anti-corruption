@@ -30,12 +30,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * F (docs/ANOMALY_DETECTION.md §F): two or more contracts of one buyer with the same supplier in the same CPV group,
- * each below the simple procurement threshold of its signing date, signed within 90 days and together at or above the
- * threshold. A window that spans a threshold change uses the lowest threshold in it. Details that docs/ leave open are
- * in work/decisions.md (2026-11-03, #41).
- */
 @Component
 @RequiredArgsConstructor
 public class SplittingRule implements GroupRule {
@@ -47,7 +41,6 @@ public class SplittingRule implements GroupRule {
 
     private final RuleThresholds thresholds;
 
-    /** A contract below the threshold of its own signing date. */
     record Candidate(Contract contract, BigDecimal value, BigDecimal threshold, SubjectType type, String cpv3, String cpv2) {
     }
 
@@ -66,7 +59,6 @@ public class SplittingRule implements GroupRule {
         for (List<Candidate> group : groupBy(candidates, candidate -> supplierKey(candidate) + "|" + candidate.cpv3())) {
             windows.addAll(windowsOf(group, false));
         }
-        // Weaker match: different CPV3 within one CPV2, only for contracts not already in a CPV3 window.
         Set<Contract> used = new HashSet<>();
         windows.forEach(window -> window.members().forEach(member -> used.add(member.contract())));
         List<Candidate> rest = candidates.stream().filter(candidate -> !used.contains(candidate.contract())).toList();
@@ -94,7 +86,6 @@ public class SplittingRule implements GroupRule {
         return candidates;
     }
 
-    /** A contract from a ZJN procedure (e.g. a lot of an open procedure) went through public procurement already. */
     private boolean isPublicProcedure(Contract contract) {
         String procedure = contract.getProcedureType();
         if (procedure == null) {
@@ -116,10 +107,6 @@ public class SplittingRule implements GroupRule {
         return groups.values();
     }
 
-    /**
-     * Each start date opens the longest window of at most {@code window-days}; a qualifying window is reported and the
-     * search continues after its last contract, so the same contracts never give two indicators.
-     */
     private List<Window> windowsOf(List<Candidate> group, boolean isCpv2Match) {
         RuleF rule = thresholds.ruleF();
         List<Window> found = new ArrayList<>();
@@ -179,7 +166,6 @@ public class SplittingRule implements GroupRule {
         return new GroupFinding(draft, Indicator.SUBJECT_GROUP, subjectRef(input, window, supplier, cpv), contracts);
     }
 
-    /** docs §F: "jaka" with >= 3 contracts each >= 70 % of the threshold, "slaba" when only the CPV division matches. */
     private EvidenceStrength strength(Window window) {
         if (window.isCpv2Match()) {
             return EvidenceStrength.WEAK;
@@ -222,7 +208,6 @@ public class SplittingRule implements GroupRule {
         return text.toString();
     }
 
-    /** "Između 03.02.2025. i 28.04.2025." or, when all contracts were signed on one day, "Dana 28.08.2024.". */
     private static String periodLabel(List<Candidate> members) {
         var first = members.getFirst().contract().getDateSigned();
         var last = members.getLast().contract().getDateSigned();
@@ -237,16 +222,11 @@ public class SplittingRule implements GroupRule {
         ref.put("cpvLevel", cpv.length());
         ref.put("from", window.members().getFirst().contract().getDateSigned().toString());
         ref.put("to", window.members().getLast().contract().getDateSigned().toString());
-        // The lowest threshold in the window, the one the sum is compared with; the UI draws it, never recomputes it.
         ref.put("threshold", window.threshold());
         ref.put("contractIds", window.members().stream().map(member -> member.contract().getId()).toList());
         return ref;
     }
 
-    /**
-     * 200.000 kn converted at 7,53450 is 26.544,56 EUR and the 2023 threshold is 26.540 EUR: the same legal threshold,
-     * so a window over 1.1.2023 is not a threshold change. Only a difference of at least 1 EUR counts.
-     */
     private static boolean isThresholdChange(List<Candidate> members) {
         BigDecimal min = members.stream().map(Candidate::threshold).min(BigDecimal::compareTo).orElseThrow();
         BigDecimal max = members.stream().map(Candidate::threshold).max(BigDecimal::compareTo).orElseThrow();

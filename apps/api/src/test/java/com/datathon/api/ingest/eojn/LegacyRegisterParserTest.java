@@ -17,13 +17,11 @@ import java.util.List;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
-/** Old EOJN register report (A2) on two real files downloaded from data.gov.hr on 2026-11-02. */
 class LegacyRegisterParserTest {
 
     private static final LocalDate TODAY = LocalDate.of(2026, 11, 3);
     private static final Function<String, Oibs.Result> NO_JPT = name -> new Oibs.Result(null, Oibs.Status.MISSING);
 
-    /** EOJN "RPT_Ugovor" export: title block with "Naručitelj: OPĆINA BLATO", header in row 14, plain numbers in HRK. */
     @Test
     void parsesEojnReportWithBuyerInTitle() throws IOException {
         List<SheetData> sheets = readFixture("opcina-blato-registar-ugovora-2021.xlsx");
@@ -45,8 +43,8 @@ class LegacyRegisterParserTest {
         assertThat(first.dateSigned()).isEqualTo(LocalDate.of(2021, 3, 2));
         assertThat(first.cpv()).isEqualTo("39294000");
         assertThat(first.currencyOriginal()).isEqualTo("HRK");
-        assertThat(first.initialValue()).isEqualByComparingTo("4828.77");      // 36.382,40 kn
-        assertThat(first.initialValueGross()).isEqualByComparingTo("5952.19"); // 44.846,75 kn
+        assertThat(first.initialValue()).isEqualByComparingTo("4828.77");
+        assertThat(first.initialValueGross()).isEqualByComparingTo("5952.19");
         assertThat(first.euFunded()).isTrue();
         assertThat(first.paymentNote()).as("cell holds only a line break").isNull();
         assertThat(first.amendmentsValue()).as("A2 has no amendment column").isNull();
@@ -54,7 +52,6 @@ class LegacyRegisterParserTest {
         assertThat(first.qualityFlags()).isEmpty();
     }
 
-    /** Retyped yearly sheets: buyer only in the dataset publisher, currency in the header "(kn)" / "(EUR)". */
     @Test
     void readsCurrencyFromHeaderAndBuyerFromPublisher() throws IOException {
         List<SheetData> sheets = readFixture("hera-registar-ugovora.xlsx");
@@ -75,8 +72,8 @@ class LegacyRegisterParserTest {
         assertThat(kuna.supplierOib().oib()).isEqualTo("05355685913");
         assertThat(kuna.dateSigned()).isEqualTo(LocalDate.of(2022, 1, 21));
         assertThat(kuna.currencyOriginal()).isEqualTo("HRK");
-        assertThat(kuna.initialValue()).isEqualByComparingTo("5275.73"); // 39.750 kn
-        assertThat(kuna.paidAmount()).isEqualByComparingTo("607.21");    // 4.575 kn
+        assertThat(kuna.initialValue()).isEqualByComparingTo("5275.73");
+        assertThat(kuna.paidAmount()).isEqualByComparingTo("607.21");
 
         ParsedContract euro = contract(sheet(result, "2023").rows().getFirst());
         assertThat(euro.currencyOriginal()).isEqualTo("EUR");

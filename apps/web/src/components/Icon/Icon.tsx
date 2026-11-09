@@ -1,6 +1,5 @@
 import type {ReactNode} from "react";
 
-// Paths from Lucide (https://lucide.dev, ISC licence), copied so we do not add a dependency for a few icons.
 const ICON_PATHS = {
     alert: (
         <>
@@ -133,7 +132,6 @@ interface IconProps {
     className?: string;
 }
 
-// Decorative by default: the text next to the icon carries the meaning.
 export const Icon = ({name, size = 16, className}: IconProps) => {
     return (
         <svg

@@ -6,7 +6,6 @@ import com.datathon.api.rules.SplittingRule;
 import com.datathon.api.rules.ValueIncreaseRule;
 import com.datathon.api.rules.YoungCompanyRule;
 
-/** Croatian titles of the rules, as named in docs/ANOMALY_DETECTION.md. */
 public final class RuleTitles {
 
     private RuleTitles() {

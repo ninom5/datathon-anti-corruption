@@ -9,7 +9,6 @@ const BROWSE_LINKS = [
     {path: routes.SOURCES, label: "Izvori podataka", description: "skupovi, datoteke i datumi dohvata"},
 ];
 
-// What the product does in three steps, and the other ways in.
 export const HowItWorks = () => (
     <section className={styles.panel} aria-labelledby="how-it-works-title">
         <h2 id="how-it-works-title" className={styles.panelHeading}>Kako radi</h2>

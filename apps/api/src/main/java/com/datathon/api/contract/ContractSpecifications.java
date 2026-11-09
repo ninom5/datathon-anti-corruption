@@ -19,13 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
-/** Filters of the contract explorer as JPA criteria, shared by the list and the summary. */
 public final class ContractSpecifications {
 
     private ContractSpecifications() {
     }
 
-    /** Everything the explorer may show for the filter. Contracts with natural persons are never shown (GDPR). */
     public static Specification<Contract> visible(ContractFilter filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -65,7 +63,6 @@ public final class ContractSpecifications {
         return (root, query, cb) -> cb.isTrue(root.get("isSynthetic"));
     }
 
-    /** Crafts are left out of summaries and top lists, because a craft's name usually names its owner. */
     public static Specification<Contract> withoutCrafts() {
         return (root, query, cb) -> notSupplierType(root, cb, OrganizationType.CRAFT);
     }
@@ -78,7 +75,6 @@ public final class ContractSpecifications {
         return (root, query, cb) -> cb.exists(activeIndicator(root, query, cb, new IndicatorCriteria(severity, List.of(), null)));
     }
 
-    /** Probable entry errors in the source: "informativno" indicators of rule D (see Indicator.isPossibleEntryError). */
     public static Specification<Contract> withPossibleEntryError() {
         return (root, query, cb) -> cb.exists(activeIndicator(root, query, cb,
                 new IndicatorCriteria(SeverityNote.INFORMATIVE, List.of("D_VALUE_INCREASE", "D_OVERPAYMENT"), null)));
@@ -88,7 +84,6 @@ public final class ContractSpecifications {
         return (root, query, cb) -> cb.exists(activeIndicator(root, query, cb, new IndicatorCriteria(null, List.of(ruleCode), null)));
     }
 
-    /** Conditions on one indicator; all of them must hold for the same indicator. Empty parts are ignored. */
     private record IndicatorCriteria(SeverityNote severity, List<String> ruleCodes, MagnitudeBand band) {
     }
 
@@ -97,7 +92,6 @@ public final class ContractSpecifications {
     }
 
     private static Predicate notSupplierType(Root<Contract> root, CriteriaBuilder cb, OrganizationType type) {
-        // A left join, because a contract without a named supplier must stay visible.
         Join<Contract, Organization> supplier = root.join("supplier", JoinType.LEFT);
         return cb.or(cb.isNull(supplier.get("id")), cb.notEqual(supplier.get("orgType"), type));
     }

@@ -37,11 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Evaluation of the AI assessment (docs/ANOMALY_DETECTION.md §4.6). Synthetic: 40 fixed contexts with labels written
- * before any run. Real: a reproducible random sample that people label by hand; metrics are computed only on what was
- * actually labelled. Results go to docs/EVALUATION.md by hand, with date, model, prompt version, n and cost.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -124,7 +119,6 @@ public class AiEvaluationService {
         cost[0] = cost[0].add(amount);
     }
 
-    /** A rejected answer counts as "no flag", because that is what the user would see (nothing). */
     private static SyntheticReport report(String version, String model, List<CaseResult> results, BigDecimal cost) {
         List<CaseResult> answered = results.stream().filter(result -> result.actual() != null).toList();
         List<Pair> pairs = answered.stream()
@@ -164,9 +158,6 @@ public class AiEvaluationService {
         }
     }
 
-    // ----- real sample -----
-
-    /** CSV (semicolon, UTF-8) for hand labelling; the label columns are empty on purpose. */
     @Transactional(readOnly = true)
     public String realSampleCsv(String seed, int size) {
         StringBuilder csv = new StringBuilder(
@@ -194,10 +185,6 @@ public class AiEvaluationService {
                              BigDecimal rejectionRate) {
     }
 
-    /**
-     * Metrics on a labelled sample CSV (columns id, oznaka_osoba1, oznaka_osoba2; labels "vrijedi_provjeriti" or "ne").
-     * Unlabelled rows and contracts without an assessment are left out, never counted as 0.
-     */
     @Transactional(readOnly = true)
     public RealReport realMetrics(String csv) {
         List<Map<String, String>> rows = SemicolonCsv.parse(csv);

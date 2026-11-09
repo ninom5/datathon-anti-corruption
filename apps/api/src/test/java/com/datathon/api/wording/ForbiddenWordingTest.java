@@ -11,12 +11,6 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
-/**
- * AGENTS.md: no forbidden term may appear in code, templates or resources that can reach a user. Scans the backend
- * sources and resources and, when present, the frontend sources. Excluded: the list itself, and the AI prompts in
- * {@code resources/ai/}, which must name the forbidden words to forbid them to the model; they never reach a user, and
- * every model answer is checked against the same list (AiAssessmentValidator).
- */
 class ForbiddenWordingTest {
 
     private static final List<Path> ROOTS = List.of(Path.of("src/main"), Path.of("../web/src"));

@@ -16,7 +16,6 @@ export const useContracts = (filter: ContractFilter) =>
         placeholderData: keepPreviousData,
     });
 
-/** The summary does not depend on paging or sorting. */
 const toSummaryFilter = (filter: ContractFilter): ContractFilter => ({
     buyerOib: filter.buyerOib,
     supplierOib: filter.supplierOib,

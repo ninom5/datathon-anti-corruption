@@ -7,7 +7,6 @@ import com.datathon.api.organization.Organization;
 import com.datathon.api.organization.OrganizationType;
 import org.junit.jupiter.api.Test;
 
-/** GDPR display (decision 2026-11-05): names from the 2026-11-05 data the classifier did not mark as crafts. */
 class OrganizationRefTest {
 
     private static Organization organization(String name) {

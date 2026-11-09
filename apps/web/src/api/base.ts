@@ -1,7 +1,6 @@
 import axios from 'axios';
 import type {ErrorResponseType} from "@/types";
 
-/** Error with the backend's Croatian message and the HTTP status (undefined when the server was not reached). */
 export class ApiError extends Error {
     readonly status: number | undefined;
 

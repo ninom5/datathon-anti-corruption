@@ -12,10 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-/**
- * Starts the app against a throwaway PostgreSQL 17: proves the migrations apply and every entity matches them. The
- * key is forced empty, so this also proves the app and the rules run without ANTHROPIC_API_KEY (AGENTS.md).
- */
 @SpringBootTest(properties = "javniradar.anthropic.api-key=")
 @Import(TestcontainersConfiguration.class)
 class ApiApplicationTests {

@@ -24,10 +24,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/**
- * Result of one deterministic rule for one subject. The three dimensions (data quality, magnitude, evidence strength)
- * are separate fields on purpose: there is no combined score (docs/ANOMALY_DETECTION.md §0.2).
- */
 @Entity
 @Table(name = "indicator")
 @Getter
@@ -36,9 +32,7 @@ import org.hibernate.type.SqlTypes;
 public class Indicator {
 
     public static final String SUBJECT_CONTRACT = "contract";
-    /** Rule F: contracts of one buyer, supplier and CPV group inside a time window. */
     public static final String SUBJECT_GROUP = "group";
-    /** Rule C: one buyer and CPV division over a period. */
     public static final String SUBJECT_BUYER_CPV = "buyer_cpv";
 
     @Id
@@ -60,7 +54,6 @@ public class Indicator {
     @JoinColumn(name = "buyer_id")
     private Organization buyer;
 
-    /** Every contract the indicator is about: one for contract rules, the whole group for F and C. */
     @ElementCollection
     @CollectionTable(name = "indicator_contract", joinColumns = @JoinColumn(name = "indicator_id"))
     @Column(name = "contract_id")
@@ -99,15 +92,10 @@ public class Indicator {
         this.computedAt = Instant.now();
     }
 
-    /**
-     * "Informativno" means a probable entry error only for rule D (implausible numbers in the register). For F and C it
-     * means legitimate context (the buyer's own company, recurring supplies), which is not an error in the source.
-     */
     public static boolean isPossibleEntryError(Indicator indicator) {
         return indicator.getSeverityNote() == SeverityNote.INFORMATIVE && indicator.getRuleCode().startsWith("D_");
     }
 
-    /** An indicator about a group of contracts of one buyer (rules F and C). */
     public Indicator(String ruleCode, String ruleVersion, String subjectType, Organization buyer, List<Long> contractIds) {
         this.ruleCode = ruleCode;
         this.ruleVersion = ruleVersion;

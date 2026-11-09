@@ -23,7 +23,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** A contract from a register. Amounts are EUR; null means "not published", never 0. */
 @Entity
 @Table(name = "contract")
 @Getter

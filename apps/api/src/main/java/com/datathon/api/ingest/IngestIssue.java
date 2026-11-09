@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/** A rejected row or file (severity error) or a kept row with a data problem (warning). */
 @Entity
 @Getter
 @Table(name = "ingest_issue")

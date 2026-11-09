@@ -10,7 +10,6 @@ import com.datathon.api.organization.OrganizationType;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Crafts and natural persons never get an AI assessment shown, whatever the table holds (GDPR, AGENTS.md). */
 class AiAssessmentQueryServiceTest {
 
     @Test

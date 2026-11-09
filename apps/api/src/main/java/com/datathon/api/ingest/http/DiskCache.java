@@ -45,7 +45,6 @@ public class DiskCache {
         }
     }
 
-    /** When the cached copy was written, i.e. when it was really downloaded. */
     public Optional<Instant> lastModified(URI uri, String extension) {
         Path path = pathFor(uri, extension);
         try {

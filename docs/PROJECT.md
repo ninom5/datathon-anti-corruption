@@ -9,7 +9,7 @@ _Tim **Nazor** · Datathon Portala otvorenih podataka 2026 · **izazov A) Društ
 ## 1. Problem
 
 - Hrvatska ima **556 jedinica lokalne samouprave** (128 gradova, 428 općina; izvor: JPT i DZS Popis 2021). Većina su male općine bez lokalnih medija koji prate trošenje.
-- Registar ugovora je zakonska obveza (ZJN, čl. 28), ali je podatak rascjepkan: na data.gov.hr samo **oko 61 od 556 JLS (~11 %)** objavljuje strojno čitljiv registar ugovora (CKAN API, 2026-11-01, [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) §1.1), u desecima različitih tablica.
+- Registar ugovora je zakonska obveza (ZJN, čl. 28), ali je podatak rascjepkan: na data.gov.hr samo **oko 61 od 556 JLS (~11 %)** objavljuje strojno čitljiv registar ugovora (CKAN API, 2026-11-01, [`DATA_SOURCES_RESEARCH.md`](DATA_SOURCES_RESEARCH.md) §1.1), u desecima različitih tablica.
 - Nacionalni izvoz na portalu je uzorak od 20.000 redaka, a EOJN OCDS nema OIB-ova.
 - Zato građanin, vijećnik ili lokalni novinar ne može lako odgovoriti na pitanje: *koliko moja općina troši, kome, i odstupa li nešto od uobičajenog?*
 
@@ -64,7 +64,7 @@ _Ilustrativan tok. Primjer koristi **sintetičke podatke za demonstraciju** (fik
 
 **Što nastaje tek spajanjem** (nije vidljivo ni u jednom izvoru zasebno):
 - **€ po stanovniku** i usporedba sa sličnim općinama (ugovori × DZS);
-- **„naručitelj je osnivač dobavljača”**: u stvarnim podacima ima 15 takvih parova (npr. grad i vlastito komunalno društvo). To se prikazuje kao legitiman kontekst, pa smanjuje lažne uzbune pravila C i F (ugovori × JPT; [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) §5);
+- **„naručitelj je osnivač dobavljača”**: u stvarnim podacima ima 15 takvih parova (npr. grad i vlastito komunalno društvo). To se prikazuje kao legitiman kontekst, pa smanjuje lažne uzbune pravila C i F (ugovori × JPT; [`DATA_SOURCES_RESEARCH.md`](DATA_SOURCES_RESEARCH.md) §5);
 - **mlada tvrtka i nesklad djelatnosti i predmeta ugovora** (ugovori × Sudski registar);
 - **jedinstven pogled** na 40 različito formatiranih datoteka, s HRK → EUR pretvorbom i provenancijom svakog retka.
 
@@ -85,7 +85,7 @@ _Ilustrativan tok. Primjer koristi **sintetičke podatke za demonstraciju** (fik
 
 - **Hibrid pravila i LLM-a s validatorom dokaza:** pravila su deterministička i verzionirana; AI (Claude Haiku 5.5, strukturirani izlaz po JSON shemi) traži ono što pravila ne vide (npr. djelatnost dobavljača ne odgovara predmetu, iznos „jednostavne nabave” iznad praga). Svaki razlog mora citirati polje iz konteksta, a validator odbacuje neutemeljen odgovor prije prikaza.
 - **Tri odvojene dimenzije** (kvaliteta podataka, veličina odstupanja, pouzdanost dokaza) umjesto jednog „rizika”.
-- **„Što ovo NE znači”** uz svaki indikator i izmjerena evaluacija AI-ja (sintetika 40 slučajeva: preciznost 1,00, odziv 0,905–0,952, 0 lažno pozitivnih; [`docs/EVALUATION.md`](docs/EVALUATION.md)).
+- **„Što ovo NE znači”** uz svaki indikator i izmjerena evaluacija AI-ja (sintetika 40 slučajeva: preciznost 1,00, odziv 0,905–0,952, 0 lažno pozitivnih; [`EVALUATION.md`](EVALUATION.md)).
 - **Ponovljiv ingest** stvarnih, neurednih općinskih tablica (dva EOJN formata, HRK/EUR, pogreške u izvoru zadržane i označene).
 
 ## 8. Izvedivost i stanje razvoja

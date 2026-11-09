@@ -32,10 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Imports one class A or A2 file in one transaction: every row is kept as a raw record, parsed rows become contracts
- * with provenance, rejected rows become ingest issues. Used for real files and the synthetic demo set alike.
- */
 @Service
 @RequiredArgsConstructor
 public class RegisterImporter {
@@ -63,12 +59,6 @@ public class RegisterImporter {
         return stats;
     }
 
-    /**
-     * Imports one old EOJN register report (A2). The buyer is taken from the sheet title or the dataset publisher and
-     * matched to JPT for its OIB. Rows of a year for which the buyer already has class A data are kept as raw records
-     * but not imported (counted as {@code overlaps_class_a}); within A2 a content hash is the natural key, so the
-     * same contract in a newer yearly file replaces the older row.
-     */
     @Transactional
     public ImportStats importLegacy(Long runId, SourceFile file, List<SheetData> sheets) {
         ImportStats stats = new ImportStats();
@@ -88,11 +78,6 @@ public class RegisterImporter {
         return stats;
     }
 
-    /**
-     * The old report never prints the buyer's OIB. JPT is asked first; when it has no unique match, an existing
-     * organization with the same normalised name and an OIB (e.g. the class A buyer) is used, so the same
-     * municipality does not end up as two buyers.
-     */
     private Oibs.Result findBuyerOib(String name) {
         Oibs.Result fromJpt = jptDirectory.findOibByName(name);
         if (fromJpt.isUsable()) {
@@ -159,7 +144,6 @@ public class RegisterImporter {
         stats.countSuperseded();
     }
 
-    /** A2 has no EOJN link: (buyer, supplier OIB or name, date, amount, subject) identify a contract. */
     static String legacyNaturalKey(ParsedContract contract) {
         String buyer = contract.buyerOib().isUsable() ? contract.buyerOib().oib() : NameNormalizer.normalize(contract.buyerName());
         String supplier = contract.supplierOib().isUsable() ? contract.supplierOib().oib() : NameNormalizer.normalize(contract.supplierName());

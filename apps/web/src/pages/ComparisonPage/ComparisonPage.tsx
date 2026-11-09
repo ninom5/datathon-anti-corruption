@@ -13,10 +13,6 @@ import styles from "./ComparisonPage.module.css";
 const categoryText = (comparison: PeerComparison) =>
     comparison.cpv2 ? `na kategoriju ${comparison.cpv2} ${comparison.cpvName}` : "ukupno na sve ugovore";
 
-/**
- * "GRAD X: u 2025. ugovoreno 41 € po stanovniku ...", neutral wording from docs/ANOMALY_DETECTION.md §3A. Impersonal
- * so it fits both "grad" and "općina" without grammatical gender.
- */
 const headline = (comparison: PeerComparison) => {
     const selected = comparison.members.find((member) => member.selected);
     const name = comparison.municipality.name;

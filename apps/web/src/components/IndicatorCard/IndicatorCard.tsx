@@ -21,7 +21,6 @@ interface DimensionProps {
     compact?: boolean;
 }
 
-/** One of the three equal boxes; there is never a combined score (docs/UI_UX.md §3.4). */
 const Dimension = ({title, value, hint, compact}: DimensionProps) => (
     <div className={styles.dimension}>
         <h4>{title}</h4>
@@ -64,7 +63,6 @@ export const IndicatorCard = ({indicator, showLink = true, inContract = false, c
                 </section>
             )}
 
-            {/* A probable entry error is not headlined with its percentage (e.g. +12.163 %), which would mislead. */}
             {!compact && !isEntryError && <p className={styles.magnitude}>{indicator.magnitude.label}</p>}
 
             <div className={styles.dimensions}>

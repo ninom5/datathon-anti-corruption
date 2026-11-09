@@ -19,7 +19,6 @@ public class OibValidator implements ConstraintValidator<Oib, String> {
         return checkDigit(value) == value.charAt(LENGTH - 1) - '0';
     }
 
-    /** ISO 7064, MOD 11,10 over the first ten digits. */
     private static int checkDigit(String oib) {
         int remainder = 10;
         for (int index = 0; index < LENGTH - 1; index++) {

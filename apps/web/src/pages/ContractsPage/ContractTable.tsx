@@ -9,7 +9,6 @@ interface ContractTableProps {
     contracts: ContractListItem[];
 }
 
-/** Total value falls back to the initial value; both are EUR without VAT. */
 const displayedValue = (contract: ContractListItem) => contract.totalValue ?? contract.initialValue;
 
 export const ContractTable = ({contracts}: ContractTableProps) => (

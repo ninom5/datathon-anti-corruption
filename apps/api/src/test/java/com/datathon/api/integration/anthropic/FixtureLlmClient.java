@@ -11,11 +11,6 @@ import org.springframework.core.io.ClassPathResource;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Test double of the Claude API: answers with prepared JSON from {@code fixtures/ai/<name>.json}. The placeholder
- * {@code {{ugovor.izvor_url}}} is replaced by the source URL of the context, so a fixture can cite a real row.
- * The name {@value #UNAVAILABLE} simulates an API error. Every call reports the same token usage.
- */
 public class FixtureLlmClient implements LlmClient {
 
     public static final String UNAVAILABLE = "nedostupno";
@@ -27,7 +22,6 @@ public class FixtureLlmClient implements LlmClient {
     private final AtomicInteger calls = new AtomicInteger();
     private String defaultFixture = "vrijedi-provjeriti";
 
-    /** The next calls answer with these fixtures, in order; after that with the default one. */
     public synchronized void enqueue(String... fixtureNames) {
         queue.addAll(java.util.List.of(fixtureNames));
     }

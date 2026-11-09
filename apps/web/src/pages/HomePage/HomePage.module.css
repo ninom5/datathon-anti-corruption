@@ -14,7 +14,6 @@
     font-size: var(--font-size-xl);
 }
 
-/* One framed list with dividers, like the list rows elsewhere: no card per fact. */
 .facts {
     padding: 0;
     list-style: none;
@@ -64,7 +63,6 @@
     gap: var(--space-4);
 }
 
-/* "Kako radi" side panel: plain numbered steps like a printed leaflet, no boxed numbers. */
 .panel {
     padding: var(--space-4) var(--space-5);
     background: var(--color-surface);

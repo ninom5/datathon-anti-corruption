@@ -2,10 +2,6 @@ package com.datathon.api.assessment;
 
 import java.math.BigDecimal;
 
-/**
- * Counters and budget of one run, shared by the worker threads. The budget is checked before each call; with N
- * parallel calls a run can overshoot it by at most N calls (a few tenths of a cent with Haiku).
- */
 final class AiRunState {
 
     private final BigDecimal maxUsd;
@@ -28,7 +24,6 @@ final class AiRunState {
         this.maxConsecutiveErrors = maxConsecutiveErrors;
     }
 
-    /** Reserves one call; false (and the run stops) when the money or the call budget is used up. */
     synchronized boolean tryStartCall() {
         if (stopReason != null) {
             return false;

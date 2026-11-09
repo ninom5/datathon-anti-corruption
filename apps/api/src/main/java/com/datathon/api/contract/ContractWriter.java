@@ -10,17 +10,12 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Upserts a contract by its natural key (class A: EOJN URL; A2: content hash). The same contract appears in several yearly files (659 duplicates
- * measured on 2026-11-01), so a later file replaces the values and the provenance; the older raw row stays.
- */
 @Service
 @RequiredArgsConstructor
 public class ContractWriter {
 
     public enum Outcome { CREATED, SUPERSEDED }
 
-    /** {@code supersededProvenance} is the provenance the row had before, when it was replaced. */
     public record Written(Contract contract, Outcome outcome, Optional<Provenance> supersededProvenance) {
     }
 
@@ -31,7 +26,6 @@ public class ContractWriter {
         return upsert(parsed.contractUrl(), parsed, provenance, isSynthetic);
     }
 
-    /** {@code naturalKey}: the EOJN URL for class A, a content hash for A2 (docs/DATA_MODEL.md §3). */
     public Written upsert(String naturalKey, ParsedContract parsed, Provenance provenance, boolean isSynthetic) {
         Optional<Contract> existing = contractRepository.findByNaturalKey(naturalKey);
         Contract contract = existing.orElseGet(() -> new Contract(naturalKey));

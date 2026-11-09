@@ -16,7 +16,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** One public body from the JPT register (latest snapshot), keyed by OIB. */
 @Entity
 @Table(name = "jpt_body")
 @Getter
@@ -37,7 +36,6 @@ public class JptBody {
     private String municipalityName;
     private LocalDate foundedOn;
 
-    /** JSON array [{"oib": "...", "naziv": "..."}], the register's "Osnivaci". */
     @JdbcTypeCode(SqlTypes.JSON)
     private String founders;
 

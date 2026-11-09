@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-/** Aggregates over the same specification as the explorer list, computed in the database. */
 @Component
 @RequiredArgsConstructor
 class ContractTotals {
@@ -21,7 +20,6 @@ class ContractTotals {
     record Totals(long contracts, BigDecimal totalValue, long buyers) {
     }
 
-    /** The total value falls back to the initial value when the register does not publish a total. */
     Totals of(Specification<Contract> specification) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = cb.createTupleQuery();

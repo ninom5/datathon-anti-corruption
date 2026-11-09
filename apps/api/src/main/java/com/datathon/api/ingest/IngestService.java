@@ -20,11 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * One ingest run (docs/ARCHITECTURE.md §4): CKAN discovery, download and classification of every readable
- * "registar ugovora" resource, then import of class A and then A2 files from oldest to newest so that the newest
- * file wins on duplicate contracts, then the contract rules. Reference data (JPT, DZS) is refreshed first. Started from the admin endpoint, never on application start-up.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -61,7 +56,6 @@ public class IngestService {
         Map<String, Integer> skippedFormats = new TreeMap<>();
         List<StagedFile> staged = stageAll(runId, packages, skippedFormats);
         ImportStats importStats = importParsed(runId, staged, FormatClass.A);
-        // A2 after A: an A2 row is skipped when the buyer has class A data for the same year.
         ImportStats legacyStats = importParsed(runId, staged, FormatClass.A2);
         Map<String, Object> stats = new LinkedHashMap<>();
         stats.put("reference", referenceStats);
@@ -96,7 +90,6 @@ public class IngestService {
         return staged;
     }
 
-    /** One broken resource must not stop the run (skill rule: log, skip, continue). */
     private Optional<StagedFile> stageOne(Long runId, CkanPackage ckanPackage, CkanResource resource, String format) {
         try {
             return Optional.of(fileStager.stage(runId, ckanPackage, resource, format));
@@ -118,7 +111,6 @@ public class IngestService {
         return stats;
     }
 
-    /** Oldest file first, so that the newest file wins on duplicate contracts. */
     private ImportStats importParsed(Long runId, List<StagedFile> staged, FormatClass formatClass) {
         ImportStats total = new ImportStats();
         staged.stream()
@@ -129,7 +121,6 @@ public class IngestService {
         return total;
     }
 
-    /** One broken file must not stop the run (skill rule: log, skip, continue). */
     private ImportStats importOne(Long runId, StagedFile file) {
         try {
             ImportStats stats = file.formatClass() == FormatClass.A2

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Corrections and the right of reply (F12). Write-only: nothing sent here is public before moderation. */
 @RestController
 @RequestMapping("/api/v1/feedback")
 @RequiredArgsConstructor

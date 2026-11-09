@@ -1,4 +1,3 @@
-/* Same shape as Badge: the rule letter carries the meaning, colour only supports it. */
 .tag {
     display: inline-flex;
     align-items: center;

@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** A correction, context or right of reply sent through the form (F12). Published only after moderation. */
 @Entity
 @Table(name = "feedback")
 @Getter
@@ -29,7 +28,6 @@ public class Feedback {
     private FeedbackRole role;
     private String text;
 
-    /** Never returned by the API or logged; only for the moderator's reply. */
     private String contactEmail;
 
     private ModerationStatus moderation = ModerationStatus.NEW;

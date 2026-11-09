@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 
-/** Cache key of an assessment: {@code sha256(prompt_version + model + canonical context)} (§4.1). */
 final class ContextHash {
 
     private ContextHash() {

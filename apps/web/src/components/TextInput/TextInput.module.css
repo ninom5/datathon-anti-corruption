@@ -37,7 +37,6 @@
 @media (max-width: 768px) {
     .input {
         min-height: 42px;
-        /* 16 px stops iOS Safari from zooming into the field. */
         font-size: 1rem;
     }
 }

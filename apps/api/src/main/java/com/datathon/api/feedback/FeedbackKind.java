@@ -4,7 +4,6 @@ import com.datathon.api.common.persistence.DatabaseCode;
 import com.datathon.api.common.persistence.DatabaseCodeConverter;
 import jakarta.persistence.Converter;
 
-/** Ispravak, kontekst, pravo na odgovor ili zahtjev za uklanjanje; korisno/pogrešno are the AI assessment buttons (#44). */
 public enum FeedbackKind implements DatabaseCode {
     DATA_ERROR("greska_u_podacima"),
     CONTEXT("kontekst"),

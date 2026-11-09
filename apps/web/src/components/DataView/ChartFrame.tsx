@@ -8,7 +8,6 @@ interface ChartFrameProps {
     table: ReactNode;
 }
 
-/** Every visual has a keyboard-accessible, full-precision table alternative. */
 export const ChartFrame = ({title, description, children, table}: ChartFrameProps) => (
     <section className={styles.section}>
         <h2>{title}</h2>

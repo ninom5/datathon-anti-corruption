@@ -14,7 +14,6 @@ interface JlsTableProps {
     onSelect: (oib: string) => void;
 }
 
-/** The map as a table: keyboard and screen reader alternative, and a search over all 556 JLS. */
 export const JlsTable = ({municipalities, onSelect}: JlsTableProps) => {
     const [query, setQuery] = useState("");
     const [isWithDataOnly, setIsWithDataOnly] = useState(true);

@@ -4,16 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-/**
- * Binary metrics of docs/ANOMALY_DETECTION.md §4.6: "flag" means label != nema_oznake. Every ratio is null when its
- * denominator is 0, so an unmeasured number is never shown as 0.
- *
- * @param falsePositiveRate flags among the cases that should not be flagged
- */
 public record EvalMetrics(int cases, int truePositives, int falsePositives, int trueNegatives, int falseNegatives,
                           BigDecimal precision, BigDecimal recall, BigDecimal falsePositiveRate) {
 
-    /** One judged case: what a person (or the synthetic set) expects and what the AI said. */
     public record Pair(boolean expectedFlag, boolean actualFlag) {
     }
 
@@ -36,10 +29,6 @@ public record EvalMetrics(int cases, int truePositives, int falsePositives, int 
         return new EvalMetrics(pairs.size(), tp, fp, tn, fn, ratio(tp, tp + fp), ratio(tp, tp + fn), ratio(fp, fp + tn));
     }
 
-    /**
-     * Cohen's kappa of two binary raters: (p_o - p_e) / (1 - p_e). Null without cases, and when both raters always give
-     * the same single answer (p_e = 1, kappa undefined).
-     */
     public static BigDecimal cohensKappa(List<Pair> pairs) {
         if (pairs.isEmpty()) {
             return null;

@@ -6,10 +6,6 @@ interface OrganizationNameProps {
     showOib?: boolean;
 }
 
-/**
- * Names that may be a person's (crafts, unclassified suppliers) are replaced by the API with a placeholder (GDPR);
- * the OIB stays so the record can still be checked in the source.
- */
 export const OrganizationName = ({organization, showOib = false}: OrganizationNameProps) => {
     if (!organization) {
         return <span className={styles.muted}>nije objavljeno</span>;

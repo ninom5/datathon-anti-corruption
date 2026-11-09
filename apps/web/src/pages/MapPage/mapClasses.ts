@@ -7,10 +7,6 @@ export interface MapClassInfo {
     label: string;
 }
 
-/**
- * Indicators "vrijedi provjeriti" per 100 contracts. Fixed breaks (not quantiles) so the colour of a JLS keeps its
- * meaning when data is added. "Bez podataka" is its own patterned class, never the lightest colour.
- */
 export const MAP_CLASSES: MapClassInfo[] = [
     {key: "noData", label: "Bez strojno čitljivog registra"},
     {key: "c0", label: "0 (registar postoji)"},
@@ -32,5 +28,4 @@ export const classOf = (municipality: MunicipalityOverview | undefined): MapClas
     return "c4";
 };
 
-/** Rates from a handful of contracts swing wildly, so the panel warns below this many. */
 export const FEW_CONTRACTS = 20;

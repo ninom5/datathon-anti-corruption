@@ -17,10 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Looks up suppliers in the company register (Sudreg) in the background, one request per second, and stores a
- * snapshot per supplier. ~1.600 suppliers take about half an hour; progress via {@link #status()}.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -34,14 +30,10 @@ public class CompanyRegisterService {
     private final OrganizationRepository organizationRepository;
     private final TransactionTemplate transactionTemplate;
     private final JsonMapper jsonMapper;
-    /** Daemon thread: an unfinished lookup must never keep the JVM (or a test run) from exiting. */
     private final ExecutorService worker = Executors.newSingleThreadExecutor(
             Thread.ofPlatform().name("sudreg-lookup").daemon().factory());
     private final AtomicReference<RunStatus> current = new AtomicReference<>(RunStatus.idle());
 
-    /**
-     * @param stopReason null while running or when every supplier was looked up
-     */
     public record RunStatus(boolean running, int total, int done, int found, int notFound, int errors,
                             Instant startedAt, Instant finishedAt, String stopReason) {
 
@@ -63,7 +55,6 @@ public class CompanyRegisterService {
         return current.get();
     }
 
-    /** @param limit at most this many suppliers; null = all without a snapshot */
     public RunStatus start(Integer limit) {
         if (!sudregClient.isConfigured()) {
             throw new ExternalSourceException("Sudreg", "SUDREG_CLIENT_ID i SUDREG_CLIENT_SECRET nisu postavljeni.");

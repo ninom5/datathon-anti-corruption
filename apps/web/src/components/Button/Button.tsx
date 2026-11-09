@@ -39,7 +39,6 @@ export const ButtonLink = ({href, children, variant = "primary", size = "md", cl
     );
 };
 
-// A link that leaves the app but carries the weight of a button (the official call on a detail page).
 export const ExternalButtonLink = ({href, children, variant = "primary", size = "md", className}: ButtonLinkProps) => {
     return (
         <a

@@ -6,10 +6,6 @@ import jakarta.persistence.Converter;
 import java.util.Arrays;
 import java.util.Optional;
 
-/**
- * Band of the magnitude within one rule (bounds in thresholds.yaml, "bands"). A JavniRadar heuristic for filters and
- * reports; it is not a combined risk score and does not mix the three dimensions (work/decisions.md, 2026-11-03 #41).
- */
 public enum MagnitudeBand implements DatabaseCode {
     LOW("nizak"),
     MEDIUM("srednji"),

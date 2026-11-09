@@ -1,14 +1,14 @@
 # Evaluacija AI procjene
 
-Metoda je u `docs/ANOMALY_DETECTION.md` §4.6. Ovdje su **samo izmjerene brojke**, s datumom, modelom, verzijom prompta, n i troškom. Brojke koje još nisu izmjerene označene su kao takve.
+Metoda je u `ANOMALY_DETECTION.md` §4.6. Ovdje su **samo izmjerene brojke**, s datumom, modelom, verzijom prompta, n i troškom. Brojke koje još nisu izmjerene označene su kao takve.
 
 - **Model:** `claude-haiku-5-5` (effort `medium`), strukturirani izlaz, validator iz §4.4 i §4.7.
 - **Mjerenje:** "oznaka" znači `oznaka ≠ nema_oznake`. Odgovor koji validator odbaci računa se kao "bez oznake", jer korisnik tada ne vidi ništa.
-- **Sirovi rezultati** (svaki slučaj, razlozi, trošak) su u `work/eval/`.
+- **Sirovi rezultati** (svaki slučaj, razlozi, trošak) su u `docs/eval/`.
 
 ## 1. Sintetički skup (40 slučajeva)
 
-**Skup:** `apps/api/src/main/resources/ai/eval/synthetic-cases-v4.json`, generator `work/eval/generate_synthetic_cases.py`.
+**Skup:** `apps/api/src/main/resources/ai/eval/synthetic-cases-v4.json`, generator `docs/eval/generate_synthetic_cases.py`.
 - 21 slučaj treba označiti, 19 ne.
 - Očekivana oznaka je zapisana prije svakog runa.
 - Scenariji:
@@ -48,7 +48,7 @@ Nakon v4 skup se više ne mijenja.
 
 ## 2. Stvarni uzorak (60 ugovora)
 
-**Uzorak:** `work/eval/real-sample-seed44.csv`, ponovljiv odabir (`md5(id + "44")`) iz stvarnih ugovora klase A. Obrti, fizičke osobe i dobavljači bez OIB-a nisu u uzorku. Upute za označavanje su u `work/eval/README.md`.
+**Uzorak:** `docs/eval/real-sample-seed44.csv`, ponovljiv odabir (`md5(id + "44")`) iz stvarnih ugovora klase A. Obrti, fizičke osobe i dobavljači bez OIB-a nisu u uzorku. Upute za označavanje su u `docs/eval/README.md`.
 
 **Ručne oznake: još ih nema.** Zato **preciznost, odziv, stopa lažno pozitivnih i slaganje dvaju ocjenjivača nisu izmjereni** i ne objavljuju se.
 
@@ -85,5 +85,5 @@ Do 2026-11-04 je potrošeno ukupno **0,66 USD** (izvor: `llm_usage`):
 Jedan poziv stoji oko 0,0011–0,0016 USD. Svih 2.212 stvarnih ugovora koji ispunjavaju kriterije odabira stajalo bi oko 2,5–3,5 USD, ali ta procjena nije izmjerena punim runom.
 
 ## 4. Što slijedi
-- Dva člana tima upisuju oznake u `work/eval/real-sample-seed44.csv`. Zatim `POST /api/admin/ai/eval/real` (CSV u tijelu zahtjeva) računa metrike iz §4.6 i one se upisuju ovdje.
+- Dva člana tima upisuju oznake u `docs/eval/real-sample-seed44.csv`. Zatim `POST /api/admin/ai/eval/real` (CSV u tijelu zahtjeva) računa metrike iz §4.6 i one se upisuju ovdje.
 - Kad se spoji Sudreg (#46), NKD i datum osnivanja postaju stvarni podaci. Tada se ponavljaju obje evaluacije.

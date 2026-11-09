@@ -19,7 +19,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** One downloaded resource. Kept even when the download or classification failed, so coverage can be reported. */
 @Entity
 @Table(name = "source_file")
 @Getter

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.junit.jupiter.api.Test;
 
-/** Every case of docs/ANOMALY_DETECTION.md §4.4, plus the stricter additions noted in AiAssessmentValidator. */
 class AiAssessmentValidatorTest {
 
     private static final String ROW_URL = "https://primjer.invalid/registar.xlsx#sheet=1;row=12";

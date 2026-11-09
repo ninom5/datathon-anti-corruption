@@ -5,18 +5,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-/**
- * Organization type from the name only (docs/DATA_MODEL.md §3). Errs towards NATURAL_PERSON and CRAFT for names
- * that look personal, because showing a private person by mistake is worse than hiding a company (GDPR).
- * Rules were checked against supplier names of the 2026-11-02 ingest.
- */
 public final class OrganizationClassifier {
 
-    /** "Ivo", "IVO", "Ivić-Horvat", "IVIĆ-HORVAT". */
     private static final Pattern NAME_WORD = Pattern.compile("(\\p{Lu}\\p{Ll}+|\\p{Lu}{2,})(-(\\p{Lu}\\p{Ll}+|\\p{Lu}{2,}))?");
     private static final Pattern VOWEL = Pattern.compile("[AEIOUaeiou]");
     private static final List<String> FOREIGN_FORMS = List.of(" gmbh", " ltd", " inc", " s.p.a", " s.r.l", " kft", " sp. z o.o", " ag", " bv", " llc");
-    /** Personal businesses whose registered name contains the owner's name. */
     private static final List<String> CRAFT_WORDS = List.of("obrt", " vl.", " vl ", ",vl.", ",vl ", "opg ", "o.p.g",
             "obiteljsko poljoprivredno", "odvjetni", "ured ovlašten", "ured ovlasten", "ured ovl.", " član ", " clan ");
     private static final List<String> INSTITUTION_WORDS = List.of(
@@ -71,10 +64,6 @@ public final class OrganizationClassifier {
         return OrganizationType.OTHER;
     }
 
-    /**
-     * Crafts are registered as "NAZIV, IME PREZIME, MJESTO, ADRESA". Two or more commas without a legal form
-     * therefore point to a craft, i.e. a name that includes a private person.
-     */
     private static boolean looksLikeCraftRegistryName(String name) {
         return name.chars().filter(character -> character == ',').count() >= 2;
     }
@@ -97,7 +86,6 @@ public final class OrganizationClassifier {
         return true;
     }
 
-    /** "KSV", "HP": uppercase without vowels or of two letters is an abbreviation, not a first name or surname. */
     private static boolean isAcronym(String word) {
         boolean isUpperCase = word.equals(word.toUpperCase(Locale.ROOT));
         return isUpperCase && (word.length() <= 2 || !VOWEL.matcher(word).find());

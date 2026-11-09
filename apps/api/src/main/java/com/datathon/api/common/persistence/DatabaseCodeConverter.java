@@ -3,7 +3,6 @@ package com.datathon.api.common.persistence;
 import jakarta.persistence.AttributeConverter;
 import java.util.Arrays;
 
-/** Base converter: code English enums to the Croatian codes used by the CHECK constraints in V1__init.sql. */
 public abstract class DatabaseCodeConverter<E extends Enum<E> & DatabaseCode> implements AttributeConverter<E, String> {
 
     private final Class<E> type;

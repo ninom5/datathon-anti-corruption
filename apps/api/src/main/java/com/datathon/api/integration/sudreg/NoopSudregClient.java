@@ -3,7 +3,6 @@ package com.datathon.api.integration.sudreg;
 import com.datathon.api.common.ExternalSourceException;
 import java.util.Optional;
 
-/** Without credentials nothing is looked up; the AI context then keeps NKD and founding date as "nedostupno". */
 public class NoopSudregClient implements SudregClient {
 
     @Override

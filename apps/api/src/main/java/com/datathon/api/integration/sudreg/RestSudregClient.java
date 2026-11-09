@@ -1,7 +1,5 @@
 package com.datathon.api.integration.sudreg;
 
-// The answer is parsed into SudregCompany (NKD from pretezita_djelatnost, founding date, procedures); a 404 or empty answer is Optional.empty().
-
 import com.datathon.api.common.ExternalSourceException;
 import java.net.http.HttpClient;
 import java.time.Clock;
@@ -19,10 +17,6 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * OAuth2 client credentials; the token (6 h in the 2026-11-04 check) is kept in memory. Exception messages never
- * carry the request URL, the OIB or the credentials, because exception text is logged.
- */
 public class RestSudregClient implements SudregClient {
 
     private static final String SOURCE = "Sudreg";
@@ -89,7 +83,6 @@ public class RestSudregClient implements SudregClient {
         return retryWithNewToken(oib);
     }
 
-    /** A token can be revoked before it expires, so one 401 gets a single retry with a fresh token. */
     private Optional<String> retryWithNewToken(String oib) {
         try {
             return Optional.ofNullable(requestDetails(oib, token()));
@@ -127,7 +120,6 @@ public class RestSudregClient implements SudregClient {
         }
     }
 
-    /** Keeps a safety margin, but never more than half of a short lifetime, so a 30 s token is still reused. */
     private static Duration usableLifetime(Duration lifetime) {
         Duration margin = TOKEN_EXPIRY_MARGIN.compareTo(lifetime.dividedBy(2)) < 0
                 ? TOKEN_EXPIRY_MARGIN

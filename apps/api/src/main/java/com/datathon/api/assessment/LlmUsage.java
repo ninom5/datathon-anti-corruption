@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** One model call (or cache hit) with tokens and cost (docs/ARCHITECTURE.md §7). */
 @Entity
 @Table(name = "llm_usage")
 @Getter

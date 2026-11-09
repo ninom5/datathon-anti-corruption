@@ -1,183 +1,206 @@
-# JavniRadar – arhitektura (MVP u 8 dana)
+# JavniRadar – tehnička arhitektura
 
-## 1. Odluka o stacku [PRIJEDLOG, čeka potvrdu tima]
+_Tim Nazor · Datathon Portala otvorenih podataka 2026 · izazov A. Stanje koda: grana `main` (PR #55), provjereno 2026-11-08._
 
-Brief je predlagao Python + FastAPI. **Preporučujemo Javu/Spring Boot za ingest, pravila i API**, uz isti React frontend. Obrazloženje:
+Ovaj dokument opisuje **ono što je implementirano**. Podatkovni model je u [`DATA_MODEL.md`](DATA_MODEL.md), a pravila i AI procjena u [`ANOMALY_DETECTION.md`](ANOMALY_DETECTION.md).
 
-| Činjenica (provjereno u repou) | Posljedica |
-|---|---|
-| Ovaj repo već ima `apps/api` (Spring Boot 4, Java 25, JPA, PostgreSQL 17 u Dockeru) i `apps/web` (React 19, TS, Vite, wouter, TanStack Query) | Stack je već postavljen i tim ga je odabrao |
-| Kod za ponovnu upotrebu (`PoliteHttpClient`, `RobotsRules`, `DiskCache`, `HostThrottle`, `RestSudregClient`, `FixtureSudregClient`, `PdfTextExtractor`, `AmountParser`, `CroatianDates`, AI paket s `LlmUsage`) postoji **samo u Javi**, u repou `Desktop/datathon` | Prepisivanje u Python stoji 1–2 dana, a nemamo ih |
-| Tim je u tom repou isporučio 288 prolaznih testova u Javi | Java je dokazana brzina tima |
-| Jedan jezik za ingest, pravila i API | Nema ljepila između jezika i nema dvostrukih modela |
-
-**Python se koristi samo za istraživanje i evaluaciju** (`tools/notebooks`, skripte s `pandas`/`openpyxl`). Python **nije** u produkcijskom toku.
-**Baza: PostgreSQL** (već je u `docker-compose.yml`). DuckDB ne treba: podataka je malo (< 100 k redaka), a Postgres daje `pg_trgm` za pretragu po nazivu i JSONB za dokaze.
-**Rizik:** ako tim zaključi da je Python brži, data model i API ugovor iz ovih dokumenata vrijede bez promjene. Mijenja se samo §2.
-
-## 2. Ponovna upotreba koda iz `Desktop/datathon` (drugi projekt, agregator natječaja)
-
-U ovom repou **nema mape `poc/`**. Kod koji se može ponovno iskoristiti je u susjednom repou `C:\Users\Nino\Desktop\datathon` (branch `sime/ingest-other-sources`, AI na `origin/feature/pkg-5-ai`). Taj repo ostaje netaknut, a datoteke **kopiramo** uz bilješku o porijeklu u zaglavlju klase.
-
-| Komponenta (paket u izvoru) | Što radi | Kako je koristimo |
-|---|---|---|
-| `ingest/http/PoliteHttpClient`, `RobotsRules`, `HostThrottle`, `DiskCache`, `TextDecoder` | robots.txt, razmak između zahtjeva po hostu, retry na 429/5xx, disk cache, dekodiranje cp1250/UTF-8 | sav download (CKAN, resursi, JPT, DZS). **User-Agent mijenjamo** u `JavniRadar/0.1 (studentski projekt; kontakt)` |
-| `integration/sudreg/*` (`SudregClient`, `RestSudregClient`, `FixtureSudregClient`, `SudregCompany`, `NkdAreaMapper`) | OAuth2 client credentials; fixture ako ključ nije postavljen; poruke grešaka bez OIB-a | pravilo B, AI kontekst; fixture za sintetički demo |
-| `ingest/extract/PdfTextExtractor`, `AmountParser`, `CroatianDates` | tekst iz PDF-a, parsiranje "1.500,00 kn", hrvatski datumi | parser klasa B/C/D, priprema za LLM |
-| `ai/*` (`LlmUsage`, `LlmUsageRepository`, `*Schema`, `BatchRunner`, `*Merger`) | strukturirani izlaz, evidencija troška, batch | AI procjena i ekstrakcija |
-| `.claude/skills/spring-boot-api`, `react-web` | konvencije koda | kopirati u `.claude/skills/` |
-
-**Ne koristimo:** izvore natječaja (HZZ, APPRRR, MZOM, NN), modele domene natječaja.
-
-## 3. Dijagram
+## 1. Dijagram
 
 ```mermaid
 flowchart LR
-  subgraph Izvori
-    CKAN[data.gov.hr CKAN API]
-    RES[Resursi: XLSX/CSV/JSON registri ugovora]
-    JPT[JPT REST API]
-    DZS[DZS Popis 2021 XLSX]
-    OCDS[OCP registar: EOJN OCDS]
-    SUD[Sudski registar API OAuth2]
+  subgraph Izvori["Javni izvori"]
+    CKAN["data.gov.hr<br/>CKAN API"]
+    REG["Registri ugovora JLS<br/>XLSX / XLS / CSV"]
+    JPT["JPT REST API<br/>jpt.gov.hr"]
+    DZS["DZS Popis 2021<br/>XLSX"]
+    SUD["Sudski registar API<br/>OAuth2"]
+    GEO["geoBoundaries / OSM<br/>GeoJSON (offline)"]
   end
-  subgraph Ingest[apps/api – ingest modul]
-    DISC[Discovery] --> DL[PoliteHttpClient + cache]
-    DL --> PARSE[Parseri: EOJN-format / CSV / LLM ekstrakcija]
-    PARSE --> VAL[Validacija + normalizacija]
-    VAL --> MATCH[Entity matching OIB / naziv]
+
+  subgraph API["apps/api – Spring Boot 4, Java 25"]
+    ING["ingest<br/>PoliteHttpClient, FormatClassifier,<br/>Eojn/Legacy parseri, normalizacija"]
+    REF["reference<br/>JPT + DZS → municipality,<br/>usporedne skupine P1–P7"]
+    ORG["organization<br/>OIB matching, tip subjekta,<br/>Sudreg snimke"]
+    RUL["rules<br/>D, F, C, B (deterministička)"]
+    AI["assessment<br/>odabir, kontekst, Claude,<br/>validator, cache, budžet"]
+    REST["REST /api/v1 (javno)<br/>/api/admin (X-Admin-Token)"]
   end
-  subgraph Analiza
-    RULES[Pravila C, D, F (+B, G)]
-    AI[AI procjena Haiku → Sonnet + validator]
-  end
-  DB[(PostgreSQL)]
-  API[REST /api/v1]
-  WEB[React web]
-  CKAN --> DISC; RES --> DL; JPT --> DL; DZS --> DL; OCDS --> DL; SUD --> MATCH
-  MATCH --> DB --> RULES --> DB
-  DB --> AI --> DB
-  DB --> API --> WEB
+
+  DB[("PostgreSQL 17<br/>Flyway V1–V5")]
+  LLM["Claude API<br/>(Anthropic)"]
+  WEB["apps/web – React 19 + Vite<br/>karta, profil, istraživač,<br/>indikator, usporedba, izvori"]
+
+  CKAN --> ING
+  REG --> ING
+  JPT --> REF
+  DZS --> REF
+  SUD --> ORG
+  ING --> DB
+  REF --> DB
+  ORG --> DB
+  DB --> RUL --> DB
+  DB --> AI
+  AI <--> LLM
+  AI --> DB
+  DB --> REST --> WEB
+  GEO -. "build_jls_geojson.py" .-> WEB
 ```
 
-## 4. Ingest pipeline
+## 2. Moduli
 
-| Korak | Ulaz | Izlaz | Napomene |
-|---|---|---|---|
-| 1. Discovery | CKAN `package_search?q=registar ugovora&rows=1000`, `organization` | `source_dataset`, `source_resource` | spremamo `metadata_modified`, licencu i format |
-| 2. Download | URL resursa | `source_file` (sha256, veličina, `retrieved_at`, HTTP status) | `PoliteHttpClient`; 1 zahtjev/s po hostu; preskok ako se sha256 nije promijenio |
-| 3. Klasifikacija | prvih 15–20 redaka svakog lista | `format_class` A/B/C/D | **A** ako red zaglavlja sadrži ≥ 25 od 33 stupca EOJN izvoza (`EojnColumn`); B = red zaglavlja sa stupcem "OIB"; C = red zaglavlja bez OIB-a; D = ostalo. Stari EOJN izvještaj (18 stupaca) je B, vidi `work/decisions.md` 2026-11-02 |
-| 4. Parsiranje | A: Apache POI, traži red zaglavlja (prvih 15 redaka); CSV: detekcija kodiranja i separatora; B/C/D: LLM ekstrakcija (Should) | `raw_contract_row` (JSONB izvornog retka + `row_number`) | redak se nikad ne gubi; neparsirano ide u `ingest_issue` |
-| 5. Normalizacija | raw | `contract` | iznos: `"1.500,00"` → 1500.00; HRK → EUR /7,53450 za datume < 2023-01-01; datum: Excel serial / `dd.MM.yyyy.`; CPV: prvih 8 znamenki; OIB: 11 znamenki + kontrolna znamenka (ISO 7064 MOD 11,10) |
-| 6. Validacija | contract | `ingest_issue` | vidi §6 |
-| 7. Matching | OIB / naziv | `organization` | vidi `DATA_MODEL.md` §4 |
-| 8. Pravila | contract, reference | `indicator` | deterministički, verzionirano |
-| 9. AI | contract + indikatori | `ai_assessment` | samo ako je `ANTHROPIC_API_KEY` postavljen i budžet nije potrošen |
-
-Pokretanje: `POST /api/admin/ingest/run` s headerom `X-Admin-Token` (= env `ADMIN_TOKEN`; bez njega se svaki admin poziv odbija), sinkrono, ~5 min. Ponovni run preskače datoteke s istim URL-om i sha256 koje su već uvezene. Cron kasnije. Za MVP je dovoljan **ručni run + GitHub Actions `workflow_dispatch`** ili Spring `@Scheduled` noću. Svaki run je zapis u `ingest_run`.
-Nakon uvoza ingest pokreće deterministička pravila (`RulesService`). Pravila se mogu ponovno izračunati bez ingesta: `POST /api/admin/rules/run` (npr. nakon promjene `thresholds.yaml`). Sintetički skup se učitava s `POST /api/admin/synthetic/load`: CSV iz `src/main/resources/synthetic/` pretvara se u XLSX i prolazi isti čitač, parser i pravila kao stvarna datoteka. Očekivani ishodi su samo u testnim fixtureima (`fixtures/synthetic/expected.csv`).
-
-## 5. REST API (`/api/v1`, JSON, samo čitanje osim povratnih informacija)
-
-| Metoda | Putanja | Opis |
+| Modul | Paket / mapa | Odgovornost |
 |---|---|---|
-| GET | `/search?q=&type=` | brza pretraga naručitelja, dobavljača i ugovora (`pg_trgm`) |
-| GET | `/contracts?buyer=&supplier=&cpv=&procedure=&min=&max=&from=&to=&has_indicator=&page=` | istraživač ugovora |
-| GET | `/contracts/{id}` | ugovor + indikatori + AI procjena + dokazi |
-| GET | `/buyers/{oib}` | profil naručitelja (JLS): potrošnja po CPV, po stanovniku, indikatori |
-| GET | `/municipalities` | svih 556 JLS za kartu: ugovori, godine, indikatori "vrijedi provjeriti" i informativni, na 100 ugovora (`null` = nema registra) (#43) |
-| GET | `/municipalities/{oib}/peers?year=&cpv2=` | usporedba sa skupinom P1–P7: € po stanovniku, medijan, rang, n, `sufficient` (n ≥ 8) (#43) |
-| GET | `/suppliers/{oib}` | profil dobavljača (ugovori, naručitelji, Sudreg snapshot) |
-| GET | `/indicators?rule=&county=&buyer=` | popis indikatora |
-| GET | `/indicators/{id}` | detalj indikatora (3 dimenzije, dokazi, "što ovo NE znači") |
-| GET | `/sources` | izvori, licence, zadnji uspješni dohvat, broj zapisa |
-| GET | `/methodology` | verzije pravila, pragovi, evaluacija AI-ja |
-| POST | `/feedback` | ispravak ili pravo na odgovor. **Napravljeno (#45):** tijelo `{targetType: indicator\|contract, targetId, kind: greska_u_podacima\|kontekst\|pravo_na_odgovor\|uklanjanje_osobnih_podataka, role?, text (10–4.000), contactEmail?}`; `contactEmail` obavezan za pravo na odgovor i uklanjanje. Odgovor 201 `{id, targetType, targetId, kind, moderation, createdAt}` (e-mail se ne vraća). 404 za neaktivan indikator ili skriven ugovor, 429 iznad 10/min po IP-u |
-| POST | `/ask` | (Should) pretraga prirodnim jezikom → strukturirani filter |
+| Ingest | `apps/api/.../ingest` (`IngestService`, `FormatClassifier`, `eojn/EojnRegisterParser`, `eojn/LegacyRegisterParser`, `normalize/*`, `http/*`) | otkrivanje skupova preko CKAN-a, pristojan download (robots.txt, 1 zahtjev/s po hostu, retry, disk cache, sha256), klasifikacija formata (A, A2, B, C, D), parsiranje, normalizacija iznosa, datuma, OIB-a, CPV-a i valute (HRK → EUR po 7,53450), deduplikacija |
+| Referentni podaci | `reference` (`JptImporter`, `DzsCensusReader`, `MunicipalityImporter`, `PeerGroups`) | 4.678 javnopravnih tijela, 556 JLS sa stanovništvom, usporedne skupine po veličini |
+| Organizacije | `organization` (`OrganizationResolver`, `OrganizationClassifier`, `CompanyRegisterService`) | jedinstveni naručitelji i dobavljači po OIB-u, tip (`jls`, `doo`, `obrt`, `fizicka_osoba`…), Sudreg snimke |
+| Pravila | `rules` (`ValueIncreaseRule`, `OverpaymentRule`, `SplittingRule`, `ConcentrationRule`, `YoungCompanyRule`, `RulesService`) | deterministički indikatori s verzijom, pragovima iz `config/thresholds.yaml` i dokazima |
+| AI procjena | `assessment` (`AiCandidateSelector`, `AiContextBuilder`, `AiRunService`, `AiAssessmentValidator`) + `integration/anthropic` | procjena ugovora uz pravila, nikad spojena s njima |
+| Integracije | `integration/ckan`, `integration/jpt`, `integration/sudreg`, `integration/anthropic` | klijenti vanjskih API-ja; bez ključa se uključuju `Noop*` inačice |
+| Izvori | `source` | pokrivenost, status datoteka, problemi ingesta |
+| Općine | `municipality` | karta (556 JLS) i usporedba sa skupinom |
+| Jezik | `wording` + `resources/wording/forbidden_terms_hr.txt` | popis zabranjenih riječi; test ga provjerava |
+| Web | `apps/web/src` (`pages/*`, `api/*`, `components/*`) | 8 stranica: početna, istraživač ugovora, detalj ugovora, profil naručitelja, detalj indikatora, izvori, karta, usporedba |
 
-**Primjer** `GET /api/v1/contracts/123`:
-```json
-{
-  "id": 123,
-  "buyer": {"oib": "00000000002", "name": "Općina Primjerovo", "population": 3120, "peerGroup": "P2"},
-  "supplier": {"oib": "00000000001", "name": "Primjer d.o.o.", "type": "LLC"},
-  "subject": "Rekonstrukcija nerazvrstane ceste",
-  "cpv": {"code": "45233140", "label": "Radovi na cestama"},
-  "procedureType": "Otvoreni postupak",
-  "dateSigned": "2025-03-10",
-  "values": {"initialValue": 200000.00, "amendmentsValue": 150000.00, "totalValue": 350000.00, "paidAmount": null, "currency": "EUR", "vatIncluded": false},
-  "indicators": [{"id": 1, "ruleCode": "D_VALUE_INCREASE", "magnitude": {"value": 0.75, "unit": "udio", "label": "+75 %"},
-                  "dataQuality": "visoka", "evidenceStrength": "srednja"}],
-  "aiAssessment": {"label": "WORTH_CHECKING", "badge": "AI procjena – zahtijeva ljudsku provjeru", "model": "claude-haiku-5-5"},
-  "provenance": {"sourceUrl": "https://data.gov.hr/…/registar-ugovora.xlsx", "locator": "sheet=1;row=41", "retrievedAt": "2026-11-03T09:12:00Z",
-                 "method": "PARSER", "confidence": 1.0, "eojnUrl": "https://eojn.hr/contract-eo/000000"},
-  "synthetic": true
-}
-```
-**Implementirano u POC-u (2026-11-02):**
-| Metoda | Putanja | Napomena |
+## 3. Tok podataka
+
+1. **Otkrivanje:** `CkanClient` zove `package_search?q=registar ugovora&rows=1000`. Spremaju se skup, izdavatelj, licenca i `metadata_modified` (`source_dataset`).
+2. **Download:** `PoliteHttpClient` preuzima XLSX/XLS/CSV resurse i bilježi URL, HTTP status, veličinu, sha256 i vrijeme (`source_file`).
+3. **Klasifikacija i parsiranje:** klasa A (33-stupčani EOJN izvoz) i A2 (stari EOJN izvještaj) se parsiraju. B, C i D se evidentiraju kao „format nije podržan” ili „nestrukturirano”.
+4. **Provenancija:** svaki izvorni redak ostaje u `raw_record` (JSONB + lokator `sheet;row`). Ugovor pokazuje na `provenance` (metoda, verzija parsera, pouzdanost).
+5. **Normalizacija i validacija:** problemi idu u `ingest_issue` (npr. `supplier_oib_invalid_checksum`, `hrk_after_euro`). Redak bez naručitelja, iznosa ili datuma se odbacuje.
+6. **Spajanje:** naručitelj i dobavljač po OIB-u → `organization`; naručitelj → JPT (vrsta, županija, osnivači) → DZS (stanovništvo).
+7. **Pravila:** `RulesService` računa indikatore nakon ingesta ili na `POST /api/admin/rules/run`.
+8. **Sudreg (opcionalno):** `POST /api/admin/sudreg/run` dohvaća snimke dobavljača (samo `doo`, `jdoo`, `dd`, `javno_tijelo`).
+9. **AI (opcionalno):** `POST /api/admin/ai/run` procjenjuje odabrane ugovore.
+10. **Prikaz:** REST API → React. Demo radi iz baze, nikad uživo s vanjskog izvora.
+
+## 4. Povezivanje izvora (ključevi)
+
+| Spoj | Ključ | Napomena |
 |---|---|---|
-| GET | `/contracts?buyerOib=&supplierOib=&year=&hasIndicator=&severity=&ruleCode=&band=&synthetic=&sort=&page=&size=` | `severity` je `vrijedi_provjeriti` ili `informativno`; `ruleCode` je lista (`D_VALUE_INCREASE,F_SPLITTING`), `band` je `nizak`/`srednji`/`visok`; `severity`, `ruleCode` i `band` moraju vrijediti za **isti** indikator. Uključuje skupne indikatore F i C (tablica `indicator_contract`). `synthetic` je zadano `false`; `sort` je `dateSigned` (zadano) ili `value` |
-| GET | `/contracts/summary` (isti filtri) | brojke za traku istraživača; samo stvarni podaci. **Od #41 obrti ulaze u brojke** (`craftContracts` kaže koliko), a isključeni su samo iz lista s nazivima. `possibleEntryErrors` broji samo informativne indikatore pravila D (kod F i C "informativno" je legitiman kontekst, ne greška). `contractsByRule` je broj ugovora po pravilu uz filtar bez vlastitog izbora pravila |
-| GET | `/contracts/{id}` (#44: AI) | `aiAssessment` (`label`, `confidence`, `reasons[]` s `claim`, `fields`, `sources`, `missingData`, `legitExplanations`, `model`, `promptVersion`, `createdAt`, `badge` "AI procjena – zahtijeva ljudsku provjeru") ili `null` uz `aiAssessmentUnavailableReason` ("AI procjena nije dostupna." / "AI procjena se ne radi za obrte i fizičke osobe."). Samo prihvaćena procjena |
-| POST | `/api/admin/ai/eval/synthetic`, `/api/admin/ai/eval/real-sample/run?seed=&size=&dryRun=`, `/api/admin/ai/eval/real` (CSV u tijelu); GET `/api/admin/ai/eval/real-sample?seed=&size=` (#44) | evaluacija AI-ja (`docs/EVALUATION.md`), `X-Admin-Token`. Sintetika i run uzorka zovu model |
-| POST | `/api/admin/sudreg/run?limit=`, GET `/api/admin/sudreg/status` (#46) | dohvat dobavljača iz Sudskog registra u pozadini (1 zahtjev/s, samo tvrtke i javna tijela), napredak i rezultat; traži `SUDREG_CLIENT_ID/SECRET` |
-| POST | `/api/admin/ai/run?limit=&synthetic=&dryRun=&contractIds=` (#44) | `X-Admin-Token`. `dryRun=true` (zadano) ne zove model: broj kandidata (`eligible`, `candidates`), pogoci u cacheu, primjer konteksta, gruba procjena troška. Pravi run vraća `called`, `cacheHits`, `accepted`, `rejected`, `errors`, `notProcessed`, `stopReason`, `costUsd`. Bez ključa: `configured=false`, "AI nije konfiguriran" |
-| GET | `/contracts/{id}` | vrijednosti, indikatori (tri dimenzije, `sourceExplanation`, `possibleEntryError`, dokazi, "što ovo NE znači"), provenancija (skup, izdavatelj, datoteka, lokator, vrijeme dohvata, metoda, pouzdanost) |
-| GET | `/buyers?synthetic=` | naručitelji s brojem ugovora, za filtar; `type` je `jls`, `zupanija` ili `javno_tijelo` |
-| GET | `/buyers/{oib}` (#41) | profil: `coverage` ("2018.–2026., 2026. nepotpuna"), `byYear`, `byCpv` (CPV2), `topSuppliers` (najviše 10, **bez obrta**; `craftContracts` ih broji), `indicatorCounts` i `indicators`, `sources` (skup, klasa formata, datoteke), `jpt` (oznaka, vrsta, županija), `municipality` (DZS 2021, usporedna skupina). 404 za nepoznat OIB, 400 za neispravan |
-| GET | `/indicators?ruleCode=&buyerOib=&band=&severity=&synthetic=&page=&size=` (#41) | indikatori svih pravila; svaki ima `subjectType` (`contract`, `group` za F, `buyer_cpv` za C), `contractIds`, `buyer`, `magnitude.band` i tri odvojene dimenzije. Sortirano po pravilu, pa po veličini odstupanja |
-| GET | `/sources?synthetic=&page=&size=` | skupovi s datotekama: status (`uvezeno`, `format_nije_podrzan`, `nestrukturirano`, `necitljivo`, `nedostupno`), vrijeme dohvata, broj redaka i ugovora |
-| GET | `/sources/summary` | pokrivenost: skupovi, datoteke po statusu, naručitelji po tipu, ugovori po godini (`incomplete` za godinu koja nije završila u trenutku dohvata), skriveni ugovori s fizičkim osobama, problemi ingesta po kodu |
+| Ugovor → naručitelj / dobavljač | **OIB** (11 znamenki, kontrolna znamenka ISO 7064 MOD 11,10, `OibValidator`) | A2: naručitelj iz retka „Naručitelj:” ili izdavatelja na CKAN-u, pa OIB iz JPT-a po jedinstvenom normaliziranom nazivu |
+| Naručitelj → JPT | **OIB** | daje vrstu tijela, županiju i **osnivače** |
+| Dobavljač → JPT osnivači | **OIB osnivača = OIB naručitelja** | „naručitelj je osnivač dobavljača” (npr. komunalno poduzeće) kao legitiman kontekst za F i C (`JptDirectory.isSupplierFoundedByBuyer`) |
+| JPT → DZS | **(normalizirana županija, vrsta, normalizirani naziv JLS)** | DZS nema OIB ni šifru; 556/556 JLS spojeno |
+| Dobavljač → Sudski registar | **OIB** | datum osnivanja, NKD, stečaj/likvidacija |
+| JLS → granica na karti | **OIB** iz naše tablice `municipality`, dodan u GeoJSON spajanjem po nazivu (skripta) | 542/556 |
+| Ugovor → EOJN | `eojn_contract_url` iz izvornog registra | samo poveznica, bez dohvata |
+| Ugovor → kategorija | **CPV 2008** (8 znamenki, odjeljak = prve 2) | usporedba i pravila F i C |
 
-- **GDPR:** ugovor s fizičkom osobom vraća 404 i ne pojavljuje se u listama. Obrt se vraća kao `{"name": "Obrt (naziv skriven)", "nameHidden": true, "oib": ...}`.
-- **Nepotpuna godina:** `yearIncomplete = true` za godine od godine zadnjeg dohvata (`DataCoverage`), tj. 2026. u POC-u.
+**Nova vrijednost iz spajanja:** iznos po stanovniku unutar usporedne skupine (ugovori × DZS), prepoznavanje vlastitih komunalnih društava (ugovori × JPT osnivači), mlada tvrtka i nesklad djelatnosti i predmeta (ugovori × Sudreg NKD).
 
-JSON polja su camelCase na engleskom, prema rječniku u skillu `spring-boot-api`. Liste vraćaju `{content, totalElements, page, size}` (zadano `size = 20`, najviše 100).
+## 5. AI obrada
 
-**Greške:** jedinstveni oblik koji frontend već očekuje (`apps/web/src/types/ErrorResponse.type.ts`): `{statusCode, message, error}`, s porukom na hrvatskom. Odgovori ne sadrže stack traceove, OIB-ove ni URL-ove vanjskih servisa (obrazac iz `RestSudregClient`).
+- **Model:** `claude-haiku-5-5` (zadano, `AI_MODEL`), effort `medium`, **strukturirani izlaz** prema JSON shemi `resources/ai/ai-flag-v3.schema.json`; prompt `resources/ai/ai-flag-v3.txt`.
+- **Kandidati:** ugovori s barem jednim indikatorom pravila, ugovori ≥ 20.000 € ili s generičkim predmetom. **Ne procjenjuju se** obrti, fizičke osobe ni subjekti tipa `ostalo`/`nepoznato` (GDPR).
+- **Kontekst:** kanonski JSON (ugovor, indikatori, statistika usporedne skupine kad je n ≥ 8, prag jednostavne nabave, Sudreg podaci s izvorom i datumom). Tekst iz registara ulazi samo kao podatak u JSON poljima.
+- **Validator** (`AiAssessmentValidator`), deterministički, nakon svakog poziva: razlog mora citirati polja iz konteksta; zabranjene riječi odbacuju cijeli odgovor; tvrdnja > 300 znakova se odbacuje; „visoka pozornost” s manje od dva razloga postaje „vrijedi provjeriti”; usporedba s općinama bez statistike skupine se odbacuje. Odbačeni odgovori se ne prikazuju.
+- **Cache i budžet:** ključ je hash konteksta + model + verzija prompta; `llm_usage` bilježi tokene i trošak; run staje na `AI_MAX_USD_PER_RUN` (zadano 2 USD) i `AI_MAX_CALLS_PER_RUN` (300). Bez `ANTHROPIC_API_KEY` aplikacija i pravila rade normalno.
+- **Prikaz:** blok „AI procjena – zahtijeva ljudsku provjeru” na dnu detalja ugovora, s razlozima, citiranim poljima, mogućim legitimnim objašnjenjima i podacima koji nedostaju.
+- **Izmjereno** ([`EVALUATION.md`](EVALUATION.md)): sintetika 40 slučajeva, `ai-flag-v3`, dva runa: preciznost 1,00, odziv 0,905 i 0,952, 0 lažno pozitivnih. Na stvarnom uzorku (60) **nema ručnih oznaka**, pa preciznost na stvarnim podacima nije izmjerena. U lokalnoj bazi: 300 prihvaćenih procjena (280 stvarnih, 20 sintetičkih), ukupni trošak svih poziva 0,73 USD (609 zapisa u `llm_usage`).
 
-## 6. Validacija i greške
-- **Redak se odbacuje** ako nema naručitelja, iznosa ili datuma. Zapis ide u `ingest_issue(severity=error)`.
-- **Upozorenje** (redak ostaje, `data_quality` pada): neispravna kontrolna znamenka OIB-a, iznos ≤ 0 ili > 100 M €, datum u budućnosti, CPV bez 8 znamenki, iznos u kunama nakon 2023.
-- **Vanjski izvor nedostupan:** run označava izvor kao `failed`, a stari podaci ostaju (`last_successful_fetch` u `/sources`). Demo radi iz baze, nikad uživo s vanjskog izvora.
-- **LLM greška ili timeout:** zapis bez AI procjene; UI prikazuje "AI procjena nije dostupna". Pravila ne ovise o tome.
+## 6. REST API
 
-## 7. Opservabilnost
-- Strukturirani logovi (JSON) s `run_id` i `source`, bez OIB-a fizičkih osoba.
-- `ingest_run`: broj preuzetih, parsiranih, odbačenih i spojenih zapisa po izvoru.
-- `llm_usage`: tokeni, trošak, model, cache hit.
-- `/actuator/health` i `/api/v1/sources`, koji služi i kao javna stranica "Stanje podataka".
+Sve rute su iz `@*Mapping` anotacija u `apps/api/src/main/java`. JSON, camelCase. Liste vraćaju `{content, totalElements, page, size}`. Greške: `{statusCode, message, error}`.
 
-## 8. Sigurnost
-- Nema korisničkih računa u MVP-u. Admin endpointi traže `X-Admin-Token` iz env varijable.
-- Tajne (`ANTHROPIC_API_KEY`, `SUDREG_CLIENT_ID/SECRET`) samo u env varijablama. `.env` je u `.gitignore`.
-- Rate limit na `/feedback` i `/ask` (10/min po IP-u). Captcha se ne koristi. `/feedback` koristi vlastiti `FeedbackRateLimiter` u memoriji, bez Bucket4j (#45, `work/decisions.md`).
-- Escape svog teksta iz izvora u UI-ju (React to radi po zadanim postavkama; bez `dangerouslySetInnerHTML`).
-- Prompt injection: tekst iz registara ide u prompt **samo kao podatak** unutar JSON polja. Validator odbacuje izlaz koji citira polja ili URL-ove izvan konteksta.
-- CORS samo za domenu frontenda.
+**Javno (`/api/v1`, samo čitanje):**
 
-## 9. Pravni, organizacijski i tehnički preduvjeti
-
-| Područje | Preduvjet | Kako ga ispunjavamo |
+| Metoda | Ruta | Opis |
 |---|---|---|
-| **Ponovna uporaba** | Zakon o pravu na pristup informacijama (ZPPI) + Pravilnik o dozvolama za ponovnu uporabu (NN 67/17): otvorena dozvola traži **navođenje izvora** | izvor i poveznica uz svaki broj; stranica "Izvori i licence" |
-| **GDPR** | Registri malih općina sadrže **fizičke osobe** (ugovori o djelu, najam, darovanje) i **obrte** (ime i prezime vlasnika u nazivu) | MVP **ne prikazuje** ugovore s fizičkim osobama (`supplier.type = fizicka_osoba` → filtrirano). Obrti se prikazuju kao poslovni subjekti, ali **bez** AI procjene i bez "profila osobe". Pravna osnova je javni interes / legitimni interes transparentnosti [PRETPOSTAVKA, treba pravnu provjeru]. Postoji zahtjev za uklanjanje preko `/feedback` |
-| **Kleveta / odgovornost** | Netočna ili tendenciozna oznaka može naštetiti ugledu tvrtke ili općine | politika neutralnog jezika (popis zabranjenih riječi, test); svaki indikator ima "što ovo NE znači"; **pravo na odgovor** (§ `FEATURES.md` F12); vidljiva verzija pravila i datum izračuna |
-| **Sudski registar** | Registracija za OAuth2 ključ; uvjeti korištenja [NEVERIFICIRANO] | zahtjev odmah (vidi `MVP_ROADMAP.md`); do tada `FixtureSudregClient` samo sa sintetičkim OIB-ima |
-| **EOJN** | robots.txt zabranjuje struganje eojn.hr; uvjeti nisu pročitani | ne strugamo; OCDS iz OCP registra; budućnost: službeni API (vidi §10) |
-| **Organizacijski** | Tko održava podatke, tko odgovara na prigovore | MVP: tim, rok odgovora 7 dana; budućnost: partner (udruga, fakultet) ili MPUDT |
-| **Licenca koda** | OSS (boduje se) | prijedlog: **EUPL-1.2** (kompatibilna s javnim sektorom EU) ili MIT. Javna objava ovisi o sigurnosnoj politici organizacije (otvoreno, `work/decisions.md`) |
-| **AI** | Pravila natjecanja traže navođenje AI alata | odjeljak "Korišteni alati" u README-u (Claude API, Claude Code) |
+| GET | `/api/v1/contracts?buyerOib=&supplierOib=&year=&hasIndicator=&severity=&ruleCode=&band=&synthetic=&sort=&page=&size=` | istraživač ugovora |
+| GET | `/api/v1/contracts/summary` (isti filtri) | brojke za traku istraživača |
+| GET | `/api/v1/contracts/{id}` | ugovor, indikatori (tri dimenzije), provenancija, AI procjena ili razlog zašto je nema |
+| GET | `/api/v1/indicators?ruleCode=&buyerOib=&band=&severity=&synthetic=&page=&size=` | popis indikatora |
+| GET | `/api/v1/indicators/{id}` | detalj indikatora s dokazima i „što ovo NE znači” |
+| GET | `/api/v1/buyers?synthetic=` | naručitelji |
+| GET | `/api/v1/buyers/{oib}` | profil naručitelja: po godini, po CPV-u, glavni dobavljači (bez obrta), indikatori, izvori, JPT, DZS |
+| GET | `/api/v1/municipalities` | svih 556 JLS za kartu |
+| GET | `/api/v1/municipalities/{oib}/peers?year=&cpv2=` | usporedba sa skupinom (medijan, rang, n, `sufficient` za n ≥ 8) |
+| GET | `/api/v1/sources?synthetic=&page=&size=` | skupovi i datoteke sa statusom |
+| GET | `/api/v1/sources/summary` | pokrivenost i problemi ingesta |
 
-## 10. Interoperabilnost i integracija
-- **Ulaz OCDS:** `contract` je mapiran na OCDS (`ocid`, `buyer`, `awards[].suppliers`, `contracts[].value`, `tender.procurementMethodDetails`). Adapter `OcdsReleaseMapper` čita JSONL (Should). Isti adapter radi za bilo koji OCDS izvor (npr. budući izravni EOJN feed).
-- **Izravni EOJN:** od 16.05.2026. ZJN čl. 28 st. 5 traži da je **registar ugovora objavljen u EOJN-u**. Prijedlog MPUDT-u/MPGI-ju: javni REST/OCDS endpoint s OIB-om (`parties[].identifier.scheme = "HR-OIB"`) i brojem ponuda (`tender.numberOfTenderers`). JavniRadar tada može zamijeniti ingest općinskih XLSX-ova jednim izvorom.
-- **Izlaz:** normalizirani skup `javniradar-ugovori` (CSV + JSON + OCDS JSONL) s metapodacima **DCAT-AP HR**, objavljen natrag na data.gov.hr preko CKAN-a (`package_create` traži API ključ izdavatelja, što je organizacijski preduvjet).
-- **Identifikatori:** OIB (`HR-OIB`), JPT brojčana oznaka, CPV 2008, NKD 2025, NUTS/LAU za karte.
-- **Integracije:** poveznica "Zatraži dokument" generira predložak ZPPI zahtjeva (moguća integracija s imamopravoznati.org); izvoz CSV-a za Državni ured za reviziju i unutarnje revizore.
+**Administracija (`/api/admin`, header `X-Admin-Token` = env `ADMIN_TOKEN`; bez njega svaki poziv vraća 401):**
 
-## 11. Deploy
-- **MVP:** jedan VM ili Render/Railway: `api` (jar) + `postgres` + statički `web` (Vite build iza istog Nginxa ili Spring static).
-- Seed baze iz zamrznutog snapshota (`db/seed/*.sql.gz`), da demo ne ovisi o vanjskim izvorima.
-- Prije predaje mora proći: `yarn build && yarn lint` (web), `./mvnw test` (api).
+| Metoda | Ruta | Opis |
+|---|---|---|
+| POST | `/api/admin/ingest/run` | ingest registara, JPT-a i DZS-a, zatim pravila |
+| POST | `/api/admin/rules/run` | ponovni izračun pravila |
+| POST | `/api/admin/synthetic/load` | učitavanje sintetičkog demo skupa |
+| POST | `/api/admin/sudreg/run?limit=` · GET `/api/admin/sudreg/status` | dohvat Sudskog registra u pozadini |
+| POST | `/api/admin/ai/run?limit=&synthetic=&dryRun=&contractIds=` | AI procjena (`dryRun=true` je zadano i ne zove model) |
+| POST | `/api/admin/ai/eval/synthetic` · GET `/api/admin/ai/eval/real-sample` · POST `/api/admin/ai/eval/real-sample/run` · POST `/api/admin/ai/eval/real` | evaluacija AI-ja |
+
+## 7. Standardi i interoperabilnost
+
+| Standard | Gdje se koristi | Stanje |
+|---|---|---|
+| **OIB** (ISO 7064 MOD 11,10) | ključ svih spajanja, `OibValidator` | ✅ |
+| **CPV 2008** (Uredba (EZ) 213/2008) | kategorije ugovora, pravila F i C, usporedba | ✅ |
+| **NKD 2007/2025** | djelatnost dobavljača iz Sudskog registra | ✅ (oba oblika) |
+| **JSON Schema** | shema izlaza AI procjene (`ai-flag-v3.schema.json`), strukturirani izlaz modela | ✅ |
+| **CKAN Action API** | otkrivanje skupova na data.gov.hr | ✅ |
+| **OAuth2 client credentials** | Sudski registar | ✅ |
+| **GeoJSON** | granice JLS | ✅ |
+| REST + JSON | `/api/v1` | ✅ |
+| **OpenAPI** specifikacija našeg API-ja | – | ❌ ne postoji; API je opisan u ovom dokumentu (vidi §11) |
+| OCDS, DCAT-AP | – | ❌ nije implementirano |
+
+## 8. Kvaliteta i testovi
+
+- **Backend:** `./mvnw test` → **88 testova, 0 grešaka** (2026-11-08). Integracijski testovi rade nad pravim PostgreSQL 17 kroz Testcontainers (zato treba Docker). Pokrivaju: parsere EOJN i A2 na stvarnoj datoteci Grada Osijeka, normalizaciju, pravila B i D, sintetički ground truth za sva pravila (`SyntheticGroundTruthTest`), privatnost (fizičke osobe i obrti, `ContractPrivacyTest`), validator AI-ja (15 slučajeva), kontekst i run s fixture klijentom (bez ključa), kontrolere, zabranjene riječi (`ForbiddenWordingTest`).
+- **Frontend:** `yarn build` (TypeScript + Vite) i `yarn lint` (ESLint) prolaze; `yarn test` → 11/11 (`tests/ui-data.test.mjs`).
+- **Točnost parsera:** 20 ugovora klase A i 20 klase A2 ručno uspoređeno s izvornim ćelijama neovisnim čitačem (openpyxl): svih 40 se podudara ([`DATA_SOURCES_RESEARCH.md`](DATA_SOURCES_RESEARCH.md) §1.1a, §1.1b).
+- **Shema baze:** Flyway migracije `V1__init.sql` … `V5__company_snapshot.sql`; Hibernate samo provjerava (`ddl-auto: validate`).
+- **Tajne:** samo env varijable (`DB_PASSWORD`, `ADMIN_TOKEN`, `ANTHROPIC_API_KEY`, `SUDREG_CLIENT_ID`, `SUDREG_CLIENT_SECRET`); `apps/api/.env` je u `.gitignore`. Pregled povijesti gita (2026-11-08) nije našao ključeve.
+
+## 9. Preduvjeti za uvođenje
+
+### 9.1 Tehnički
+
+| Preduvjet | Stanje |
+|---|---|
+| Java 25, Node 22, Yarn 1, Docker (PostgreSQL 17) | lokalno provjereno |
+| Server za API i bazu (1 VM, ~2 GB RAM dovoljno za < 10.000 ugovora [PRETPOSTAVKA]) + statički hosting za web | ❌ nije postavljeno; nema javnog demo URL-a |
+| Reverse proxy koji poslužuje `web` i prosljeđuje `/api` | u razvoju to radi Vite proxy (`vite.config.ts`); za produkciju treba Nginx ili Spring static |
+| Periodični ingest (noćni `@Scheduled` ili cron koji zove admin rutu) | ❌ samo ručno |
+| Ključevi: Sudreg (OAuth2), Anthropic (s limitom potrošnje) | opcionalno; bez njih nema pravila B ni AI procjene |
+| HTTPS, CORS samo za domenu frontenda, rate limit | ❌ nije implementirano |
+
+### 9.2 Organizacijski
+
+- **Vlasnik sustava:** tko održava ingest i odgovara na prigovore (u MVP-u tim; dugoročno udruga, fakultet ili MPUDT).
+- **Postupak ispravka i prava na odgovor** za općine i tvrtke koje se prepoznaju u indikatoru (u MVP-u nije implementiran obrazac; zahtjev ide e-mailom timu).
+- **Suradnja s izdavateljima:** JLS koje objavljuju vlastite tablice (klase B, C, D) trebaju prijeći na standardni EOJN izvoz, ili treba poseban parser po izdavatelju.
+- **Proračun za LLM:** procjena svih ~2.200 prihvatljivih stvarnih ugovora ≈ 3 USD s Haikuom (mjereno 2026-11-03).
+
+### 9.3 Pravni
+
+| Područje | Preduvjet | Kako ga ispunjavamo / što nedostaje |
+|---|---|---|
+| Ponovna uporaba podataka | ZPPI i Pravilnik NN 67/17: navođenje izvora | izvor, datoteka i redak uz svaki ugovor; stranica „Izvori”; `DATA_SOURCES.md`. ⚠️ Dva skupa imaju nejasnu licencu na portalu (Grad Bjelovar, Grad Zlatar) |
+| GDPR | registri sadrže fizičke osobe i obrte (ime vlasnika u nazivu) | ugovori s fizičkim osobama se ne prikazuju (109 skrivenih); obrt je „Obrt (naziv skriven)” i ne ulazi u top liste ni AI procjenu; nazivi tipa `ostalo` skriveni. ⚠️ Pravna osnova (javni interes) **nije pravno provjerena**; za produkciju treba DPIA |
+| Odgovornost za oznake | netočna oznaka može naštetiti ugledu | neutralni jezik (zabranjene riječi su test); „što ovo NE znači” uz svaki indikator; tri odvojene dimenzije umjesto jednog „rizika”; AI uvijek označen kao procjena koja traži ljudsku provjeru |
+| Sudski registar | uvjeti korištenja API-ja | ključ dobiven; ⚠️ uvjete ponovne objave podataka treba pročitati i zapisati |
+| EOJN | `robots.txt: Disallow: /` | ne strugamo; koristimo samo poveznice iz registara |
+| Karta | CC BY-SA 2.0 / ODbL | atribucija ispod karte; izvedena datoteka pod istim uvjetima |
+| AI | EU AI Act: sustav ne donosi odluke o osobama; transparentnost | AI samo predlaže što provjeriti, uz oznaku i dokaze; ne obrađuje fizičke osobe ni obrte |
+| Licenca koda | OSS | MIT (`LICENSE`), ovisnosti u `THIRD_PARTY_LICENSES.md` |
+
+## 10. Ograničenja
+
+- **Pokrivenost:** 34 od 556 JLS (6 %) ima ugovore u bazi. Na data.gov.hr samo ~61 JLS objavljuje strojno čitljiv registar; od toga parsiramo samo standardne EOJN formate (A, A2).
+- **Nema broja ponuda** ni u jednom provjerenom strojno čitljivom izvoru, pa scenarij „niska konkurencija” nije moguć.
+- **Usporedba općina:** skupina rijetko ima n ≥ 8, pa usporedba često prikazuje „Nedovoljno podataka”.
+- **Kvaliteta izvora:** greške u izvornim registrima prenose se vjerno (npr. iznos s PDV-om manji od iznosa bez PDV-a); označene su kao kvaliteta podataka, ne kao nalaz.
+- **AI:** preciznost na stvarnim podacima nije izmjerena (nema ručnih oznaka); sintetički skup je malen (n = 40).
+- **Pravilo B** na stvarnim podacima daje 0 indikatora (31 mlada tvrtka, svi ugovori < 50.000 €); vidi se samo na sintetičkom primjeru.
+- **Nema deploya**, autentikacije korisnika, obrasca za ispravak ni OpenAPI specifikacije.
+
+## 11. Daljnji razvoj (tehnički)
+
+1. OpenAPI 3 specifikacija (`springdoc-openapi`) i javni API za novinare.
+2. Deploy (Docker Compose s API-jem, bazom i Nginxom) i noćni ingest.
+3. Parseri za klase B i C (vlastite tablice) i LLM ekstrakcija za D/PDF, s provenancijom `method = LLM`.
+4. Izravan EOJN feed (OCDS s OIB-om i brojem ponuda), kad ga MPUDT/EOJN objavi.
+5. Izvoz normaliziranog skupa natrag na data.gov.hr (CSV/JSON s DCAT-AP HR metapodacima).
+6. Obrazac za ispravak i pravo na odgovor, s moderacijom.

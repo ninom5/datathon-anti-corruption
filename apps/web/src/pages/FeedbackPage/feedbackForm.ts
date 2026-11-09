@@ -14,7 +14,6 @@ export const emptyDraft: FeedbackDraft = {kind: "greska_u_podacima", role: "", t
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Same rules as FeedbackRequest on the backend, so the user sees the reason before sending. */
 export const validateDraft = (draft: FeedbackDraft): FeedbackErrors => {
     const errors: FeedbackErrors = {};
     const textLength = draft.text.trim().length;

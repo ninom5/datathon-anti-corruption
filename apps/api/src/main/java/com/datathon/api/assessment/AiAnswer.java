@@ -3,10 +3,6 @@ package com.datathon.api.assessment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/**
- * The model's answer with the Croatian keys required by the brief (docs/ANOMALY_DETECTION.md §4.3). Enum values are
- * kept as the raw strings the model returned; {@link AiAssessmentValidator} decides what is usable.
- */
 public record AiAnswer(
         @JsonProperty("oznaka") String label,
         @JsonProperty("razlozi") List<Reason> reasons,

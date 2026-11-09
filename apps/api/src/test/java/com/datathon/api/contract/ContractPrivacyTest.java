@@ -27,11 +27,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
-/**
- * GDPR display rules end to end (decision 2026-11-02, docs/DATA_MODEL.md §8): a craft's name never leaves the API,
- * but its OIB, the source link and its indicators do; crafts stay out of summaries; contracts with natural persons
- * are not exposed at all.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(TestcontainersConfiguration.class)
@@ -87,7 +82,6 @@ class ContractPrivacyTest {
                 .bodyJson().extractingPath("$.totalElements").isEqualTo(0);
         assertThat(mvc.get().uri("/api/v1/contracts/" + personContract.getId())).hasStatus(404);
 
-        // Crafts count in numbers (decision 2026-11-03, #41); the natural person never does.
         assertThat(mvc.get().uri("/api/v1/contracts/summary?buyerOib=" + BUYER_OIB)).bodyJson().satisfies(json -> {
             assertThat(json).extractingPath("$.contracts").isEqualTo(1);
             assertThat(json).extractingPath("$.withIndicator").isEqualTo(1);
@@ -95,7 +89,6 @@ class ContractPrivacyTest {
             assertThat(json).extractingPath("$.contractsByRule.D_VALUE_INCREASE").isEqualTo(1);
         });
 
-        // Buyer profile: the craft is counted, but stays out of the supplier list with names.
         MvcTestResult profile = mvc.get().uri("/api/v1/buyers/" + BUYER_OIB).exchange();
         assertThat(profile).hasStatusOk();
         assertThat(profile.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))

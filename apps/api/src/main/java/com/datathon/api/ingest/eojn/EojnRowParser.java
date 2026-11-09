@@ -18,17 +18,11 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Normalises one data row of a class A register: amounts (HRK to EUR), dates (Excel serial or text), OIB checksum,
- * CPV. Rows without contract link, buyer, signing date or any amount are rejected (docs/ARCHITECTURE.md §6);
- * every other problem becomes a quality flag on the kept row.
- */
 public final class EojnRowParser {
 
     public static final String EXTRACTOR_VERSION = "eojn-xlsx-v1";
 
     private static final Pattern CPV_CELL = Pattern.compile("^(\\d{8})(?:-\\d)?\\s*(?:-\\s*(.*))?$", Pattern.DOTALL);
-    /** docs/ARCHITECTURE.md §6: amounts above this are flagged as implausible, not dropped. */
     private static final BigDecimal MAX_PLAUSIBLE_EUR = new BigDecimal("100000000");
 
     private final EojnHeader header;
@@ -159,7 +153,6 @@ public final class EojnRowParser {
         return result;
     }
 
-    /** An unreadable optional date is kept as null with a flag, never guessed (docs/DATA_MODEL.md §4). */
     private LocalDate readOptionalDate(SheetRow row, EojnColumn column, List<String> flags) {
         String raw = text(row, column);
         if (raw.isBlank()) {

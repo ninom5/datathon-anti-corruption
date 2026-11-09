@@ -9,7 +9,6 @@ interface Hover {
     name: string;
     x: number;
     y: number;
-    /** Past the middle of the map the tooltip opens to the left, so it never leaves the frame. */
     isRightHalf: boolean;
 }
 
@@ -46,10 +45,6 @@ interface JlsMapProps {
     onSelect: (oib: string) => void;
 }
 
-/**
- * Choropleth of all JLS. Paths are not focusable (556 tab stops would trap keyboard users); the JLS picker and the
- * table under the map are the keyboard alternative (docs/UI_UX.md §5).
- */
 export const JlsMap = ({map, municipalities, selectedOib, summary, onSelect}: JlsMapProps) => {
     const [hover, setHover] = useState<Hover | undefined>();
     const selected = map.shapes.find((shape) => shape.oib !== null && shape.oib === selectedOib);

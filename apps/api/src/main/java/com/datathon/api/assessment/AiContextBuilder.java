@@ -16,13 +16,8 @@ import java.util.TreeMap;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Builds the context of docs/ANOMALY_DETECTION.md §4.2 from database rows only. Keys are sorted (TreeMap), so the same
- * data always gives the same JSON and the same hash. No database access here: {@link AiContextLoader} loads the rows.
- */
 final class AiContextBuilder {
 
-    /** Sudreg has no key yet (docs/DATA_SOURCES.md), so NKD and founding date are unknown, never guessed. */
     static final String COMPANY_REGISTER_UNAVAILABLE = "nedostupno";
 
     private static final JsonMapper JSON = JsonMapper.shared();
@@ -30,30 +25,15 @@ final class AiContextBuilder {
     private AiContextBuilder() {
     }
 
-    /**
-     * Facts about a contract that come from other tables or from configuration.
-     *
-     * @param ownedByBuyer       true when JPT lists the buyer as a founder of the supplier; null when unknown
-     * @param municipality       DZS 2021 population and peer group of the buyer; null when the buyer is not a JLS
-     * @param peerStatistics     statistika_skupine, null when the peer comparison is not sufficient or not possible
-     * @param simpleProcurement  ZJN simple procurement threshold valid on the signing date for the subject type
-     *                           (thresholds.yaml), null when date or subject type is unknown
-     */
     record ContextFacts(Boolean ownedByBuyer, MunicipalityFacts municipality, Map<String, Object> peerStatistics,
                         Threshold simpleProcurement, CompanyFacts company) {
     }
 
-    /**
-     * The newest Sudreg snapshot of the supplier; null when it was never looked up (or cannot be: crafts, persons).
-     *
-     * @param foundInRegister false when the register has no subject with this OIB
-     */
     record CompanyFacts(boolean foundInRegister, java.time.LocalDate retrievedOn, java.time.LocalDate foundedOn,
                         String nkdCode, String nkdName, String nkdVersion, Boolean inBankruptcy,
                         Boolean inLiquidation) {
     }
 
-    /** A value from thresholds.yaml with the legal source it was copied from. */
     record Threshold(BigDecimal valueEur, String source) {
     }
 
@@ -81,8 +61,6 @@ final class AiContextBuilder {
         part.put("cpv", contract.getCpv() == null ? null
                 : contract.getCpv().strip() + (contract.getCpvLabel() == null ? "" : " - " + contract.getCpvLabel()));
         part.put("vrijednost_eur", value(contract));
-        // The paid amount in registers usually includes VAT, so the model must see the gross value too (rule D2
-        // compares with it); without it every +25 % payment looked like an overpayment (work/decisions.md, #44).
         part.put("vrijednost_s_pdv_eur", grossValue(contract));
         part.put("pocetna_vrijednost_eur", contract.getInitialValue());
         part.put("izmjene_eur", contract.getAmendmentsValue());
@@ -114,7 +92,6 @@ final class AiContextBuilder {
         return part;
     }
 
-    /** Where NKD and founding date come from; never guessed (docs/ANOMALY_DETECTION.md §4.2). */
     private static String registerSource(CompanyFacts company) {
         if (company == null) {
             return COMPANY_REGISTER_UNAVAILABLE;
@@ -126,7 +103,6 @@ final class AiContextBuilder {
         return "Sudski registar, sudreg-data.gov.hr (" + version + ", dohvaćeno " + company.retrievedOn() + ")";
     }
 
-    /** A JLS with its population (DZS, Popis 2021) and peer group P1-P7. */
     record MunicipalityFacts(Integer population, String peerGroup) {
     }
 
@@ -140,11 +116,6 @@ final class AiContextBuilder {
         return part;
     }
 
-    /**
-     * Rule C is about a buyer and CPV division and is linked to every contract of that cell (#41), also to contracts of
-     * other suppliers. For the model it is evidence only on contracts of the supplier it names (topSupplierOib);
-     * on the others it would read as a statement about this supplier.
-     */
     static boolean isAboutThisSupplier(Indicator indicator, Organization supplier) {
         if (!ConcentrationRule.RULE_CODE.equals(indicator.getRuleCode()) || indicator.getSubjectRef() == null) {
             return true;
@@ -174,7 +145,6 @@ final class AiContextBuilder {
         return part;
     }
 
-    /** The exact row: file URL plus our locator ({@code sheet=1;row=41}) as fragment, as in §4.2. */
     static String sourceUrl(Provenance provenance) {
         RawRecord raw = provenance == null ? null : provenance.getRawRecord();
         if (raw == null || raw.getFile() == null || raw.getFile().getUrl() == null) {
@@ -197,7 +167,6 @@ final class AiContextBuilder {
         return urls;
     }
 
-    /** The value rules use: total with amendments, or the initial value when no total is published. */
     private static BigDecimal value(Contract contract) {
         return contract.getTotalValue() != null ? contract.getTotalValue() : contract.getInitialValue();
     }

@@ -47,7 +47,7 @@ CREATE TABLE source_file (
   dataset_id      BIGINT REFERENCES source_dataset(id),
   url             TEXT NOT NULL,
   format          TEXT,                      -- XLSX/CSV/JSON/PDF
-  format_class    CHAR(1),                   -- A/B/C/D (vidi DATA_SOURCES §1.1)
+  format_class    CHAR(1),                   -- A/B/C/D (vidi DATA_SOURCES_RESEARCH §1.1)
   sha256          CHAR(64),
   bytes           BIGINT,
   http_status     INT,
@@ -133,7 +133,7 @@ CREATE TABLE procedure (                      -- postupak (EOJN tender)
 CREATE TABLE lot (
   id BIGSERIAL PRIMARY KEY, procedure_id BIGINT REFERENCES procedure(id), lot_no TEXT, title TEXT);
 
-CREATE TABLE bid (                            -- prazno u MVP-u: broj ponuda nije dostupan (DATA_SOURCES §0)
+CREATE TABLE bid (                            -- prazno u MVP-u: broj ponuda nije dostupan (DATA_SOURCES_RESEARCH §0)
   id BIGSERIAL PRIMARY KEY, lot_id BIGINT REFERENCES lot(id), bidder_id BIGINT REFERENCES organization(id),
   value_eur NUMERIC(14,2), provenance_id BIGINT REFERENCES provenance(id));
 
@@ -321,7 +321,7 @@ lower → ukloni dijakritike (č,ć→c, š→s, ž→z, đ→dj) → zamijeni p
 **Implementirano:** `source_dataset`, `source_file`, `raw_record`, `provenance`, `organization`, `contract`, `indicator`, `ingest_run`, `ingest_issue`.
 **Još nije:** `municipality`, `procurement_plan`, `plan_item`, `procedure`, `lot`, `bid`, `contract_amendment`, `payment`. `ai_assessment` i `llm_usage` su u `V4__ai.sql` (§8c), `company_snapshot` u `V5__company_snapshot.sql` (§8d), `feedback` u `V6__feedback.sql` (#45), identičan shemi iznad. Iznos izmjene i isplaćeni iznos su stupci u `contract`, kao u izvoru klase A.
 
-**Dodaci u odnosu na §2** (obrazloženje u `work/decisions.md`):
+**Dodaci u odnosu na §2:**
 | Tablica | Stupac | Zašto |
 |---|---|---|
 | `source_dataset` | `metadata_modified`, `is_synthetic` | CKAN svježina; sintetički izvor se označava na razini skupa |

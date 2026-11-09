@@ -21,7 +21,6 @@ export const roleOptions: {value: FeedbackRole; label: string}[] = [
     {value: "ostalo", label: "Ostalo"},
 ];
 
-/** The moderator has to answer these, so the backend requires a contact address. */
 export const kindsNeedingContact: FeedbackKind[] = ["pravo_na_odgovor", "uklanjanje_osobnih_podataka"];
 
 export const TEXT_MIN_LENGTH = 10;

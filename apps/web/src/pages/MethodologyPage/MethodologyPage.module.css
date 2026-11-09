@@ -35,7 +35,6 @@
     padding-left: var(--space-5);
 }
 
-/* One rule = one bordered surface: formula, thresholds with sources, what it does not mean. */
 .rule {
     display: flex;
     flex-direction: column;

@@ -8,15 +8,9 @@ import com.datathon.api.source.FormatClass;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Format classes from docs/DATA_SOURCES.md §1.1, decided from the first rows of each sheet:
- * A = EOJN header found; A2 = header of the old EOJN register report; B = a header-like row with an OIB column;
- * C = a header-like row without OIB; D = neither.
- */
 public final class FormatClassifier {
 
     private static final int SAMPLE_ROWS = 20;
-    /** A header-like row has at least this many short, non-numeric cells. */
     private static final int MIN_HEADER_CELLS = 4;
     private static final int MAX_HEADER_CELL_LENGTH = 80;
 

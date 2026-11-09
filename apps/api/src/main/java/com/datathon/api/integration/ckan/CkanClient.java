@@ -15,10 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.JsonNode;
 
-/**
- * data.gov.hr CKAN action API (verified 2026-11-02: package_search returns HTTP 200, 139 packages for
- * "registar ugovora"). Resources are not in the DataStore, so files are downloaded directly afterwards.
- */
 @Component
 @RequiredArgsConstructor
 public class CkanClient {
@@ -62,7 +58,6 @@ public class CkanClient {
                 parseTime(node.path("metadata_modified").asString("")), resources);
     }
 
-    /** CKAN timestamps have no zone; the CKAN convention is UTC. */
     private static Instant parseTime(String value) {
         if (value == null || value.isBlank()) {
             return null;

@@ -25,7 +25,6 @@ export const HomePage = () => {
         }
         const jls = coverage.data.buyersByType.jls ?? 0;
         const otherBuyers = Object.values(coverage.data.buyersByType).reduce((sum, count) => sum + count, 0) - jls;
-        // The summary counts the contracts shown in the explorer (crafts included, contracts with natural persons left out).
         return (
             <ol className={styles.facts}>
                 <li>

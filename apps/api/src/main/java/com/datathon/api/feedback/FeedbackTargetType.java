@@ -4,7 +4,6 @@ import com.datathon.api.common.persistence.DatabaseCode;
 import com.datathon.api.common.persistence.DatabaseCodeConverter;
 import jakarta.persistence.Converter;
 
-/** What the feedback is about. Only indicators and contracts accept it so far; AI assessments come with #44. */
 public enum FeedbackTargetType implements DatabaseCode {
     INDICATOR("indicator"),
     AI_ASSESSMENT("ai_assessment"),

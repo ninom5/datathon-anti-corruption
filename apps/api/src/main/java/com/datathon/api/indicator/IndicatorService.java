@@ -24,12 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Read side of indicators: the indicator list and the shared mapping to the response with evidence and contracts. */
 @Service
 @RequiredArgsConstructor
 public class IndicatorService {
 
-    /** Rule first, then the largest deviation; units differ between rules, so values are only compared within one. */
     private static final Sort DEFAULT_SORT = Sort.by(Sort.Order.asc("ruleCode"),
             Sort.Order.desc("magnitudeValue").nullsLast(), Sort.Order.asc("id"));
 
@@ -45,13 +43,11 @@ public class IndicatorService {
         return PageResponse.from(page, indicator -> toResponse(indicator, contractIds));
     }
 
-    /** For callers inside a read transaction that already hold the indicators (contract detail, buyer profile). */
     public List<IndicatorResponse> toResponses(List<Indicator> indicators) {
         Map<Long, List<Long>> contractIds = contractIdsOf(indicators.stream().map(Indicator::getId).toList());
         return indicators.stream().map(indicator -> toResponse(indicator, contractIds)).toList();
     }
 
-    /** One indicator with its group's contracts (natural persons left out, GDPR) and the parsed subject. */
     @Transactional(readOnly = true)
     public IndicatorDetail getById(Long id) {
         Indicator indicator = indicatorRepository.findDetailById(id)
@@ -75,7 +71,6 @@ public class IndicatorService {
         return contract.getSupplier() != null && contract.getSupplier().getOrgType() == OrganizationType.NATURAL_PERSON;
     }
 
-    /** Contract indicators (D1, D2) only reference their contract, which the detail already carries. */
     private IndicatorSubject subjectOf(Indicator indicator) {
         if (Indicator.SUBJECT_CONTRACT.equals(indicator.getSubjectType()) || indicator.getSubjectRef() == null) {
             return null;

@@ -4,12 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Columns of the old EOJN register report (format class A2, docs/DATA_SOURCES.md §1.1b). Header texts are from real
- * files downloaded 2026-11-02 (e.g. "RPT_Ugovor" sheets of Grad Varaždinske Toplice, Grad Korčula yearly sheets).
- * Publishers lengthen the headers ("Datum sklapanja ugovora ili okvirnog sporazuma", "Iznos bez PDV-a (kn)"), so a
- * header matches when it starts with one of the prefixes. Order matters: the more specific prefix comes first.
- */
 public enum LegacyColumn {
     EVID_NUMBER("evidencijski broj nabave"),
     SUBJECT("predmet nabave"),

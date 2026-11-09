@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-/** One normalised class A row, before organizations are resolved. Amounts in EUR, null = not published. */
 public record ParsedContract(
         String contractUrl,
         String tenderUrl,

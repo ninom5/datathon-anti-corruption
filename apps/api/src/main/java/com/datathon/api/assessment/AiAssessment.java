@@ -18,10 +18,6 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/**
- * One AI assessment of one contract (docs/ANOMALY_DETECTION.md §4). Model, prompt version and input hash are set by
- * the system, never by the model. JSON columns keep the model's Croatian keys ({@code tvrdnja, polja, izvori}).
- */
 @Entity
 @Table(name = "ai_assessment")
 @Getter

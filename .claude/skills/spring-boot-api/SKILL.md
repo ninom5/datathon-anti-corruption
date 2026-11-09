@@ -1,17 +1,17 @@
 ---
 name: spring-boot-api
-description: MUST be loaded before writing or changing any backend code in apps/api of JavniRadar (Spring Boot 4, Java 25, JPA, PostgreSQL). Trigger on any implementation request that touches the backend, including Croatian ones such as "implementiraj", "napravi", "dodaj endpoint", "napiši ingest / parser / pravilo", "popravi bug u API-ju", or any backend task from docs/MVP_ROADMAP.md (ingest, normalizacija, pravila C/D/F/B/G, AI procjena, REST API, deploy). Covers endpoints, services, entities, repositories, SQL/migrations, external API clients (data.gov.hr CKAN, JPT, Sudski registar, OCDS, Anthropic), indicator rules, AI assessment, error handling and tests.
+description: MUST be loaded before writing or changing any backend code in apps/api of JavniRadar (Spring Boot 4, Java 25, JPA, PostgreSQL). Trigger on any implementation request that touches the backend, including Croatian ones such as "implementiraj", "napravi", "dodaj endpoint", "napiši ingest / parser / pravilo", "popravi bug u API-ju", or any backend task (ingest, normalizacija, pravila C/D/F/B/G, AI procjena, REST API, deploy). Covers endpoints, services, entities, repositories, SQL/migrations, external API clients (data.gov.hr CKAN, JPT, Sudski registar, OCDS, Anthropic), indicator rules, AI assessment, error handling and tests.
 ---
 
 # Spring Boot API (`apps/api`)
 
-Read first: `docs/ARCHITECTURE.md`, `docs/DATA_MODEL.md`, `docs/ANOMALY_DETECTION.md` and `AGENTS.md`. If they disagree with this skill, the docs win; fix whichever is wrong and note it in `work/decisions.md`.
+Read first: `docs/ARCHITECTURE.md`, `docs/DATA_MODEL.md`, `docs/ANOMALY_DETECTION.md` and `AGENTS.md`. If they disagree with this skill, the docs win; fix whichever is wrong and explain it in the PR description.
 
 Goal: code that works for the demo by 9 Nov (feature freeze 7 Nov 20:00), that the whole team can read without explanation, and that the jury can inspect (criteria "Feasibility" and "Technical architecture"). Simple and consistent beats clever.
 
 ## Stack (verified in `pom.xml`)
 - Spring Boot 4.1, Java 25, `spring-boot-starter-webmvc` (blocking MVC, NOT WebFlux), Data JPA, Validation, Lombok, PostgreSQL 17 in Docker (`localhost:5434`, container `javniradar-postgres`, own compose project so it never shares a volume with `Desktop/datathon`).
-- `open-in-view: false` is intentional. The schema in `docs/DATA_MODEL.md` relies on CHECK constraints, `pg_trgm` and JSONB, which `ddl-auto: update` cannot create, so `docs/MVP_ROADMAP.md` proposes **Flyway** (`V1__init.sql`); confirmed 2026-11-02 in `work/decisions.md`.
+- `open-in-view: false` is intentional. The schema in `docs/DATA_MODEL.md` relies on CHECK constraints, `pg_trgm` and JSONB, which `ddl-auto: update` cannot create, so the schema is managed by **Flyway** (`V1__init.sql`).
 - Boot 4 uses **Jackson 3** (packages `tools.jackson.*`, not `com.fasterxml.jackson.databind`). Annotations like `@JsonProperty` are still in `com.fasterxml.jackson.annotation`. If unsure about an import, check what is on the classpath; don't guess.
 - Do not add dependencies to `pom.xml` without a short justification to the user (what, why, alternative without the dependency).
 
@@ -119,7 +119,7 @@ Add new terms here before using them in code.
 - Comments explain **why** (e.g. "the same EOJN contract appears in several yearly files, hence dedup by contract URL"), not *what* the code does. A service's public API may have a short Javadoc when the name isn't enough.
 
 ## REST conventions
-- Public routes under **`/api/v1`**. The frontend `axios` has `baseURL: '/api'`, so frontend paths start with `/v1/...`. Example: `@RequestMapping("/api/v1/contracts")`. Admin routes go under `/api/admin` and need `X-Admin-Token`. The endpoint list is in `docs/ARCHITECTURE.md` §5.
+- Public routes under **`/api/v1`**. The frontend `axios` has `baseURL: '/api'`, so frontend paths start with `/v1/...`. Example: `@RequestMapping("/api/v1/contracts")`. Admin routes go under `/api/admin` and need `X-Admin-Token`. The endpoint list is in `docs/ARCHITECTURE.md` §6.
 - Resources plural, lowercase, hyphens: `/api/v1/contracts`, `/api/v1/buyers/{oib}`, `/api/v1/buyers/{oib}/peers`.
 - List `GET`s always support pagination (`page`, `size`, default `size=20`, max 100) and return a page-like DTO (`content`, `totalElements`, `page`, `size`), not a raw Spring `Page` (its JSON is not stable).
 - Statuses: 200 read, 201 create (+ `Location`), 204 delete, 400 validation, 404 not found, 502 when an external source is down.
@@ -139,9 +139,9 @@ This is the core of the "Use of open data" criterion, so it must be reliable and
 - Map their JSON to a dedicated `record` inside the client package, and let only our domain DTO into the rest of the app. Foreign field names don't leak into services.
 - Wrap external source errors in `ExternalSourceException` with the source name. One failing source must not break the whole import: log, skip, continue.
 - Be polite: all downloads go through `PoliteHttpClient` (robots.txt, ~1 request/s per host, retry, disk cache), with `User-Agent` `JavniRadar/0.1 (studentski projekt)`. **Never scrape eojn.hr** (robots.txt `Disallow: /`). Never bypass logins or CAPTCHAs.
-- Verify a source with a real request before integrating it, and record the result in `docs/DATA_SOURCES.md`. Never invent endpoints or field names.
+- Verify a source with a real request before integrating it, and record the result in `docs/DATA_SOURCES_RESEARCH.md`. Never invent endpoints or field names.
 - For the demo: store import results in the database and read from the database. The demo must not depend on someone else's server being up while recording the video.
-- Reused code is copied from repo `Desktop/datathon`: `PoliteHttpClient`, `RobotsRules`, `DiskCache`, the Sudreg clients, `AmountParser`, `CroatianDates` and AI usage tracking. Keep a one-line origin note in the class header. Field lists and per-format quirks of contract registers are in `docs/DATA_SOURCES.md` §1.
+- Reused code is copied from repo `Desktop/datathon`: `PoliteHttpClient`, `RobotsRules`, `DiskCache`, the Sudreg clients, `AmountParser`, `CroatianDates` and AI usage tracking. Field lists and per-format quirks of contract registers are in `docs/DATA_SOURCES_RESEARCH.md` §1.
 
 ## Domain rules (JavniRadar, non-negotiable)
 - **Provenance:** every imported row keeps its `RawRecord`, and every domain row has a `provenanceId`. No number without a source.
@@ -188,4 +188,4 @@ This is the core of the "Use of open data" criterion, so it must be reliable and
 1. `./mvnw -q compile` passes (Windows: `mvnw.cmd -q compile`); if you touched logic that has tests, also `./mvnw test`.
 2. If the API is running, check the endpoint with `curl` and show the real response.
 3. New endpoint used by the frontend: tell the user the exact JSON shape so the type in `apps/web/src/types/` can be aligned (or add it yourself following the `react-web` skill).
-4. A new architecture decision (new dependency, new source, model change) goes into `work/decisions.md` with the reasoning.
+4. A new architecture decision (new dependency, new source, model change) goes into the PR description with the reasoning.

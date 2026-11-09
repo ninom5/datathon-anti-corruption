@@ -9,13 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-/**
- * One row of the contract explorer. Amounts are EUR without VAT; null means "not published".
- *
- * @param yearIncomplete the signing year was not over when the registers were retrieved, so its totals are partial
- * @param amountDoubtful the register's own amounts contradict each other (VAT, shifted columns), so the shown amount may
- *                       be a typo in the source; the detail page lists the reasons
- */
 public record ContractListItem(
         Long id,
         OrganizationRef buyer,

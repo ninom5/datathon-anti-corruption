@@ -27,17 +27,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Downloads one CKAN resource, records it as a {@link SourceFile} and classifies it (A/B/C/D). */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class FileStager {
 
-    /** Formats we can open; the rest (PDF, DOCX, HTML, JSON, XML) is counted but not downloaded in the POC. */
     public static final List<String> READABLE_FORMATS = List.of("XLSX", "XLS", "CSV");
     private static final Pattern HTTP_STATUS = Pattern.compile("HTTP (\\d{3})");
 
-    /** {@code sheets} is filled only for parsed classes (A, A2) and only when the file is new (not imported before). */
     public record StagedFile(SourceFile file, FormatClass formatClass, boolean isNew, List<SheetData> sheets) {
     }
 
@@ -72,7 +69,6 @@ public class FileStager {
         if (known.isPresent() && rawRecordRepository.existsByFile(known.get())) {
             return new StagedFile(known.get(), known.get().getFormatClass(), false, List.of());
         }
-        // A file staged by an interrupted run but never imported is classified and imported again.
         SourceFile file = known.orElseGet(() -> newFile(runId, dataset, resource, format, fetched.retrievedAt()));
         file.setSha256(sha256);
         file.setBytes((long) fetched.body().length);
@@ -85,7 +81,6 @@ public class FileStager {
         try {
             sheets = format.equals("CSV") ? SheetReader.readCsv(body) : SheetReader.readWorkbook(body);
         } catch (IOException | RuntimeException e) {
-            // POI throws unchecked exceptions for corrupt or mislabelled files (e.g. HTML saved as .xlsx).
             file.setErrorMessage("Datoteka nije čitljiva kao " + format + ": " + e.getClass().getSimpleName());
             fileRepository.save(file);
             return new StagedFile(file, null, true, List.of());
@@ -131,7 +126,6 @@ public class FileStager {
         return file;
     }
 
-    /** CKAN sometimes lists an empty or relative URL (an upload that never finished). */
     private static boolean isAbsoluteHttpUrl(String url) {
         try {
             java.net.URI uri = java.net.URI.create(url.strip().replace(" ", "%20"));

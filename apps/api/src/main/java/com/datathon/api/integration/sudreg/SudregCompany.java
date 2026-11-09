@@ -6,14 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import tools.jackson.databind.JsonNode;
 
-/**
- * The fields of {@code /api/javni/detalji_subjekta} JavniRadar uses (checked 2026-11-04/05, docs/DATA_SOURCES.md §7).
- * The activity comes in two shapes: {@code pretezita_djelatnost} (NKD 2025 with name, e.g. "41.00.0") or, for older
- * entries, only the number {@code glavna_djelatnost} (6312 = "63.12") without name or version. The version is then
- * recorded as {@link #MAIN_ACTIVITY_FIELD}, never guessed.
- *
- * @param reducedPayload only these fields, without e-mail addresses or street, for provenance
- */
 public record SudregCompany(String oib, String mbs, String name, LocalDate foundedOn, LocalDate dissolvedOn,
                             String legalForm, String nkdCode, String nkdName, String nkdVersion,
                             boolean inBankruptcy, boolean inLiquidation, String statusText,
@@ -59,7 +51,6 @@ public record SudregCompany(String oib, String mbs, String name, LocalDate found
                 inBankruptcy, inLiquidation, statusText, payload);
     }
 
-    /** 6312 -> "63.12", 150 -> "01.50" (the number has no leading zero). */
     private static String mainActivityCode(JsonNode value) {
         if (!value.isNumber() || value.asInt() == 0) {
             return null;
@@ -68,7 +59,6 @@ public record SudregCompany(String oib, String mbs, String name, LocalDate found
         return digits.substring(0, 2) + "." + digits.substring(2);
     }
 
-    /** Sudreg sends the OIB as a JSON number, so a leading zero is lost and put back here. */
     private static String oib(String value) {
         if (value == null || value.isBlank()) {
             return null;
@@ -81,7 +71,6 @@ public record SudregCompany(String oib, String mbs, String name, LocalDate found
         return value.isNull() || value.isMissingNode() ? null : value.asString();
     }
 
-    /** Sudreg dates look like "2020-12-09T00:00:00". */
     private static Optional<LocalDate> date(String value) {
         if (value == null || value.length() < 10) {
             return Optional.empty();
