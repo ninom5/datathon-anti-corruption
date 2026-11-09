@@ -160,8 +160,8 @@ Sve rute su iz `@*Mapping` anotacija u `apps/api/src/main/java`. JSON, camelCase
 | Preduvjet | Stanje |
 |---|---|
 | Java 25, Node 22, Yarn 1, Docker (PostgreSQL 17) | lokalno provjereno |
-| Server za API i bazu (1 VM, ~2 GB RAM dovoljno za < 10.000 ugovora [PRETPOSTAVKA]) + statički hosting za web | ❌ nije postavljeno; nema javnog demo URL-a |
-| Reverse proxy koji poslužuje `web` i prosljeđuje `/api` | u razvoju to radi Vite proxy (`vite.config.ts`); za produkciju treba Nginx ili Spring static |
+| Server za API i bazu + hosting za web | ✅ demo na https://javniradar.zulja.org: Docker Compose (PostgreSQL, API, Nginx) iza Cloudflare tunela; API i baza troše oko 0,5 GB RAM-a |
+| Reverse proxy koji poslužuje `web` i prosljeđuje `/api` | ✅ u razvoju Vite proxy (`vite.config.ts`), u produkciji Nginx |
 | Periodični ingest (noćni `@Scheduled` ili cron koji zove admin rutu) | ❌ samo ručno |
 | Ključevi: Sudreg (OAuth2), Anthropic (s limitom potrošnje) | opcionalno; bez njih nema pravila B ni AI procjene |
 | HTTPS, CORS samo za domenu frontenda, rate limit | ❌ nije implementirano |
@@ -194,12 +194,12 @@ Sve rute su iz `@*Mapping` anotacija u `apps/api/src/main/java`. JSON, camelCase
 - **Kvaliteta izvora:** greške u izvornim registrima prenose se vjerno (npr. iznos s PDV-om manji od iznosa bez PDV-a); označene su kao kvaliteta podataka, ne kao nalaz.
 - **AI:** preciznost na stvarnim podacima nije izmjerena (nema ručnih oznaka); sintetički skup je malen (n = 40).
 - **Pravilo B** na stvarnim podacima daje 0 indikatora (31 mlada tvrtka, svi ugovori < 50.000 €); vidi se samo na sintetičkom primjeru.
-- **Nema deploya**, autentikacije korisnika, obrasca za ispravak ni OpenAPI specifikacije.
+- **Nema** autentikacije korisnika, obrasca za ispravak ni OpenAPI specifikacije.
 
 ## 11. Daljnji razvoj (tehnički)
 
 1. OpenAPI 3 specifikacija (`springdoc-openapi`) i javni API za novinare.
-2. Deploy (Docker Compose s API-jem, bazom i Nginxom) i noćni ingest.
+2. Noćni ingest na produkcijskom serveru.
 3. Parseri za klase B i C (vlastite tablice) i LLM ekstrakcija za D/PDF, s provenancijom `method = LLM`.
 4. Izravan EOJN feed (OCDS s OIB-om i brojem ponuda), kad ga MPUDT/EOJN objavi.
 5. Izvoz normaliziranog skupa natrag na data.gov.hr (CSV/JSON s DCAT-AP HR metapodacima).

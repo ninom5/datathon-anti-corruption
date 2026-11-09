@@ -4,6 +4,8 @@
 
 Civic-tech alat koji lokalnu javnu nabavu u Hrvatskoj čini razumljivom, pretraživom i usporedivom. Natjecanje: Datathon Portala otvorenih podataka 2026, izazov A (Društvo i javne usluge: transparentnost javnog sektora).
 
+**Demo:** https://javniradar.zulja.org
+
 > Indikatori nisu optužbe. Pokazuju što vrijedi provjeriti.
 
 ## Dokumentacija

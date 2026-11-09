@@ -2,6 +2,8 @@
 
 _Tim **Nazor** · Datathon Portala otvorenih podataka 2026 · **izazov A) Društvo i javne usluge** (transparentnost javnog sektora, građansko sudjelovanje)._
 
+**Demo:** https://javniradar.zulja.org
+
 > Indikatori nisu optužbe. Pokazuju što vrijedi provjeriti.
 
 **Izvor brojki u ovom dokumentu**, ako nije drukčije navedeno: lokalna baza nakon ingesta 2026-11-02 i 2026-11-03 (Sudreg 2026-11-05), očitano 2026-11-08 preko `GET /api/v1/contracts/summary`, `GET /api/v1/sources/summary` i SQL upita. Popis skupova je u [`DATA_SOURCES.md`](DATA_SOURCES.md).
@@ -94,7 +96,7 @@ _Ilustrativan tok. Primjer koristi **sintetičke podatke za demonstraciju** (fik
 - **Testovi:** `./mvnw test` 88/88; `yarn build`, `yarn lint`, `yarn test` 11/11 (2026-11-08).
 - **Točnost parsera** provjerena na 40 ugovora prema izvornim ćelijama: 40/40.
 - **Trošak AI-ja:** ukupno 0,73 USD za sve dosadašnje pozive (609), uključujući evaluaciju.
-- **Nije gotovo:** javni deploy (demo je lokalni), obrazac za ispravak, OpenAPI specifikacija, ručne oznake za evaluaciju na stvarnim podacima.
+- **Nije gotovo:** obrazac za ispravak, OpenAPI specifikacija, ručne oznake za evaluaciju na stvarnim podacima.
 
 ## 9. Iskrena ograničenja
 
@@ -110,7 +112,7 @@ _Ilustrativan tok. Primjer koristi **sintetičke podatke za demonstraciju** (fik
 
 | Rok | Što |
 |---|---|
-| **Kratkoročno** (1–3 mjeseca) | javni deploy i noćni ingest; ručne oznake i mjerenje AI-ja na stvarnim podacima; OpenAPI; obrazac za ispravak i pravo na odgovor; parseri za vlastite tablice s OIB-om (klasa B) |
+| **Kratkoročno** (1–3 mjeseca) | noćni ingest; ručne oznake i mjerenje AI-ja na stvarnim podacima; OpenAPI; obrazac za ispravak i pravo na odgovor; parseri za vlastite tablice s OIB-om (klasa B) |
 | **Srednjoročno** (3–12 mjeseci) | LLM ekstrakcija iz PDF i nestrukturiranih registara; planovi nabave (plan → ugovor); isplate iz proračuna (Naputak NN 59/23) za tok plan → ugovor → isplata; obavijesti po općini; izvoz normaliziranog skupa natrag na data.gov.hr |
 | **Dugoročno** | izravan EOJN feed s OIB-om i brojem ponuda (od 16.05.2026. registar ugovora se objavljuje u EOJN-u); svih 556 JLS; partnerstvo s udrugom, fakultetom ili MPUDT-om za održavanje |
 
